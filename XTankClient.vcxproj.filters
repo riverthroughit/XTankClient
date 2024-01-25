@@ -1,0 +1,239 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>qml;cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>qrc;rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Form Files">
+      <UniqueIdentifier>{99349809-55BA-4b9d-BF79-8FDBB0286EB3}</UniqueIdentifier>
+      <Extensions>ui</Extensions>
+    </Filter>
+    <Filter Include="Translation Files">
+      <UniqueIdentifier>{639EADAA-A684-42e4-A9AD-28FC9BCB8F7C}</UniqueIdentifier>
+      <Extensions>ts</Extensions>
+    </Filter>
+    <Filter Include="Source Files\Renderer">
+      <UniqueIdentifier>{75ce856b-0d78-481b-ad30-4e7d6ab9107e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Renderer\Input">
+      <UniqueIdentifier>{5fe4a9d7-113d-47db-956d-b0a61df79679}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Renderer\Render">
+      <UniqueIdentifier>{749bff14-9109-446f-9be2-1a15ec7404d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Renderer\Scene">
+      <UniqueIdentifier>{d95af082-265f-4d43-ab3a-03fcc231c15e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Renderer\Output">
+      <UniqueIdentifier>{ea9276ce-a41b-4a2e-b4ba-b15a65fa048d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Physics">
+      <UniqueIdentifier>{0ac66cfd-0369-4a95-aecf-aa384bb85793}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Renderer\MyMath">
+      <UniqueIdentifier>{c2702a05-6f1f-47ac-8842-9b002d89591e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ECS">
+      <UniqueIdentifier>{e4ed16f8-e8a1-4d7f-8931-004af2d25a54}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\FixedMath">
+      <UniqueIdentifier>{8bc55fe5-b329-49c9-bf13-9712da37f00d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="renderer\input\Face.h">
+      <Filter>Source Files\Renderer\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="renderer\input\Material.h">
+      <Filter>Source Files\Renderer\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="renderer\input\ObjData.h">
+      <Filter>Source Files\Renderer\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="renderer\input\Vertex.h">
+      <Filter>Source Files\Renderer\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="renderer\render\Fragment.h">
+      <Filter>Source Files\Renderer\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="renderer\render\FragmentShader.h">
+      <Filter>Source Files\Renderer\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="renderer\render\Rasterization.h">
+      <Filter>Source Files\Renderer\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="renderer\render\Render.h">
+      <Filter>Source Files\Renderer\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="renderer\render\VertexShader.h">
+      <Filter>Source Files\Renderer\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="renderer\scene\Camera.h">
+      <Filter>Source Files\Renderer\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="renderer\scene\Light.h">
+      <Filter>Source Files\Renderer\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="renderer\scene\Scene.h">
+      <Filter>Source Files\Renderer\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="renderer\output\Frames.h">
+      <Filter>Source Files\Renderer\Output</Filter>
+    </ClInclude>
+    <ClInclude Include="renderer\output\FramesInRenderer.h">
+      <Filter>Source Files\Renderer\Output</Filter>
+    </ClInclude>
+    <ClInclude Include="renderer\output\FuncCodes.h">
+      <Filter>Source Files\Renderer\Output</Filter>
+    </ClInclude>
+    <ClInclude Include="renderer\output\UserSceneData.h">
+      <Filter>Source Files\Renderer\Output</Filter>
+    </ClInclude>
+    <ClInclude Include="Config.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\MyMath\HoVector3.h">
+      <Filter>Source Files\Renderer\MyMath</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\MyMath\HoVector4.h">
+      <Filter>Source Files\Renderer\MyMath</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\MyMath\mathValue.h">
+      <Filter>Source Files\Renderer\MyMath</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\MyMath\Matrix4f.h">
+      <Filter>Source Files\Renderer\MyMath</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\ComponentArray.h">
+      <Filter>Source Files\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\ComponentManager.h">
+      <Filter>Source Files\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Coordinator.h">
+      <Filter>Source Files\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\EntityManager.h">
+      <Filter>Source Files\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Event.h">
+      <Filter>Source Files\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\EventManager.h">
+      <Filter>Source Files\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\System.h">
+      <Filter>Source Files\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\SystemManager.h">
+      <Filter>Source Files\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Types.h">
+      <Filter>Source Files\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="FixedMath\Config.h">
+      <Filter>Source Files\FixedMath</Filter>
+    </ClInclude>
+    <ClInclude Include="FixedMath\fixedMath.h">
+      <Filter>Source Files\FixedMath</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\Shape.h">
+      <Filter>Source Files\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="FixedMath\Vec2i.h">
+      <Filter>Source Files\FixedMath</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\CollisionDetection.h">
+      <Filter>Source Files\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\Rectangle.h">
+      <Filter>Source Files\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\Circle.h">
+      <Filter>Source Files\Physics</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="renderer\input\Face.cpp">
+      <Filter>Source Files\Renderer\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="renderer\input\Material.cpp">
+      <Filter>Source Files\Renderer\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="renderer\input\ObjData.cpp">
+      <Filter>Source Files\Renderer\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="renderer\input\Vertex.cpp">
+      <Filter>Source Files\Renderer\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="renderer\render\Fragment.cpp">
+      <Filter>Source Files\Renderer\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="renderer\render\FragmentShader.cpp">
+      <Filter>Source Files\Renderer\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="renderer\render\Rasterization.cpp">
+      <Filter>Source Files\Renderer\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="renderer\render\Render.cpp">
+      <Filter>Source Files\Renderer\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="renderer\render\VertexShader.cpp">
+      <Filter>Source Files\Renderer\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="renderer\scene\Camera.cpp">
+      <Filter>Source Files\Renderer\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="renderer\scene\Light.cpp">
+      <Filter>Source Files\Renderer\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="renderer\scene\Scene.cpp">
+      <Filter>Source Files\Renderer\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="renderer\output\Frames.cpp">
+      <Filter>Source Files\Renderer\Output</Filter>
+    </ClCompile>
+    <ClCompile Include="renderer\output\FramesInRenderer.cpp">
+      <Filter>Source Files\Renderer\Output</Filter>
+    </ClCompile>
+    <ClCompile Include="renderer\output\FuncCodes.cpp">
+      <Filter>Source Files\Renderer\Output</Filter>
+    </ClCompile>
+    <ClCompile Include="renderer\output\UserSceneData.cpp">
+      <Filter>Source Files\Renderer\Output</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer\MyMath\HoVector4.cpp">
+      <Filter>Source Files\Renderer\MyMath</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer\MyMath\Matrix4f.cpp">
+      <Filter>Source Files\Renderer\MyMath</Filter>
+    </ClCompile>
+    <ClCompile Include="FixedMath\fixedMath.cpp">
+      <Filter>Source Files\FixedMath</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics\Shape.cpp">
+      <Filter>Source Files\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics\CollisionDetection.cpp">
+      <Filter>Source Files\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="FixedMath\Vec2i.cpp">
+      <Filter>Source Files\FixedMath</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics\Rectangle.cpp">
+      <Filter>Source Files\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics\Circle.cpp">
+      <Filter>Source Files\Physics</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
