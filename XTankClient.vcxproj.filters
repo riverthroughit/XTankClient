@@ -48,6 +48,9 @@
     <Filter Include="Source Files\FixedMath">
       <UniqueIdentifier>{8bc55fe5-b329-49c9-bf13-9712da37f00d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Event">
+      <UniqueIdentifier>{03a561c9-26b5-4993-b3c7-f9560dbcf5ae}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="renderer\input\Face.h">
@@ -160,6 +163,9 @@
     </ClInclude>
     <ClInclude Include="Physics\Circle.h">
       <Filter>Source Files\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Event.h">
+      <Filter>Source Files\Event</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

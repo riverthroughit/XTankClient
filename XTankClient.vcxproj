@@ -27,6 +27,7 @@
     <ClInclude Include="ECS\System.h" />
     <ClInclude Include="ECS\SystemManager.h" />
     <ClInclude Include="ECS\Types.h" />
+    <ClInclude Include="Event.h" />
     <ClInclude Include="FixedMath\Config.h" />
     <ClInclude Include="FixedMath\fixedMath.h" />
     <ClInclude Include="FixedMath\Vec2i.h" />
