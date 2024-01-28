@@ -5,10 +5,6 @@
 //
 //int fixedSubtract(int num1, int num2);
 
-int fixedMultiply(int num1, int num2) {
-	return num1 * num2 >> DECIMAL_DIGITS;
-}
+int fixedMultiply(int num1, int num2);
 
-int fixedDivide(int num1, int num2) {
-	return num1 / num2 << DECIMAL_DIGITS;
-}
+int fixedDivide(int num1, int num2);

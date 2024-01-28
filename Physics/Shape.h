@@ -20,9 +20,9 @@ private:
 	friend class CollisionDetection;
 
 public:
-	bool isCollideWith(Shape* shape);
+	bool IsCollideWith(Shape* shape);
 
-	Type getType() { return type; };
+	Type GetType() { return type; };
 };
 
 

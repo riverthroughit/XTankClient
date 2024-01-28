@@ -1,7 +1,7 @@
 #include "Shape.h"
 #include "CollisionDetection.h"
 
-bool Shape::isCollideWith(Shape* shape)
+bool Shape::IsCollideWith(Shape* shape)
 {
-	return CollisionDetection::isCollide(this, shape);
+	return CollisionDetection::IsCollide(this, shape);
 }

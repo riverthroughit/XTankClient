@@ -27,10 +27,14 @@
     <ClInclude Include="ECS\System.h" />
     <ClInclude Include="ECS\SystemManager.h" />
     <ClInclude Include="ECS\Types.h" />
-    <ClInclude Include="Event.h" />
+    <ClInclude Include="Event\Event.h" />
+    <ClInclude Include="Event\EventManager.h" />
+    <ClInclude Include="Event\EventQueue.h" />
+    <ClInclude Include="Factory\Factory.h" />
     <ClInclude Include="FixedMath\Config.h" />
     <ClInclude Include="FixedMath\fixedMath.h" />
     <ClInclude Include="FixedMath\Vec2i.h" />
+    <ClInclude Include="ObjectPool\ObjectPool.h" />
     <ClInclude Include="Physics\Circle.h" />
     <ClInclude Include="Physics\CollisionDetection.h" />
     <ClInclude Include="Physics\Rectangle.h" />
@@ -59,6 +63,7 @@
   <ItemGroup>
     <ClCompile Include="FixedMath\fixedMath.cpp" />
     <ClCompile Include="FixedMath\Vec2i.cpp" />
+    <ClCompile Include="Main.cpp" />
     <ClCompile Include="Physics\Circle.cpp" />
     <ClCompile Include="Physics\CollisionDetection.cpp" />
     <ClCompile Include="Physics\Rectangle.cpp" />

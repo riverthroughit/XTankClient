@@ -51,6 +51,12 @@
     <Filter Include="Source Files\Event">
       <UniqueIdentifier>{03a561c9-26b5-4993-b3c7-f9560dbcf5ae}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\ObjectPool">
+      <UniqueIdentifier>{0c37117c-82a2-40d3-a565-7cffb70effe6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Factory">
+      <UniqueIdentifier>{d69a2cfe-afd6-4439-b431-845c36a57352}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="renderer\input\Face.h">
@@ -164,7 +170,19 @@
     <ClInclude Include="Physics\Circle.h">
       <Filter>Source Files\Physics</Filter>
     </ClInclude>
-    <ClInclude Include="Event.h">
+    <ClInclude Include="Event\Event.h">
+      <Filter>Source Files\Event</Filter>
+    </ClInclude>
+    <ClInclude Include="Event\EventManager.h">
+      <Filter>Source Files\Event</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectPool\ObjectPool.h">
+      <Filter>Source Files\ObjectPool</Filter>
+    </ClInclude>
+    <ClInclude Include="Factory\Factory.h">
+      <Filter>Source Files\Factory</Filter>
+    </ClInclude>
+    <ClInclude Include="Event\EventQueue.h">
       <Filter>Source Files\Event</Filter>
     </ClInclude>
   </ItemGroup>
@@ -240,6 +258,9 @@
     </ClCompile>
     <ClCompile Include="Physics\Circle.cpp">
       <Filter>Source Files\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
