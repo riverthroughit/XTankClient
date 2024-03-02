@@ -20,25 +20,50 @@
     <ClInclude Include="Config.h" />
     <ClInclude Include="ECS\ComponentArray.h" />
     <ClInclude Include="ECS\ComponentManager.h" />
-    <ClInclude Include="ECS\Coordinator.h" />
+    <ClInclude Include="ECS\Component\AttachComponent.h" />
+    <ClInclude Include="ECS\Component\CollisionComponent.h" />
+    <ClInclude Include="ECS\Component\CommandComponent.h" />
+    <ClInclude Include="ECS\Component\EntitySpawnComponent.h" />
+    <ClInclude Include="ECS\Component\InputComponent.h" />
+    <ClInclude Include="ECS\Component\KeyboardComponent.h" />
+    <ClInclude Include="ECS\Component\ObstacleComponent.h" />
+    <ClInclude Include="ECS\Component\PlayerComponent.h" />
+    <ClInclude Include="ECS\Component\PosComponent.h" />
+    <ClInclude Include="ECS\Component\PRenderBufferComponent.h" />
+    <ClInclude Include="ECS\Component\PRenderComponent.h" />
+    <ClInclude Include="ECS\Component\SocketComponent.h" />
+    <ClInclude Include="ECS\Component\SpeedComponent.h" />
+    <ClInclude Include="ECS\Component\UniformGridComponent.h" />
+    <ClInclude Include="ECS\ECSUtil.h" />
+    <ClInclude Include="ECS\System\CommandSystem.h" />
+    <ClInclude Include="ECS\System\EntitySpawnSystem.h" />
+    <ClInclude Include="ECS\System\FireSystem.h" />
+    <ClInclude Include="ECS\System\FrameSystem.h" />
+    <ClInclude Include="ECS\System\InputSystem.h" />
+    <ClInclude Include="ECS\System\MoveSystem.h" />
+    <ClInclude Include="ECS\System\ObstacleSystem.h" />
+    <ClInclude Include="ECS\System\PlayerSpawnSystem.h" />
+    <ClInclude Include="ECS\System\PRenderBufferSystem.h" />
+    <ClInclude Include="ECS\System\SocketSystem.h" />
+    <ClInclude Include="ECS\System\SpeedChangeSystem.h" />
+    <ClInclude Include="ECS\World.h" />
     <ClInclude Include="ECS\EntityManager.h" />
     <ClInclude Include="ECS\Event.h" />
     <ClInclude Include="ECS\EventManager.h" />
     <ClInclude Include="ECS\System.h" />
     <ClInclude Include="ECS\SystemManager.h" />
+    <ClInclude Include="ECS\System\CollisionSystem.h" />
     <ClInclude Include="ECS\Types.h" />
-    <ClInclude Include="Event\Event.h" />
-    <ClInclude Include="Event\EventManager.h" />
+    <ClInclude Include="ECS\XTankWorld.h" />
+    <ClInclude Include="Event\EventDefine.h" />
     <ClInclude Include="Event\EventQueue.h" />
     <ClInclude Include="Factory\Factory.h" />
-    <ClInclude Include="FixedMath\Config.h" />
-    <ClInclude Include="FixedMath\fixedMath.h" />
-    <ClInclude Include="FixedMath\Vec2i.h" />
+    <ClInclude Include="Math\FixedPoint.h" />
+    <ClInclude Include="Math\Vec2.h" />
     <ClInclude Include="ObjectPool\ObjectPool.h" />
-    <ClInclude Include="Physics\Circle.h" />
-    <ClInclude Include="Physics\CollisionDetection.h" />
-    <ClInclude Include="Physics\Rectangle.h" />
-    <ClInclude Include="Physics\Shape.h" />
+    <QtMoc Include="QtWidget\PaintWidget.h" />
+    <ClInclude Include="Util\Macro.h" />
+    <ClInclude Include="Util\Util.h" />
     <ClInclude Include="renderer\input\Face.h" />
     <ClInclude Include="renderer\input\Material.h" />
     <ClInclude Include="renderer\input\ObjData.h" />
@@ -59,15 +84,27 @@
     <ClInclude Include="renderer\scene\Camera.h" />
     <ClInclude Include="renderer\scene\Light.h" />
     <ClInclude Include="renderer\scene\Scene.h" />
+    <ClInclude Include="TypeConfig.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="FixedMath\fixedMath.cpp" />
-    <ClCompile Include="FixedMath\Vec2i.cpp" />
+    <ClCompile Include="Config.cpp" />
+    <ClCompile Include="ECS\Component\FrameComponent.h" />
+    <ClCompile Include="ECS\ECSUtil.cpp" />
+    <ClCompile Include="ECS\System.cpp" />
+    <ClCompile Include="ECS\System\CollisionSystem.cpp" />
+    <ClCompile Include="ECS\System\CommandSystem.cpp" />
+    <ClCompile Include="ECS\System\EntitySpawnSystem.cpp" />
+    <ClCompile Include="ECS\System\FrameSystem.cpp" />
+    <ClCompile Include="ECS\System\InputSystem.cpp" />
+    <ClCompile Include="ECS\System\MoveSystem.cpp" />
+    <ClCompile Include="ECS\System\ObstacleSystem.cpp" />
+    <ClCompile Include="ECS\System\PlayerSpawnSystem.cpp" />
+    <ClCompile Include="ECS\System\PRenderBufferSystem.cpp" />
+    <ClCompile Include="ECS\System\SocketSystem.cpp" />
+    <ClCompile Include="ECS\System\SpeedChangeSystem.cpp" />
+    <ClCompile Include="ECS\XTankWorld.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Physics\Circle.cpp" />
-    <ClCompile Include="Physics\CollisionDetection.cpp" />
-    <ClCompile Include="Physics\Rectangle.cpp" />
-    <ClCompile Include="Physics\Shape.cpp" />
+    <ClCompile Include="QtWidget\PaintWidget.cpp" />
     <ClCompile Include="renderer\input\Face.cpp" />
     <ClCompile Include="renderer\input\Material.cpp" />
     <ClCompile Include="renderer\input\ObjData.cpp" />
@@ -86,6 +123,9 @@
     <ClCompile Include="renderer\scene\Camera.cpp" />
     <ClCompile Include="renderer\scene\Light.cpp" />
     <ClCompile Include="renderer\scene\Scene.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtUic Include="QtWidget\PaintWidget.ui" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{AAC3F659-741F-4AE1-A680-AAD2BD1E30C5}</ProjectGuid>
@@ -109,14 +149,12 @@
   </ImportGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="QtSettings">
     <QtInstall>5.12.12_msvc2017_64</QtInstall>
-    <QtModules>
-    </QtModules>
+    <QtModules>core;gui;widgets</QtModules>
     <QtBuildConfig>debug</QtBuildConfig>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="QtSettings">
     <QtInstall>5.12.12_msvc2017_64</QtInstall>
-    <QtModules>
-    </QtModules>
+    <QtModules>core;gui;widgets</QtModules>
     <QtBuildConfig>release</QtBuildConfig>
   </PropertyGroup>
   <Target Name="QtMsBuildNotFound" BeforeTargets="CustomBuild;ClCompile" Condition="!Exists('$(QtMsBuild)\qt.targets') or !Exists('$(QtMsBuild)\qt.props')">

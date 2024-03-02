@@ -16,7 +16,7 @@ protected:
     IProductRegistrar() {}
     virtual ~IProductRegistrar() {}
 
-    // 禁止外部拷贝和赋值操作
+    // 禁止拷贝和赋值操作
     IProductRegistrar(const IProductRegistrar&) = delete;
     const IProductRegistrar& operator=(const IProductRegistrar&) = delete;
 };

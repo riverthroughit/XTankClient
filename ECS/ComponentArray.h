@@ -50,9 +50,14 @@ public:
 		--mSize;
 	}
 
+	bool HasData(Entity entity)
+	{
+		return mEntityToIndexMap.find(entity) != mEntityToIndexMap.end();
+	}
+
 	T& GetData(Entity entity)
 	{
-		assert(mEntityToIndexMap.find(entity) != mEntityToIndexMap.end() && "Retrieving non-existent component.");
+		assert(HasData(entity) && "Retrieving non-existent component.");
 
 		return mComponentArray[mEntityToIndexMap[entity]];
 	}

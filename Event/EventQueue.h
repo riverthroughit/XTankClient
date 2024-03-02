@@ -1,30 +1,27 @@
 #pragma once
 
 #include<tuple>
-#include<vector>
-#include<utility>
+#include <vector>
+#include "Util/Macro.h"
 
-template<typename Event>
-class EventQueue {
+template<typename... ArgsType>
+struct EventQueue {
 
-	using EventArgs = Event::FuncArgs;
-	using EventTuple = std::tuple<EventArgs...>;
+	SINGLETON(EventQueue);
+
+	using EventTuple = std::tuple<ArgsType...>;
+	using FuncType = void(*)(ArgsType...);
 
 	std::vector<EventTuple> eventTuples;
 
 public:
-	EventQueue() {
-
-	}
-
-	void PushEventArgs(EventArgs... args) {
+	void PushEventArgs(ArgsType... args) {
 		eventTuples.emplace_back(args...);
 	}
 
-	void InvokeEvents() {
-		Event& event = Event::Instance();
+	void InvokeEvents(FuncType func) {
 		for (auto& eventTuple : eventTuples) {
-			std::apply([&](auto... args) {event.Invoke(args...)}, eventTuple);
+			std::apply([&](auto... args) {func(args...)}, eventTuple);
 		}
 	}
 

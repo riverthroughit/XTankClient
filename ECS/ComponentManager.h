@@ -46,6 +46,12 @@ public:
 	}
 
 	template<typename T>
+	bool HasComponent(Entity entity)
+	{
+		return GetComponentArray<T>()->HasData(entity);
+	}
+
+	template<typename T>
 	T& GetComponent(Entity entity)
 	{
 		return GetComponentArray<T>()->GetData(entity);
@@ -55,9 +61,9 @@ public:
 	{
 		for (const auto& pair : mComponentArrays)
 		{
-			const auto& component = pair.second;
+			const auto& componentArray = pair.second;
 
-			component->EntityDestroyed(entity);
+			componentArray->EntityDestroyed(entity);
 		}
 	}
 

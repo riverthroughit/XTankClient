@@ -36,17 +36,11 @@
     <Filter Include="Source Files\Renderer\Output">
       <UniqueIdentifier>{ea9276ce-a41b-4a2e-b4ba-b15a65fa048d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Physics">
-      <UniqueIdentifier>{0ac66cfd-0369-4a95-aecf-aa384bb85793}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Renderer\MyMath">
       <UniqueIdentifier>{c2702a05-6f1f-47ac-8842-9b002d89591e}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\ECS">
       <UniqueIdentifier>{e4ed16f8-e8a1-4d7f-8931-004af2d25a54}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\FixedMath">
-      <UniqueIdentifier>{8bc55fe5-b329-49c9-bf13-9712da37f00d}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Event">
       <UniqueIdentifier>{03a561c9-26b5-4993-b3c7-f9560dbcf5ae}</UniqueIdentifier>
@@ -56,6 +50,24 @@
     </Filter>
     <Filter Include="Source Files\Factory">
       <UniqueIdentifier>{d69a2cfe-afd6-4439-b431-845c36a57352}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ECS\Component">
+      <UniqueIdentifier>{05046af3-1e57-4ca9-a407-641771688590}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ECS\System">
+      <UniqueIdentifier>{3894a559-f07e-4871-9d81-b1434d4ac7cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\QtWidget">
+      <UniqueIdentifier>{bef153d3-ed1f-4b10-832e-ba68acbdb360}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\MidData">
+      <UniqueIdentifier>{60729c59-41ff-4029-b2c6-b714156ddce9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Util">
+      <UniqueIdentifier>{7c71d79e-8d1f-401f-84bd-42e49584f0f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Math">
+      <UniqueIdentifier>{8bc55fe5-b329-49c9-bf13-9712da37f00d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -128,7 +140,7 @@
     <ClInclude Include="ECS\ComponentManager.h">
       <Filter>Source Files\ECS</Filter>
     </ClInclude>
-    <ClInclude Include="ECS\Coordinator.h">
+    <ClInclude Include="ECS\World.h">
       <Filter>Source Files\ECS</Filter>
     </ClInclude>
     <ClInclude Include="ECS\EntityManager.h">
@@ -149,33 +161,6 @@
     <ClInclude Include="ECS\Types.h">
       <Filter>Source Files\ECS</Filter>
     </ClInclude>
-    <ClInclude Include="FixedMath\Config.h">
-      <Filter>Source Files\FixedMath</Filter>
-    </ClInclude>
-    <ClInclude Include="FixedMath\fixedMath.h">
-      <Filter>Source Files\FixedMath</Filter>
-    </ClInclude>
-    <ClInclude Include="Physics\Shape.h">
-      <Filter>Source Files\Physics</Filter>
-    </ClInclude>
-    <ClInclude Include="FixedMath\Vec2i.h">
-      <Filter>Source Files\FixedMath</Filter>
-    </ClInclude>
-    <ClInclude Include="Physics\CollisionDetection.h">
-      <Filter>Source Files\Physics</Filter>
-    </ClInclude>
-    <ClInclude Include="Physics\Rectangle.h">
-      <Filter>Source Files\Physics</Filter>
-    </ClInclude>
-    <ClInclude Include="Physics\Circle.h">
-      <Filter>Source Files\Physics</Filter>
-    </ClInclude>
-    <ClInclude Include="Event\Event.h">
-      <Filter>Source Files\Event</Filter>
-    </ClInclude>
-    <ClInclude Include="Event\EventManager.h">
-      <Filter>Source Files\Event</Filter>
-    </ClInclude>
     <ClInclude Include="ObjectPool\ObjectPool.h">
       <Filter>Source Files\ObjectPool</Filter>
     </ClInclude>
@@ -184,6 +169,108 @@
     </ClInclude>
     <ClInclude Include="Event\EventQueue.h">
       <Filter>Source Files\Event</Filter>
+    </ClInclude>
+    <ClInclude Include="Event\EventDefine.h">
+      <Filter>Source Files\Event</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Component\CollisionComponent.h">
+      <Filter>Source Files\ECS\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Component\PosComponent.h">
+      <Filter>Source Files\ECS\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\System\CollisionSystem.h">
+      <Filter>Source Files\ECS\System</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Component\UniformGridComponent.h">
+      <Filter>Source Files\ECS\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\System\MoveSystem.h">
+      <Filter>Source Files\ECS\System</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Component\SpeedComponent.h">
+      <Filter>Source Files\ECS\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\System\InputSystem.h">
+      <Filter>Source Files\ECS\System</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Component\InputComponent.h">
+      <Filter>Source Files\ECS\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\System\SpeedChangeSystem.h">
+      <Filter>Source Files\ECS\System</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\System\FireSystem.h">
+      <Filter>Source Files\ECS\System</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\System\CommandSystem.h">
+      <Filter>Source Files\ECS\System</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\System\ObstacleSystem.h">
+      <Filter>Source Files\ECS\System</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Component\ObstacleComponent.h">
+      <Filter>Source Files\ECS\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="TypeConfig.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Component\PRenderComponent.h">
+      <Filter>Source Files\ECS\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\System\PRenderBufferSystem.h">
+      <Filter>Source Files\ECS\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\Macro.h">
+      <Filter>Source Files\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\Util.h">
+      <Filter>Source Files\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\FixedPoint.h">
+      <Filter>Source Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\Vec2.h">
+      <Filter>Source Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\ECSUtil.h">
+      <Filter>Source Files\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Component\KeyboardComponent.h">
+      <Filter>Source Files\ECS\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Component\PRenderBufferComponent.h">
+      <Filter>Source Files\ECS\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Component\CommandComponent.h">
+      <Filter>Source Files\ECS\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Component\PlayerComponent.h">
+      <Filter>Source Files\ECS\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Component\AttachComponent.h">
+      <Filter>Source Files\ECS\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\System\SocketSystem.h">
+      <Filter>Source Files\ECS\System</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Component\SocketComponent.h">
+      <Filter>Source Files\ECS\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\XTankWorld.h">
+      <Filter>Source Files\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\System\FrameSystem.h">
+      <Filter>Source Files\ECS\System</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\System\PlayerSpawnSystem.h">
+      <Filter>Source Files\ECS\System</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\System\EntitySpawnSystem.h">
+      <Filter>Source Files\ECS\System</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Component\EntitySpawnComponent.h">
+      <Filter>Source Files\ECS\Component</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -241,26 +328,69 @@
     <ClCompile Include="Renderer\MyMath\Matrix4f.cpp">
       <Filter>Source Files\Renderer\MyMath</Filter>
     </ClCompile>
-    <ClCompile Include="FixedMath\fixedMath.cpp">
-      <Filter>Source Files\FixedMath</Filter>
-    </ClCompile>
-    <ClCompile Include="Physics\Shape.cpp">
-      <Filter>Source Files\Physics</Filter>
-    </ClCompile>
-    <ClCompile Include="Physics\CollisionDetection.cpp">
-      <Filter>Source Files\Physics</Filter>
-    </ClCompile>
-    <ClCompile Include="FixedMath\Vec2i.cpp">
-      <Filter>Source Files\FixedMath</Filter>
-    </ClCompile>
-    <ClCompile Include="Physics\Rectangle.cpp">
-      <Filter>Source Files\Physics</Filter>
-    </ClCompile>
-    <ClCompile Include="Physics\Circle.cpp">
-      <Filter>Source Files\Physics</Filter>
-    </ClCompile>
     <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ECS\System\CollisionSystem.cpp">
+      <Filter>Source Files\ECS\System</Filter>
+    </ClCompile>
+    <ClCompile Include="ECS\System.cpp">
+      <Filter>Source Files\ECS</Filter>
+    </ClCompile>
+    <ClCompile Include="ECS\System\MoveSystem.cpp">
+      <Filter>Source Files\ECS\System</Filter>
+    </ClCompile>
+    <ClCompile Include="ECS\System\ObstacleSystem.cpp">
+      <Filter>Source Files\ECS\System</Filter>
+    </ClCompile>
+    <ClCompile Include="ECS\System\InputSystem.cpp">
+      <Filter>Source Files\ECS\System</Filter>
+    </ClCompile>
+    <ClCompile Include="ECS\System\PRenderBufferSystem.cpp">
+      <Filter>Source Files\ECS\System</Filter>
+    </ClCompile>
+    <ClCompile Include="Config.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ECS\ECSUtil.cpp">
+      <Filter>Source Files\ECS</Filter>
+    </ClCompile>
+    <ClCompile Include="ECS\Component\FrameComponent.h">
+      <Filter>Source Files\ECS\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="ECS\System\CommandSystem.cpp">
+      <Filter>Source Files\ECS\System</Filter>
+    </ClCompile>
+    <ClCompile Include="ECS\System\SocketSystem.cpp">
+      <Filter>Source Files\ECS\System</Filter>
+    </ClCompile>
+    <ClCompile Include="ECS\System\SpeedChangeSystem.cpp">
+      <Filter>Source Files\ECS\System</Filter>
+    </ClCompile>
+    <ClCompile Include="ECS\XTankWorld.cpp">
+      <Filter>Source Files\ECS</Filter>
+    </ClCompile>
+    <ClCompile Include="ECS\System\FrameSystem.cpp">
+      <Filter>Source Files\ECS\System</Filter>
+    </ClCompile>
+    <ClCompile Include="QtWidget\PaintWidget.cpp">
+      <Filter>Source Files\QtWidget</Filter>
+    </ClCompile>
+    <ClCompile Include="ECS\System\PlayerSpawnSystem.cpp">
+      <Filter>Source Files\ECS\System</Filter>
+    </ClCompile>
+    <ClCompile Include="ECS\System\EntitySpawnSystem.cpp">
+      <Filter>Source Files\ECS\System</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="QtWidget\PaintWidget.h">
+      <Filter>Source Files\QtWidget</Filter>
+    </QtMoc>
+  </ItemGroup>
+  <ItemGroup>
+    <QtUic Include="QtWidget\PaintWidget.ui">
+      <Filter>Source Files\QtWidget</Filter>
+    </QtUic>
   </ItemGroup>
 </Project>
