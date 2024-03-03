@@ -36,10 +36,10 @@ void InputSystem::ReceiveInputKey()
 
 	for (int key : inputComp.buttonToKey) {
 		if (keyboardComp.keysDown.find(key) != keyboardComp.keysDown.end()) {
-			inputComp.keysDown[key] = true;
+			inputComp.keysDown.insert(key);
 		}
 		else {
-			inputComp.keysDown[key] = false;
+			inputComp.keysDown.erase(key);
 		}
 	}
 }
@@ -49,6 +49,11 @@ void InputSystem::SetDirecButton()
 	InputComponent& inputComp = mWorld->GetSingletonComponent<InputComponent>();
 	auto& direcButtons = inputComp.direcButtons;
 
+	//移除上一帧的静止按钮
+	if (!direcButtons.empty() && direcButtons.back() == BUTTON::IDLE) {
+		direcButtons.pop_back();
+	}
+
 	auto keySetFunc = [&](BUTTON::Type btn) {
 		bool isDown = inputComp.IsButtonDown(btn);
 		auto ite = std::find(direcButtons.begin(), direcButtons.end(), btn);
@@ -57,14 +62,20 @@ void InputSystem::SetDirecButton()
 			direcButtons.push_back(btn);
 		}
 		else if(!isDown && ite != direcButtons.end()){
-			direcButtons.erase(ite); 
+			direcButtons.erase(ite);
 		}
 	};
 
+	//更新当前帧的方向按钮 若在这一帧放开所有方向按钮 则添加静止按钮
+	bool isPreEmpty = inputComp.direcButtons.empty();
 	keySetFunc(BUTTON::UP);
 	keySetFunc(BUTTON::DOWN);
 	keySetFunc(BUTTON::LEFT);
 	keySetFunc(BUTTON::RIGHT);
+	bool isCurEmpty = inputComp.direcButtons.empty();
+	if (!isPreEmpty && isCurEmpty) {
+		inputComp.direcButtons.push_back(BUTTON::IDLE);
+	}
 
 }
 
@@ -76,8 +87,11 @@ void InputSystem::SetPressedButton()
 	if (inputComp.IsButtonDown(BUTTON::FIRE)) {
 		inputComp.curBtn = BUTTON::FIRE;
 	}
-	else if(!inputComp.direcButtons.empty()){
+	else if (!inputComp.direcButtons.empty()) {
 		inputComp.curBtn = inputComp.direcButtons.back();
+	}
+	else {
+		inputComp.curBtn = BUTTON::NONE;
 	}
 }
 

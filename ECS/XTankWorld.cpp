@@ -13,6 +13,9 @@
 #include "ECS/Component/SocketComponent.h"
 #include "ECS/Component/SpeedComponent.h"
 #include "ECS/Component/UniformGridComponent.h"
+#include "ECS/Component/BulletSpawnComponent.h"
+#include "ECS/Component/DestroyComponent.h"
+#include "ECS/Component/BulletComponent.h"
 #include <chrono>
 #include "Config.h"
 #include <thread>
@@ -36,6 +39,9 @@ void XTankWorld::Init()
 	RegisterSingleComponent<SocketComponent>();
 	RegisterComponent<SpeedComponent>();
 	RegisterSingleComponent<UniformGridComponent>();
+	RegisterComponent<BulletSpawnComponent>();
+	RegisterComponent<DestroyComponent>();
+	RegisterComponent<BulletComponent>();
 
 	ComponentType attachCompType = GetComponentType<AttachComponent>();
 	ComponentType collisionCompType = GetComponentType<CollisionComponent>();
@@ -45,6 +51,9 @@ void XTankWorld::Init()
 	ComponentType posCompType = GetComponentType<PosComponent>();
 	ComponentType pRenderCompType = GetComponentType<PRenderComponent>();
 	ComponentType speedCompType = GetComponentType<SpeedComponent>();
+	ComponentType bulletSpawnCompType = GetComponentType<BulletSpawnComponent>();
+	ComponentType destroyCompType = GetComponentType<DestroyComponent>();
+	ComponentType bulletCompType = GetComponentType<BulletComponent>();
 
 	Signature signature;
 
@@ -78,7 +87,6 @@ void XTankWorld::Init()
 	mObstacleSystem = RegisterSystem<ObstacleSystem>();
 	signature.reset();
 	signature.set(posCompType);
-	signature.set(speedCompType);
 	signature.set(collisionCompType);
 	signature.set(obstacleCompType);
 	SetSystemSignature<ObstacleSystem>(signature);
@@ -86,7 +94,6 @@ void XTankWorld::Init()
 	mPRenderBufferSystem = RegisterSystem<PRenderBufferSystem>();
 	signature.reset();
 	signature.set(posCompType);
-	signature.set(speedCompType);
 	signature.set(pRenderCompType);
 	SetSystemSignature<PRenderBufferSystem>(signature);
 
@@ -98,8 +105,24 @@ void XTankWorld::Init()
 	signature.set(playerCompType);
 	SetSystemSignature<SpeedChangeSystem>(signature);
 
+	mPlayerSpawnSystem = RegisterSystem<PlayerSpawnSystem>();
 
+	mEntitySpawnSystem = RegisterSystem<EntitySpawnSystem>();
 
+	mEntityDestroySystem = RegisterSystem<EntityDestroySystem>();
+	signature.reset();
+	signature.set(destroyCompType);
+	SetSystemSignature<EntityDestroySystem>(signature);
+
+	mBulletHitSystem = RegisterSystem<BulletHitSystem>();
+	signature.reset();
+	signature.set(bulletCompType);
+	SetSystemSignature<BulletHitSystem>(signature);
+
+	mPlayerStateSystem = RegisterSystem<PlayerStateSystem>();
+	signature.reset();
+	signature.set(playerCompType);
+	SetSystemSignature<PlayerStateSystem>(signature);
 }
 
 void XTankWorld::Start()
@@ -131,12 +154,17 @@ void XTankWorld::Start()
 		if (frameComp.isNeedTick) {
 			mInputSystem->Tick(dt);
 			mSocketSystem->Tick(dt);
+			mPlayerSpawnSystem->Tick(dt);
 			mCommandSystem->Tick(dt);
 			mCollisionSystem->Tick(dt);
 			mSpeedChangeSystem->Tick(dt);
 			mObstacleSystem->Tick(dt);
 			mMoveSystem->Tick(dt);
 			mFireSystem->Tick(dt);
+			mBulletHitSystem->Tick(dt);
+			mPlayerStateSystem->Tick(dt);
+			mEntityDestroySystem->Tick(dt);
+			mEntitySpawnSystem->Tick(dt);
 			mPRenderBufferSystem->Tick(dt);
 		}
 	}

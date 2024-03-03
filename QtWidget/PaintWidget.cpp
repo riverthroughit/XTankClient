@@ -7,15 +7,22 @@
 #include <qDebug>
 #include "Util/Util.h"
 #include "ECS/Component/FrameComponent.h"
+#include "qtimer.h"
 
 PaintWidget::PaintWidget(QWidget* parent)
 	: QWidget(parent)
 {
 	ui.setupUi(this);
+	updateTimerId = startTimer(RENDER_TICK, Qt::PreciseTimer);
 }
 
 PaintWidget::~PaintWidget()
 {}
+
+void PaintWidget::SetWorld(World * world)
+{
+	mXTankWorld = world;
+}
 
 
 void PaintWidget::paintEvent(QPaintEvent* event)
@@ -53,6 +60,7 @@ void PaintWidget::paintEvent(QPaintEvent* event)
 
 		auto curPairIte = curBuffer.find(id);
 
+		//物体是否在两帧缓冲中均出现
 		if (curPairIte == curBuffer.end()) {
 			painter.drawArc(prePos.x - r, prePos.y + r, r * 2, r * 2, 0, 16 * 360);
 		}
@@ -79,7 +87,7 @@ void PaintWidget::keyPressEvent(QKeyEvent* event)
 
 	int key = event->key();
 	KeyboardComponent& keyboardComp = mXTankWorld->GetSingletonComponent<KeyboardComponent>();
-	keyboardComp.keysDown[key] = true;
+	keyboardComp.keysDown.insert(key);
 }
 
 void PaintWidget::keyReleaseEvent(QKeyEvent* event)
@@ -90,7 +98,14 @@ void PaintWidget::keyReleaseEvent(QKeyEvent* event)
 
 	int key = event->key();
 	KeyboardComponent& keyboardComp = mXTankWorld->GetSingletonComponent<KeyboardComponent>();
-	keyboardComp.keysDown[key] = false;
+	keyboardComp.keysDown.erase(key);
+}
+
+void PaintWidget::timerEvent(QTimerEvent* event)
+{
+	if (event->timerId() == updateTimerId) {
+		update();
+	}
 }
 
 void PaintWidget::InitQPaint(QPainter& painter)

@@ -2,12 +2,13 @@
 
 #include "Math/FixedPoint.h"
 
+
 template <typename T>
 struct Vec2 {
 	T x, y;
 
 public:
-	constexpr Vec2(const T& xx = T(0), const T& yy = T(0)) :
+	constexpr Vec2(const T& xx = T(), const T& yy = T()) :
 		x(xx), y(yy) 
 	{
 
@@ -31,22 +32,10 @@ public:
 		return *this;
 	}
 
-	Vec2 operator*(T num) const{
-		Vec2 Vec2 = *this;
-		Vec2 *= num;
-		return Vec2;
-	}
-
 	Vec2& operator/=(T num) {
 		x /= num;
 		y /= num;
 		return *this;
-	}
-
-	Vec2 operator/(T num) const {
-		Vec2 Vec2 = *this;
-		Vec2 /= num;
-		return Vec2;
 	}
 
 	Vec2& operator+=(const Vec2& other) {
@@ -55,21 +44,19 @@ public:
 		return *this;
 	}
 
-	Vec2 operator+(const Vec2& other) const {
-		Vec2 v = *this;
-		return v += other;
-	}
-
 	Vec2& operator-=(const Vec2& other) {
 		x -= other.x;
 		y -= other.y;
 		return *this;
 	}
 
-	Vec2 operator-(const Vec2& other) const {
-		Vec2 v = *this;
-		return v -= other;
-	}
+	//friend Vec2<T> operator * <T>(const Vec2<T>& a, T num);
+	//friend Vec2<T> operator * <T>(T num, const Vec2& a);
+	//friend Vec2<T> operator / <T>(const Vec2<T>& a, T num);
+	//friend Vec2<T> operator + <T>(const Vec2<T>& a, const Vec2<T>& b);
+	//friend Vec2<T> operator - <T>(const Vec2<T>& a, const Vec2<T>& b);
+	//friend bool operator == <T>(const Vec2<T>& a, const Vec2<T>& b);
+	//friend bool operator != <T>(const Vec2<T>& a, const Vec2<T>& b);
 
 	Vec2 operator-()const {
 		Vec2 Vec2;
@@ -77,6 +64,7 @@ public:
 		Vec2.y = -Vec2.y;
 		return Vec2;
 	}
+
 
 	T squareLenth() const {
 		return *this * *this;
@@ -94,6 +82,45 @@ public:
 		return Vec2;
 	}
 };
+
+template<typename T>
+Vec2<T> operator * (const Vec2<T>& a, T num) {
+	Vec2<T> vec2 = a;
+	return vec2 *= num;
+}
+
+template<typename T>
+Vec2<T> operator * (T num, const Vec2<T>& a) {
+	return a * num;
+}
+
+template<typename T>
+Vec2<T> operator / (const Vec2<T>& a, T num) {
+	Vec2<T> vec2 = a;
+	return vec2 /= num;
+}
+
+template<typename T>
+Vec2<T> operator + (const Vec2<T>& a, const Vec2<T>& b) {
+	Vec2<T> vec2 = a;
+	return vec2 += b;
+}
+
+template<typename T>
+Vec2<T> operator - (const Vec2<T>& a, const Vec2<T>& b) {
+	Vec2<T> vec2 = a;
+	return vec2 -= b;
+}
+
+template<typename T>
+bool operator == (const Vec2<T>& a, const Vec2<T>& b) {
+	return a.x == b.x && a.y == b.y;
+}
+
+template<typename T>
+bool operator != (const Vec2<T>& a, const Vec2<T>& b) {
+	return !(a == b);
+}
 
 using Vec2Fixed = Vec2<FixedPoint>; 
 using Vec2f = Vec2<float>;

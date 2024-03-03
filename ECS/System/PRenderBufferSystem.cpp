@@ -35,16 +35,14 @@ void PRenderBufferSystem::SwapPRenderBuffer()
 
 void PRenderBufferSystem::TickPRenderBuffer()
 {
-	PRenderBufferComponent& pRenderBufferComp = mWorld->GetSingletonComponent<PRenderBufferComponent>();
 
 	for (const Entity& entity : mEntities) {
 		PosComponent& posComp = mWorld->GetComponent<PosComponent>(entity);
 		PRenderComponent& pRenderComp = mWorld->GetComponent<PRenderComponent>(entity);
-		SpeedComponent& speedComp = mWorld->GetComponent<SpeedComponent>(entity);
 	
 		//转换为浮点数
-		Vec2f pos = { (float)(posComp.pos.x),(float)(posComp.pos.x) };
-		Vec2f direc = { (float)(speedComp.direc.x),(float)(speedComp.direc.x) };
+		Vec2f pos = { (float)(posComp.pos.x),(float)(posComp.pos.y) };
+		Vec2f direc = { (float)(posComp.direc.x),(float)(posComp.direc.y) };
 
 		WriteToPRenderBuffer(PRenderData{ entity, pRenderComp.shape,pos,direc});
 	}

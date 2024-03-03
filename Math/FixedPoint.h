@@ -79,6 +79,8 @@ public:
      friend FixedPoint operator - (const FixedPoint& a, const FixedPoint& b);
      friend FixedPoint operator * (const FixedPoint& a, const FixedPoint& b);
      friend FixedPoint operator / (const FixedPoint& a, const FixedPoint& b);
+     friend bool operator == (const FixedPoint& a, const FixedPoint& b);
+     friend bool operator != (const FixedPoint& a, const FixedPoint& b);
      friend FixedPoint sqrt(const FixedPoint& fixedPoint);
 };
 
@@ -104,6 +106,16 @@ inline FixedPoint operator / (const FixedPoint& a, const FixedPoint& b){
     FixedPoint fixedPoint(a);
     fixedPoint /= b;
     return fixedPoint;
+}
+
+inline bool operator==(const FixedPoint& a, const FixedPoint& b)
+{
+    return a.val == b.val;
+}
+
+inline bool operator!=(const FixedPoint& a, const FixedPoint& b)
+{
+    return !(a == b);
 }
 
 inline FixedPoint sqrt(const FixedPoint& fixedPoint)

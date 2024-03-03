@@ -5,4 +5,5 @@
 
 struct PosComponent {
 	Vec2Fixed pos;
+	Vec2Fixed direc;
 };

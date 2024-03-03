@@ -2,8 +2,9 @@
 
 #include "ECS/System.h"
 
-class FireSystem :public System {
+class PlayerStateSystem :public System {
 
 public:
 	virtual void Tick(float dt) override;
+
 };

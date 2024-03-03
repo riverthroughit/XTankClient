@@ -22,13 +22,20 @@ void PlayerSpawnSystem::Tick(float dt)
 		unsigned int localPlayerId = 0;
 
 		Entity localPlayer = mWorld->CreateEntity();
-		PlayerComponent playerComp{ localPlayerId };
+		PlayerComponent playerComp;
+		playerComp.playerId = localPlayerId;
+		playerComp.hp = PLAYER_HP;
+		playerComp.score = 0;
+
 		CommandComponent commandComp;
 		mWorld->AddComponent(localPlayer, playerComp);
 		mWorld->AddComponent(localPlayer, commandComp);
 
 		//tank
-		auto tankArgs = std::make_shared<ENTITY_SPAWN_ARGS::Tank>(ENTITY_SPAWN_ARGS::Tank{ localPlayer, PLAYERS_SPAWN_POS_FIXED[localPlayerId] });
+		auto tankArgs = std::make_shared<ENTITY_SPAWN_ARGS::Tank>();
+		tankArgs->ownerId = localPlayer;
+		tankArgs->pos = PLAYERS_SPAWN_POS_FIXED[localPlayerId];
+		tankArgs->direc = PLAYERS_SPAWN_DIREC_FIXED[localPlayerId];
 		entitySpawnComp.entitySpawnMap[ENTITY::TANK].push_back({ ENTITY::TANK, tankArgs });
 
 		temp = false;

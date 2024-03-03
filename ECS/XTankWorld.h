@@ -10,6 +10,11 @@
 #include "ECS/System/PRenderBufferSystem.h"
 #include "ECS/System/SocketSystem.h"
 #include "ECS/System/SpeedChangeSystem.h"
+#include "ECS/System/PlayerSpawnSystem.h"
+#include "ECS/System/EntitySpawnSystem.h"
+#include "ECS/System/EntityDestroySystem.h"
+#include "ECS/System/BulletHitSystem.h"
+#include "ECS/System/PlayerStateSystem.h"
 
 class XTankWorld :public World {
 
@@ -24,6 +29,11 @@ private:
 	std::shared_ptr<PRenderBufferSystem> mPRenderBufferSystem;
 	std::shared_ptr<SocketSystem> mSocketSystem;
 	std::shared_ptr<SpeedChangeSystem> mSpeedChangeSystem;
+	std::shared_ptr<PlayerSpawnSystem> mPlayerSpawnSystem;
+	std::shared_ptr<EntitySpawnSystem> mEntitySpawnSystem;
+	std::shared_ptr<EntityDestroySystem> mEntityDestroySystem;
+	std::shared_ptr<BulletHitSystem> mBulletHitSystem;
+	std::shared_ptr<PlayerStateSystem> mPlayerStateSystem;
 
 public:
 

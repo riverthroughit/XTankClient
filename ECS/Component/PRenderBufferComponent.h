@@ -6,9 +6,10 @@
 #include "Math/Vec2.h"
 #include <shared_mutex>
 #include <mutex>
+#include "ECS/Types.h"
 
 struct PRenderData {
-	unsigned int entityId;
+	Entity entityId;
 	PRENDER_SHAPE::Type shape;
 	Vec2f pos;
 	Vec2f direc;
@@ -20,7 +21,8 @@ class PRenderBufferComponent {
 
 	SINGLETON(PRenderBufferComponent);
 
-	using BufferMap = std::unordered_map<unsigned int,PRenderData>;
+	//key:entity ID
+	using BufferMap = std::unordered_map<Entity,PRenderData>;
 
 	//读写锁 更新索引时需互斥
 	std::shared_mutex wrMutex;

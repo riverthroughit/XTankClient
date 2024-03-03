@@ -272,6 +272,24 @@
     <ClInclude Include="ECS\Component\EntitySpawnComponent.h">
       <Filter>Source Files\ECS\Component</Filter>
     </ClInclude>
+    <ClInclude Include="ECS\Component\BulletSpawnComponent.h">
+      <Filter>Source Files\ECS\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\System\BulletHitSystem.h">
+      <Filter>Source Files\ECS\System</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Component\DestroyComponent.h">
+      <Filter>Source Files\ECS\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\System\EntityDestroySystem.h">
+      <Filter>Source Files\ECS\System</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\System\PlayerStateSystem.h">
+      <Filter>Source Files\ECS\System</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Component\BulletComponent.h">
+      <Filter>Source Files\ECS\Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="renderer\input\Face.cpp">
@@ -380,6 +398,18 @@
       <Filter>Source Files\ECS\System</Filter>
     </ClCompile>
     <ClCompile Include="ECS\System\EntitySpawnSystem.cpp">
+      <Filter>Source Files\ECS\System</Filter>
+    </ClCompile>
+    <ClCompile Include="ECS\System\FireSystem.cpp">
+      <Filter>Source Files\ECS\System</Filter>
+    </ClCompile>
+    <ClCompile Include="ECS\System\BulletHitSystem.cpp">
+      <Filter>Source Files\ECS\System</Filter>
+    </ClCompile>
+    <ClCompile Include="ECS\System\EntityDestroySystem.cpp">
+      <Filter>Source Files\ECS\System</Filter>
+    </ClCompile>
+    <ClCompile Include="ECS\System\PlayerStateSystem.cpp">
       <Filter>Source Files\ECS\System</Filter>
     </ClCompile>
   </ItemGroup>

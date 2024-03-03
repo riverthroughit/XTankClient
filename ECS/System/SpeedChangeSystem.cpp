@@ -2,6 +2,7 @@
 #include "ECS/Component/CommandComponent.h"
 #include "ECS/Component/SpeedComponent.h"
 #include "ECS/Component/PlayerComponent.h"
+#include "ECS/Component/BulletSpawnComponent.h"
 #include "ECS/World.h"
 
 void SpeedChangeSystem::Tick(float dt)
@@ -17,25 +18,32 @@ void SpeedChangeSystem::Tick(float dt)
 
 		//获取其控制的实体(即坦克)的速度组件并修改
 		PlayerComponent& playerComp = mWorld->GetComponent<PlayerComponent>(entity);
-		SpeedComponent& tankSpeedComp = mWorld->GetComponent<SpeedComponent>(playerComp.charId);
+		SpeedComponent& speedComp = mWorld->GetComponent<SpeedComponent>(playerComp.charId);
+		//炮台组件的方向也应该修改
+		auto& bulletSpawnComp = mWorld->GetComponent<BulletSpawnComponent>(playerComp.charId);
 
 		switch (cmdComp.cmd)
 		{
 		case BUTTON::UP:
-			tankSpeedComp.direc = Vec2Fixed(FixedPoint(0), FixedPoint(-1));
-
+			speedComp.direc = Vec2Fixed(FixedPoint(0), FixedPoint(-1));
+			bulletSpawnComp.spawnDirec = speedComp.direc;
 			break;
 		case BUTTON::DOWN:
-			tankSpeedComp.direc = Vec2Fixed(FixedPoint(0), FixedPoint(1));
-
+			speedComp.direc = Vec2Fixed(FixedPoint(0), FixedPoint(1));
+			bulletSpawnComp.spawnDirec = speedComp.direc;
 			break;
 		case BUTTON::LEFT:
-			tankSpeedComp.direc = Vec2Fixed(FixedPoint(-1), FixedPoint(0));
-
+			speedComp.direc = Vec2Fixed(FixedPoint(-1), FixedPoint(0));
+			bulletSpawnComp.spawnDirec = speedComp.direc;
 			break;
 		case BUTTON::RIGHT:
-			tankSpeedComp.direc = Vec2Fixed(FixedPoint(1), FixedPoint(0));
-
+			speedComp.direc = Vec2Fixed(FixedPoint(1), FixedPoint(0));
+			bulletSpawnComp.spawnDirec = speedComp.direc;
+			break;
+		case BUTTON::IDLE:
+			//注意此处炮台方向为之前的速度方向
+			bulletSpawnComp.spawnDirec = speedComp.direc;
+			speedComp.direc = Vec2Fixed(FixedPoint(0), FixedPoint(0));
 			break;
 		default:
 			break;

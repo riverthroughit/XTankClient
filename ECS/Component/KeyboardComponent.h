@@ -1,9 +1,9 @@
 #pragma once
-#include <unordered_map>
+#include <unordered_set>
 #include <Util/Macro.h>
 
 struct KeyboardComponent {
 	SINGLETON(KeyboardComponent);
 
-	std::unordered_map<int, bool> keysDown;
+	std::unordered_set<int> keysDown;
 };

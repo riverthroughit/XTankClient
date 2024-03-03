@@ -6,7 +6,7 @@ namespace ENTITY {
 	enum Type {
 		//PlayerComponent CommandComponent
 		PLAYER,
-		//AttachComp CollisionComp ObstacleComp PosComp PRenderComp SpeedComp
+		//AttachComp CollisionComp ObstacleComp PosComp PRenderComp SpeedComp BulletSpawnComp
 		TANK,
 		//AttachComp CollisionComp ObstacleComp PosComp PRenderComp SpeedComp
 		BULLET,
@@ -18,21 +18,23 @@ namespace ENTITY {
 namespace ENTITY_SPAWN_ARGS {
 
 	struct Player {
-		unsigned int id;
+		unsigned int id{};
 	};
 
 	struct Tank {
-		Entity ownerId;
-		Vec2Fixed pos;
+		Entity ownerId{};
+		Vec2Fixed pos{};
+		Vec2Fixed direc{};
 	};
 
 	struct Bullet {
-		Entity ownerId;
-		Vec2Fixed pos;
+		Entity ownerId{};
+		Vec2Fixed pos{};
+		Vec2Fixed speedDirec{};
 	};
 
 	struct Block {
-		Vec2Fixed pos;
+		Vec2Fixed pos{};
 	};
 }
 
@@ -44,7 +46,9 @@ namespace BUTTON {
 		LEFT,
 		RIGHT,
 		FIRE,
+		IDLE,
 		NONE,
+		MAX,
 	};
 }
 

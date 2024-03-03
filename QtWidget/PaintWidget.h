@@ -12,14 +12,18 @@ class PaintWidget : public QWidget
 private:
 	Ui::PaintWidgetClass ui;
 	World* mXTankWorld{};
+	int updateTimerId{};
 public:
 	PaintWidget(QWidget *parent = nullptr);
 	~PaintWidget();
+
+	void SetWorld(World* world);
 
 protected:
 	virtual void paintEvent(QPaintEvent* event) override;
 	virtual void keyPressEvent(QKeyEvent* event) override;
 	virtual void keyReleaseEvent(QKeyEvent* event) override;
+	void timerEvent(QTimerEvent* event);
 private:
 	void InitQPaint(QPainter& painter);
 };
