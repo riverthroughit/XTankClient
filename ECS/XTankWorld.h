@@ -15,6 +15,7 @@
 #include "ECS/System/EntityDestroySystem.h"
 #include "ECS/System/BulletHitSystem.h"
 #include "ECS/System/PlayerStateSystem.h"
+#include "ECS/System/SceneChangeSystem.h"
 
 class XTankWorld :public World {
 
@@ -34,10 +35,15 @@ private:
 	std::shared_ptr<EntityDestroySystem> mEntityDestroySystem;
 	std::shared_ptr<BulletHitSystem> mBulletHitSystem;
 	std::shared_ptr<PlayerStateSystem> mPlayerStateSystem;
+	std::shared_ptr<SceneChangeSystem> mSceneChangeSystem;
 
 public:
 
 	virtual void Init() override;
+
+	void SendGameStartReq();
+
+	void ReceiveGameStartRes();
 
 	void Start();
 

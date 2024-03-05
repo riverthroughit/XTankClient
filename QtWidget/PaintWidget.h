@@ -2,6 +2,8 @@
 
 #include <QWidget>
 #include "ui_PaintWidget.h"
+#include "TypeConfig.h"
+#include "Math/Vec2.h"
 
 class World;
 
@@ -26,4 +28,7 @@ protected:
 	void timerEvent(QTimerEvent* event);
 private:
 	void InitQPaint(QPainter& painter);
+
+	//»æÖÆÅö×²Ä£ÐÍ
+	void DrawEntityCollision(PRENDER_SHAPE::Type shape, Vec2f pos, QPainter& painter);
 };

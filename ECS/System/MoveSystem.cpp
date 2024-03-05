@@ -13,15 +13,8 @@ void MoveSystem::Tick(float dt)
 		PosComponent& posComp = mWorld->GetComponent<PosComponent>(entity);
 		SpeedComponent& speedComp = mWorld->GetComponent<SpeedComponent>(entity);
 
-		//更新速度 并更新空间划分结构
-		Vec2<FixedPoint>& pos = posComp.pos;
-		int x = static_cast<int>(pos.x / CUBE_SIDE_LENTH_FIXED);
-		int y = static_cast<int>(pos.y / CUBE_SIDE_LENTH_FIXED);
-		gridComp.mGrids[y][x].erase(entity);
+		//更新速度
+		posComp.pos += speedComp.direc * speedComp.speed;
 
-		pos += speedComp.direc * speedComp.speed;
-		x = static_cast<int>(pos.x / CUBE_SIDE_LENTH_FIXED);
-		y = static_cast<int>(pos.y / CUBE_SIDE_LENTH_FIXED);
-		gridComp.mGrids[y][x].insert(entity);
 	}
 }

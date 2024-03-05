@@ -290,6 +290,15 @@
     <ClInclude Include="ECS\Component\BulletComponent.h">
       <Filter>Source Files\ECS\Component</Filter>
     </ClInclude>
+    <ClInclude Include="ECS\Component\BlockComponent.h">
+      <Filter>Source Files\ECS\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\System\SceneChangeSystem.h">
+      <Filter>Source Files\ECS\System</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Component\RandComponent.h">
+      <Filter>Source Files\ECS\Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="renderer\input\Face.cpp">
@@ -410,6 +419,9 @@
       <Filter>Source Files\ECS\System</Filter>
     </ClCompile>
     <ClCompile Include="ECS\System\PlayerStateSystem.cpp">
+      <Filter>Source Files\ECS\System</Filter>
+    </ClCompile>
+    <ClCompile Include="ECS\System\SceneChangeSystem.cpp">
       <Filter>Source Files\ECS\System</Filter>
     </ClCompile>
   </ItemGroup>

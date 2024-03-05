@@ -1,5 +1,6 @@
 #pragma once
 #include "Math/Vec2.h"
+#include <memory>
 
 //渲染刷新率
 constexpr int RENDER_FPS{ 60 };
@@ -27,23 +28,27 @@ constexpr int CUBE_SIDE_LENTH{ 10 };
 constexpr int TANK_RADIUS{ 3 };
 //炮弹半径
 constexpr int BULLET_RADIUS{ 1 };
-//场景边上方格数量
-constexpr int SCENE_SIDE_NUM{ 13 };
+//场景边上方格数量(包括最边缘障碍物)
+constexpr int SCENE_SIDE_NUM{ 14 };
 //场景边长
 constexpr int SCENE_SIDE_LENTH{ SCENE_SIDE_NUM * CUBE_SIDE_LENTH };
+//障碍物密度 分子 分母
+constexpr std::pair<int, int> BLOCK_DENSITY{ 1,2 };
 //坦克速度 注意单位是每个逻辑帧
-constexpr float TANK_SPEED{ (float)CUBE_SIDE_LENTH * 1 / LOCKSTEP_FPS };
+constexpr float TANK_SPEED{ (float)CUBE_SIDE_LENTH * 4 / LOCKSTEP_FPS };
 //子弹速度
-constexpr float BULLET_SPEED{ (float)CUBE_SIDE_LENTH * 2 / LOCKSTEP_FPS };
+constexpr float BULLET_SPEED{ (float)CUBE_SIDE_LENTH * 3 / LOCKSTEP_FPS };
 //玩家hp
 constexpr int PLAYER_HP = 3;
+//复活冷却时间
+constexpr int RESPAWN_TIME = LOCKSTEP_FPS;
 
 //四个玩家的出生点
 constexpr Vec2f PLAYERS_SPAWN_POS[4]{
-	{0.5 * CUBE_SIDE_LENTH,0.5 * CUBE_SIDE_LENTH},
-	{(SCENE_SIDE_NUM - 0.5) * CUBE_SIDE_LENTH ,0.5 * CUBE_SIDE_LENTH},
-	{0.5 * CUBE_SIDE_LENTH,(SCENE_SIDE_NUM - 0.5) * CUBE_SIDE_LENTH },
-	{ (SCENE_SIDE_NUM - 0.5) * CUBE_SIDE_LENTH ,(SCENE_SIDE_NUM - 0.5) * CUBE_SIDE_LENTH },
+	{1.5 * CUBE_SIDE_LENTH,1.5 * CUBE_SIDE_LENTH},
+	{(SCENE_SIDE_NUM - 1.5) * CUBE_SIDE_LENTH ,1.5 * CUBE_SIDE_LENTH},
+	{1.5 * CUBE_SIDE_LENTH,(SCENE_SIDE_NUM - 1.5) * CUBE_SIDE_LENTH },
+	{ (SCENE_SIDE_NUM - 1.5) * CUBE_SIDE_LENTH ,(SCENE_SIDE_NUM - 1.5) * CUBE_SIDE_LENTH },
 };
 
 //四个玩家初始方向

@@ -12,6 +12,10 @@ public:
 	virtual void Tick(float dt)override;
 
 private:
+
+	//根据entity位置更新空间划分数据结构
+	void UpdateGrids();
+
 	//清除当前碰撞数据
 	void ClearHitEntities();
 

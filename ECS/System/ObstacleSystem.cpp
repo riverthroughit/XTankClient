@@ -57,7 +57,6 @@ void ObstacleSystem::BlockTypeSpeedTick(Entity entity)
 
 		if (!isEnd) {
 			speedComp.direc = { FixedPoint(0),FixedPoint(0) };
-			speedComp.speed = FixedPoint(0);
 		}
 	}
 }

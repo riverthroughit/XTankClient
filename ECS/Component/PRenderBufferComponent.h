@@ -7,6 +7,7 @@
 #include <shared_mutex>
 #include <mutex>
 #include "ECS/Types.h"
+#include <utility>
 
 struct PRenderData {
 	Entity entityId;
@@ -29,22 +30,19 @@ class PRenderBufferComponent {
 
 	//三缓冲
 	std::array<BufferMap, 3> renderBuffer;
+	//当前帧索引
+	unsigned int frameId{};
 
 	//次新帧 最新帧 正在写入帧 对应的索引
-	int preIndex = 1;
-	int curIndex = 2;
-	int writeIndex = 0;
+	int preIndex{ 1 };
+	int curIndex{ 2 };
+	int writeIndex{ 0 };
 
 public:
 
-	BufferMap GetCurBuffer() {
+	std::pair<unsigned int, std::pair<BufferMap, BufferMap>> GetFrameIdAndReadBuffers() {
 		std::shared_lock sharedLock(wrMutex);
-		return renderBuffer[curIndex];
-	}
-
-	BufferMap GetPreBuffer() {
-		std::shared_lock sharedLock(wrMutex);
-		return renderBuffer[preIndex];
+		return { frameId,{ renderBuffer[preIndex],renderBuffer[curIndex] } };
 	}
 
 };

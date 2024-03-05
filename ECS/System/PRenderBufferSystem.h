@@ -16,6 +16,9 @@ private:
 	//交换、刷新渲染队列
 	void SwapPRenderBuffer();
 
+	//更新当前帧索引
+	void UpdateFrameId();
+
 	//添加信息至渲染队列
-	void TickPRenderBuffer();
+	void UpdatePRenderBuffer();
 };

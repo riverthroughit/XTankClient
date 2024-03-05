@@ -5,11 +5,12 @@
 #include "ECS/Component/PosComponent.h"
 #include "ECS/Component/SpeedComponent.h"
 #include "ECS/Component/PRenderBufferComponent.h"
+#include "ECS/Component/FrameComponent.h"
 #include "Util/Util.h"
 
 void PRenderBufferSystem::Tick(float dt)
 {
-	TickPRenderBuffer();
+	UpdatePRenderBuffer();
 }
 
 void PRenderBufferSystem::WriteToPRenderBuffer(const PRenderData& data)
@@ -32,8 +33,15 @@ void PRenderBufferSystem::SwapPRenderBuffer()
 	bufferComp.renderBuffer[bufferComp.writeIndex].clear();
 }
 
+void PRenderBufferSystem::UpdateFrameId()
+{
+	auto& bufferComp = mWorld->GetSingletonComponent<PRenderBufferComponent>();
+	auto& frameComp = mWorld->GetSingletonComponent<FrameComponent>();
+	bufferComp.frameId = frameComp.frameId;
+}
 
-void PRenderBufferSystem::TickPRenderBuffer()
+
+void PRenderBufferSystem::UpdatePRenderBuffer()
 {
 
 	for (const Entity& entity : mEntities) {
@@ -48,4 +56,6 @@ void PRenderBufferSystem::TickPRenderBuffer()
 	}
 
 	SwapPRenderBuffer();
+
+	UpdateFrameId();
 }

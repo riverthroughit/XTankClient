@@ -21,6 +21,7 @@
     <ClInclude Include="ECS\ComponentArray.h" />
     <ClInclude Include="ECS\ComponentManager.h" />
     <ClInclude Include="ECS\Component\AttachComponent.h" />
+    <ClInclude Include="ECS\Component\BlockComponent.h" />
     <ClInclude Include="ECS\Component\BulletComponent.h" />
     <ClInclude Include="ECS\Component\BulletSpawnComponent.h" />
     <ClInclude Include="ECS\Component\CollisionComponent.h" />
@@ -34,6 +35,7 @@
     <ClInclude Include="ECS\Component\PosComponent.h" />
     <ClInclude Include="ECS\Component\PRenderBufferComponent.h" />
     <ClInclude Include="ECS\Component\PRenderComponent.h" />
+    <ClInclude Include="ECS\Component\RandComponent.h" />
     <ClInclude Include="ECS\Component\SocketComponent.h" />
     <ClInclude Include="ECS\Component\SpeedComponent.h" />
     <ClInclude Include="ECS\Component\UniformGridComponent.h" />
@@ -50,6 +52,7 @@
     <ClInclude Include="ECS\System\PlayerSpawnSystem.h" />
     <ClInclude Include="ECS\System\PlayerStateSystem.h" />
     <ClInclude Include="ECS\System\PRenderBufferSystem.h" />
+    <ClInclude Include="ECS\System\SceneChangeSystem.h" />
     <ClInclude Include="ECS\System\SocketSystem.h" />
     <ClInclude Include="ECS\System\SpeedChangeSystem.h" />
     <ClInclude Include="ECS\World.h" />
@@ -110,6 +113,7 @@
     <ClCompile Include="ECS\System\PlayerSpawnSystem.cpp" />
     <ClCompile Include="ECS\System\PlayerStateSystem.cpp" />
     <ClCompile Include="ECS\System\PRenderBufferSystem.cpp" />
+    <ClCompile Include="ECS\System\SceneChangeSystem.cpp" />
     <ClCompile Include="ECS\System\SocketSystem.cpp" />
     <ClCompile Include="ECS\System\SpeedChangeSystem.cpp" />
     <ClCompile Include="ECS\XTankWorld.cpp" />

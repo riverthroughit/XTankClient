@@ -16,6 +16,8 @@
 #include "ECS/Component/BulletSpawnComponent.h"
 #include "ECS/Component/DestroyComponent.h"
 #include "ECS/Component/BulletComponent.h"
+#include "ECS/Component/BlockComponent.h"
+#include "ECS/Component/RandComponent.h"
 #include <chrono>
 #include "Config.h"
 #include <thread>
@@ -42,6 +44,8 @@ void XTankWorld::Init()
 	RegisterComponent<BulletSpawnComponent>();
 	RegisterComponent<DestroyComponent>();
 	RegisterComponent<BulletComponent>();
+	RegisterComponent<BlockComponent>();
+	RegisterSingleComponent<RandComponent>();
 
 	ComponentType attachCompType = GetComponentType<AttachComponent>();
 	ComponentType collisionCompType = GetComponentType<CollisionComponent>();
@@ -54,12 +58,14 @@ void XTankWorld::Init()
 	ComponentType bulletSpawnCompType = GetComponentType<BulletSpawnComponent>();
 	ComponentType destroyCompType = GetComponentType<DestroyComponent>();
 	ComponentType bulletCompType = GetComponentType<BulletComponent>();
+	ComponentType blockCompType = GetComponentType<BlockComponent>();
 
 	Signature signature;
 
 	mCollisionSystem = RegisterSystem<CollisionSystem>();
 	signature.reset();
 	signature.set(collisionCompType);
+	signature.set(posCompType);
 	SetSystemSignature<CollisionSystem>(signature);
 
 	mCommandSystem = RegisterSystem<CommandSystem>();
@@ -123,13 +129,18 @@ void XTankWorld::Init()
 	signature.reset();
 	signature.set(playerCompType);
 	SetSystemSignature<PlayerStateSystem>(signature);
+
+	mSceneChangeSystem = RegisterSystem<SceneChangeSystem>();
+	signature.reset();
+	signature.set(blockCompType);
+	SetSystemSignature<SceneChangeSystem>(signature);
 }
 
 void XTankWorld::Start()
 {
 
-	//渲染线程
-	//std::thread()
+	//初始化场景
+	mSceneChangeSystem->InitScene();
 
 	using clock = std::chrono::high_resolution_clock;
 	using duration = std::chrono::duration<float, std::milli>;
@@ -162,6 +173,7 @@ void XTankWorld::Start()
 			mMoveSystem->Tick(dt);
 			mFireSystem->Tick(dt);
 			mBulletHitSystem->Tick(dt);
+			mSceneChangeSystem->Tick(dt);
 			mPlayerStateSystem->Tick(dt);
 			mEntityDestroySystem->Tick(dt);
 			mEntitySpawnSystem->Tick(dt);

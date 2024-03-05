@@ -11,4 +11,6 @@ struct PlayerComponent {
 	int hp{};
 	//分数
 	unsigned int score{};
+	//(操控的entity的)剩余复活时间
+	int respawnTime{};
 };

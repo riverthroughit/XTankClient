@@ -8,6 +8,7 @@
 
 void CollisionSystem::Tick(float dt)
 {
+	UpdateGrids();
 	
 	ClearHitEntities();
 
@@ -15,10 +16,24 @@ void CollisionSystem::Tick(float dt)
 
 }
 
+void CollisionSystem::UpdateGrids()
+{
+	auto& gridComp = mWorld->GetSingletonComponent<UniformGridComponent>();
+	gridComp.mGrids.fill(std::array<std::set<Entity>, SCENE_SIDE_NUM>());
+
+	for (Entity entity : mEntities) {
+		auto& posComp = mWorld->GetComponent<PosComponent>(entity);
+		Vec2<FixedPoint>& pos = posComp.pos;
+		int x = static_cast<int>(pos.x / CUBE_SIDE_LENTH_FIXED);
+		int y = static_cast<int>(pos.y / CUBE_SIDE_LENTH_FIXED);
+		gridComp.mGrids[y][x].insert(entity);
+	}
+}
+
 void CollisionSystem::ClearHitEntities()
 {
 	for (const Entity& entity : mEntities) {
-		CollisionComponent& c = mWorld->GetComponent<CollisionComponent>(entity);
+		auto& c = mWorld->GetComponent<CollisionComponent>(entity);
 		c.hitEntities.clear();
 	}
 }
@@ -26,7 +41,7 @@ void CollisionSystem::ClearHitEntities()
 
 void CollisionSystem::JudgeCollisionInGrids()
 {
-	UniformGridComponent& gridComp = mWorld->GetSingletonComponent<UniformGridComponent>();
+	auto& gridComp = mWorld->GetSingletonComponent<UniformGridComponent>();
 	//遍历每个grid中的entity 判断其是否与周围entity相交
 	for (int row = 0; row < SCENE_SIDE_NUM; ++row) {
 		for (int col = 0; col < SCENE_SIDE_NUM; ++col) {
@@ -42,12 +57,13 @@ void CollisionSystem::JudgeCollisionByEntity(const Entity& entity, int row, int 
 {
 	//auto& collisionEventQueue = mWorld->GetEventQueue<CollisionEventQueue>();
 
-	for (int irow = row - 1; irow < 2; ++irow) {
+	for (int irow = row - 1; irow < row + 2; ++irow) {
 		if (irow < 0 || irow >= SCENE_SIDE_NUM)continue;
-		for (int icol = col - 1; icol < 2; ++icol) {
+		for (int icol = col - 1; icol < col + 2; ++icol) {
 			if (icol < 0 || icol >= SCENE_SIDE_NUM)continue;
 
 			for (const Entity& otherEntity : gridComp.mGrids[irow][icol]) {
+				
 				if (entity == otherEntity)continue;
 
 				PosComponent& p1 = mWorld->GetComponent<PosComponent>(entity);

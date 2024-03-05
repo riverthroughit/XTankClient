@@ -1,0 +1,12 @@
+#pragma once
+
+#include "ECS/System.h"
+
+class SceneChangeSystem :public System {
+
+public:
+	virtual void Tick(float dt) override;
+
+	//生成场景内所有方块
+	void InitScene();
+};

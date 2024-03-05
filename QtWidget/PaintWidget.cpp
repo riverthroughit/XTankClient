@@ -27,14 +27,32 @@ void PaintWidget::SetWorld(World * world)
 
 void PaintWidget::paintEvent(QPaintEvent* event)
 {
+	//更新屏幕分辨率
+	SCREEN_HEIGHT = height();
+	SCREEN_WIDTH = width();
 	//创建QPainter对象
 	QPainter painter(this);
 	InitQPaint(painter);
 
 	//获取渲染队列
 	PRenderBufferComponent& bufferComp = mXTankWorld->GetSingletonComponent<PRenderBufferComponent>();
-	auto curBuffer = bufferComp.GetCurBuffer();
-	auto preBuffer = bufferComp.GetPreBuffer();
+	auto [renderFrameId, buffers] = bufferComp.GetFrameIdAndReadBuffers();
+	auto& preBuffer = buffers.first, & curBuffer = buffers.second;
+
+	//帧组件
+	FrameComponent& framComp = mXTankWorld->GetSingletonComponent<FrameComponent>();
+	unsigned int frameId = framComp.frameId;
+	float percent = framComp.percent;
+
+	//若逻辑帧已更新至下一帧 则渲染帧使用的插值比例直接设为1
+	if (frameId > renderFrameId) {
+		percent = 1;
+	}
+
+	if (percent > 1) {
+		int a = 1;
+	}
+
 
 	//变换坐标
 	for (auto& [_, data] : curBuffer) {
@@ -46,11 +64,6 @@ void PaintWidget::paintEvent(QPaintEvent* event)
 		data.direc = logicToScreen(data.direc);
 	}
 
-	//圆半径
-	float r = logicToScreen(10.0);
-
-	//帧组件
-	FrameComponent& framComp = mXTankWorld->GetSingletonComponent<FrameComponent>();
 
 	//插值得到各模型位置
 	for (auto& [id, preData] : preBuffer) {
@@ -62,17 +75,18 @@ void PaintWidget::paintEvent(QPaintEvent* event)
 
 		//物体是否在两帧缓冲中均出现
 		if (curPairIte == curBuffer.end()) {
-			painter.drawArc(prePos.x - r, prePos.y + r, r * 2, r * 2, 0, 16 * 360);
+			DrawEntityCollision(preData.shape, prePos, painter);			
+			continue;
 		}
 		else {
 			Vec2f curPos = curPairIte->second.pos;
 			Vec2f curDirec = curPairIte->second.direc;
 
-			Vec2f pos = linearInterp(prePos, curPos, framComp.percent);
-			Vec2f direc = linearInterp(preDirec, curDirec, framComp.percent);
+			
+			Vec2f pos = linearInterp(prePos, curPos, percent);
+			Vec2f direc = linearInterp(preDirec, curDirec, percent);
 
-			painter.drawArc(pos.x - r, pos.y + r, r * 2, r * 2, 0, 16 * 360);
-
+			DrawEntityCollision(preData.shape, pos, painter);
 		}
 	}
 
@@ -125,4 +139,34 @@ void PaintWidget::InitQPaint(QPainter& painter)
 	brush.setColor(Qt::yellow); //画刷颜色
 	brush.setStyle(Qt::SolidPattern); //画刷填充样式
 	painter.setBrush(brush);
+}
+
+void PaintWidget::DrawEntityCollision(PRENDER_SHAPE::Type shape, Vec2f pos, QPainter& painter)
+{
+
+	//圆半径
+	int blockR = logicToScreen(CUBE_SIDE_LENTH / 2);
+	int tankR = logicToScreen(TANK_RADIUS);
+	int bulletR = logicToScreen(BULLET_RADIUS);
+
+	//四舍五入 不然可能抖动
+	int x = pos.x + 0.5, y = pos.y + 0.5;
+
+	switch (shape)
+	{
+	case PRENDER_SHAPE::BLOCK:
+		painter.drawArc(x - blockR, y - blockR, blockR * 2, blockR * 2, 0, 16 * 360);
+		break;
+
+	case PRENDER_SHAPE::TANK:
+		painter.drawArc(x - tankR, y - tankR, tankR * 2, tankR * 2, 0, 16 * 360);
+		break;
+
+	case PRENDER_SHAPE::BULLET:
+		painter.drawArc(x - bulletR, y - bulletR, bulletR * 2, bulletR * 2, 0, 16 * 360);
+		break;
+
+	default:
+		break;
+	}
 }

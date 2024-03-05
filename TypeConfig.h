@@ -6,38 +6,17 @@ namespace ENTITY {
 	enum Type {
 		//PlayerComponent CommandComponent
 		PLAYER,
-		//AttachComp CollisionComp ObstacleComp PosComp PRenderComp SpeedComp BulletSpawnComp
+
+		//AttachComp CollisionComp ObstacleComp PosComp PRenderComp BlockComp SpeedComp BulletSpawnComp
 		TANK,
-		//AttachComp CollisionComp ObstacleComp PosComp PRenderComp SpeedComp
+
+		//AttachComp CollisionComp  PosComp PRenderComp SpeedComp
 		BULLET,
-		//CollisionComp ObstacleComp PosComp PRenderComp
+
+		//CollisionComp ObstacleComp PosComp PRenderComp BlockComp
 		BLOCK,
 	};
 }
-
-namespace ENTITY_SPAWN_ARGS {
-
-	struct Player {
-		unsigned int id{};
-	};
-
-	struct Tank {
-		Entity ownerId{};
-		Vec2Fixed pos{};
-		Vec2Fixed direc{};
-	};
-
-	struct Bullet {
-		Entity ownerId{};
-		Vec2Fixed pos{};
-		Vec2Fixed speedDirec{};
-	};
-
-	struct Block {
-		Vec2Fixed pos{};
-	};
-}
-
 
 namespace BUTTON {
 	enum Type {
@@ -62,7 +41,9 @@ namespace LOGIC_SHAPE {
 
 namespace PRENDER_SHAPE {
 	enum Type {
-		CIRCLE,
+		TANK,
+		BLOCK,
+		BULLET,
 	};
 }
 
@@ -73,3 +54,34 @@ namespace OBSTACLE {
 	};
 }
 
+namespace BLOCK {
+	enum Type {
+		HARD,
+		FRAGILE,
+	};
+}
+
+namespace ENTITY_SPAWN_ARGS {
+
+	struct Player {
+		unsigned int id{};
+	};
+
+	struct Tank {
+		Entity ownerId{};
+		Vec2Fixed pos{};
+		Vec2Fixed direc{};
+	};
+
+	struct Bullet {
+		Entity ownerId{};
+		Vec2Fixed pos{};
+		Vec2Fixed speedDirec{};
+	};
+
+	struct Block {
+		Vec2Fixed pos{};
+		Vec2Fixed direc{};
+		BLOCK::Type blockType;
+	};
+}

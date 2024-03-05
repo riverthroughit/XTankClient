@@ -10,13 +10,14 @@
 #include "ECS/Component/PRenderComponent.h"
 #include "ECS/Component/SpeedComponent.h"
 #include "Config.h"
+#include "ECS/Component/EntitySpawnComponent.h"
 
 void PlayerSpawnSystem::Tick(float dt)
 {
 	//从socket中取得数据并判断是否需要添加用户
 	static bool temp = true;
 
-	EntitySpawnComponent& entitySpawnComp = mWorld->GetSingletonComponent<EntitySpawnComponent>();
+	auto& entitySpawnComp = mWorld->GetSingletonComponent<EntitySpawnComponent>();
 	
 	if (temp) {
 		unsigned int localPlayerId = 0;
@@ -26,6 +27,7 @@ void PlayerSpawnSystem::Tick(float dt)
 		playerComp.playerId = localPlayerId;
 		playerComp.hp = PLAYER_HP;
 		playerComp.score = 0;
+		playerComp.respawnTime = 0;
 
 		CommandComponent commandComp;
 		mWorld->AddComponent(localPlayer, playerComp);
