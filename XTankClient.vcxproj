@@ -36,6 +36,7 @@
     <ClInclude Include="ECS\Component\PRenderBufferComponent.h" />
     <ClInclude Include="ECS\Component\PRenderComponent.h" />
     <ClInclude Include="ECS\Component\RandComponent.h" />
+    <ClInclude Include="ECS\Component\RollbackComponent.h" />
     <ClInclude Include="ECS\Component\SocketComponent.h" />
     <ClInclude Include="ECS\Component\SpeedComponent.h" />
     <ClInclude Include="ECS\Component\UniformGridComponent.h" />
@@ -52,6 +53,7 @@
     <ClInclude Include="ECS\System\PlayerSpawnSystem.h" />
     <ClInclude Include="ECS\System\PlayerStateSystem.h" />
     <ClInclude Include="ECS\System\PRenderBufferSystem.h" />
+    <ClInclude Include="ECS\System\RollbackSystem.h" />
     <ClInclude Include="ECS\System\SceneChangeSystem.h" />
     <ClInclude Include="ECS\System\SocketSystem.h" />
     <ClInclude Include="ECS\System\SpeedChangeSystem.h" />
@@ -71,6 +73,18 @@
     <ClInclude Include="Math\Vec2.h" />
     <ClInclude Include="ObjectPool\ObjectPool.h" />
     <QtMoc Include="QtWidget\PaintWidget.h" />
+    <QtMoc Include="QtWidget\LobbyWidget.h" />
+    <QtMoc Include="QtWidget\MainMenuWidget.h" />
+    <QtMoc Include="QtWidget\RoomWidget.h" />
+    <QtMoc Include="QtWidget\ReceiveWidget.h" />
+    <ClInclude Include="Protobuf\XTankMsg.pb.h" />
+    <ClInclude Include="QtWidget\WidgetConfig.h" />
+    <ClInclude Include="QtWidget\WidgetManager.h" />
+    <ClInclude Include="SingleCompContainer.h" />
+    <ClInclude Include="SocketConfig.h" />
+    <ClInclude Include="Socket\MessageQueue.h" />
+    <ClInclude Include="Socket\SocketClient.h" />
+    <ClInclude Include="Thread\ThreadManager.h" />
     <ClInclude Include="Util\Macro.h" />
     <ClInclude Include="Util\Util.h" />
     <ClInclude Include="renderer\input\Face.h" />
@@ -113,12 +127,19 @@
     <ClCompile Include="ECS\System\PlayerSpawnSystem.cpp" />
     <ClCompile Include="ECS\System\PlayerStateSystem.cpp" />
     <ClCompile Include="ECS\System\PRenderBufferSystem.cpp" />
+    <ClCompile Include="ECS\System\RollbackSystem.cpp" />
     <ClCompile Include="ECS\System\SceneChangeSystem.cpp" />
     <ClCompile Include="ECS\System\SocketSystem.cpp" />
     <ClCompile Include="ECS\System\SpeedChangeSystem.cpp" />
     <ClCompile Include="ECS\XTankWorld.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Protobuf\XTankMsg.pb.cc" />
+    <ClCompile Include="QtWidget\LobbyWidget.cpp" />
+    <ClCompile Include="QtWidget\MainMenuWidget.cpp" />
     <ClCompile Include="QtWidget\PaintWidget.cpp" />
+    <ClCompile Include="QtWidget\ReceiveWidget.cpp" />
+    <ClCompile Include="QtWidget\RoomWidget.cpp" />
+    <ClCompile Include="QtWidget\WidgetManager.cpp" />
     <ClCompile Include="renderer\input\Face.cpp" />
     <ClCompile Include="renderer\input\Material.cpp" />
     <ClCompile Include="renderer\input\ObjData.cpp" />
@@ -137,9 +158,15 @@
     <ClCompile Include="renderer\scene\Camera.cpp" />
     <ClCompile Include="renderer\scene\Light.cpp" />
     <ClCompile Include="renderer\scene\Scene.cpp" />
+    <ClCompile Include="Socket\SocketClient.cpp" />
+    <ClCompile Include="Thread\ThreadManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <QtUic Include="QtWidget\LobbyWidget.ui" />
+    <QtUic Include="QtWidget\MainMenuWidget.ui" />
     <QtUic Include="QtWidget\PaintWidget.ui" />
+    <QtUic Include="QtWidget\ReceiveWidget.ui" />
+    <QtUic Include="QtWidget\RoomWidget.ui" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{AAC3F659-741F-4AE1-A680-AAD2BD1E30C5}</ProjectGuid>
@@ -191,9 +218,15 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)include/;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <PreprocessorDefinitions>_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$(ProjectDir)lib/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>libprotobufd.lib;libprotocd.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
     <ClCompile>

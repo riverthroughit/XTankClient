@@ -17,6 +17,9 @@ public:
 		}
 	}
 
+	EntityManager(const EntityManager&) = default;
+	EntityManager& operator= (EntityManager&&) = default;
+
 	Entity CreateEntity()
 	{
 		assert(mLivingEntityCount < MAX_ENTITIES && "Too many entities in existence.");

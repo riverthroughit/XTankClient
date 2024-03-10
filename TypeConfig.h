@@ -1,6 +1,8 @@
 #pragma once
 #include "Math/Vec2.h"
 #include "ECS/Types.h"
+#include "Config.h"
+#include <array>
 
 namespace ENTITY {
 	enum Type {
@@ -20,15 +22,32 @@ namespace ENTITY {
 
 namespace BUTTON {
 	enum Type {
+		NONE,
 		UP,
 		DOWN,
 		LEFT,
 		RIGHT,
 		FIRE,
 		IDLE,
-		NONE,
 		MAX,
 	};
+}
+
+//房间内所有玩家一帧的操作
+struct PlayersCommand {
+
+	int frameId{};
+
+	std::array<BUTTON::Type, PLAYER_NUM> commandArray{};
+
+};
+
+inline bool operator == (const PlayersCommand& a, const PlayersCommand& b) {
+	return a.frameId == b.frameId && a.commandArray == b.commandArray;
+}
+
+inline bool operator != (const PlayersCommand& a, const PlayersCommand& b) {
+	return !(a == b);
 }
 
 namespace LOGIC_SHAPE {

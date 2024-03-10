@@ -19,6 +19,18 @@ private:
 
 
 public:
+
+	World() = default;
+
+	World(const World& other):
+		mComponentManager(std::make_unique<ComponentManager>(*other.mComponentManager)),
+		mEntityManager(std::make_unique<EntityManager>(*other.mEntityManager)),
+		mSystemManager(std::make_unique<SystemManager>(*other.mSystemManager)){
+
+	}
+
+	World& operator = (World&&) noexcept = default;
+
 	virtual void Init()
 	{
 		mComponentManager = std::make_unique<ComponentManager>();
@@ -50,9 +62,9 @@ public:
 	}
 
 	template<typename T>
-	void RegisterSingleComponent()
+	void RegisterSingletonComponent()
 	{
-
+		mComponentManager->RegisterSingletonComponent<T>();
 	}
 
 	template<typename T>
@@ -114,7 +126,7 @@ public:
 
 	template<typename T>
 	T& GetSingletonComponent() {
-		return T::Instance();
+		return mComponentManager->GetSingletonComponent<T>();
 	}
 
 

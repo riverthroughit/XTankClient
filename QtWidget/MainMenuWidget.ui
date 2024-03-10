@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainMenuWidgetClass</class>
+ <widget class="QWidget" name="MainMenuWidgetClass">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>600</width>
+    <height>400</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainMenuWidget</string>
+  </property>
+  <widget class="QPushButton" name="joinLobbyBtn">
+   <property name="geometry">
+    <rect>
+     <x>220</x>
+     <y>130</y>
+     <width>121</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>进入大厅</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="logoutBtn">
+   <property name="geometry">
+    <rect>
+     <x>220</x>
+     <y>210</y>
+     <width>111</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>退出</string>
+   </property>
+  </widget>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>joinLobbyBtn</sender>
+   <signal>clicked()</signal>
+   <receiver>MainMenuWidgetClass</receiver>
+   <slot>JoinBtnClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>299</x>
+     <y>164</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>329</x>
+     <y>214</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>logoutBtn</sender>
+   <signal>clicked()</signal>
+   <receiver>MainMenuWidgetClass</receiver>
+   <slot>ExitBtnClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>322</x>
+     <y>228</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>463</x>
+     <y>233</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>JoinBtnClicked()</slot>
+  <slot>ExitBtnClicked()</slot>
+ </slots>
+</ui>

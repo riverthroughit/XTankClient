@@ -18,7 +18,7 @@ void SceneChangeSystem::Tick(float dt)
 	}
 }
 
-void SceneChangeSystem::InitScene()
+void SceneChangeSystem::Init()
 {
 
 	auto& randComp = mWorld->GetSingletonComponent<RandComponent>();

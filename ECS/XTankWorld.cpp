@@ -18,6 +18,8 @@
 #include "ECS/Component/BulletComponent.h"
 #include "ECS/Component/BlockComponent.h"
 #include "ECS/Component/RandComponent.h"
+#include "ECS/Component/EntitySpawnComponent.h"
+#include "ECS/Component/RollbackComponent.h"
 #include <chrono>
 #include "Config.h"
 #include <thread>
@@ -30,22 +32,24 @@ void XTankWorld::Init()
 	RegisterComponent<AttachComponent>();
 	RegisterComponent<CollisionComponent>();
 	RegisterComponent<CommandComponent>();
-	RegisterSingleComponent<FrameComponent>();
-	RegisterSingleComponent<InputComponent>();
-	RegisterSingleComponent<KeyboardComponent>();
+	RegisterSingletonComponent<FrameComponent>();
+	RegisterSingletonComponent<InputComponent>();
+	RegisterSingletonComponent<KeyboardComponent>();
 	RegisterComponent<ObstacleComponent>();
 	RegisterComponent<PlayerComponent>();
 	RegisterComponent<PosComponent>();
-	RegisterSingleComponent<PRenderBufferComponent>();
+	RegisterSingletonComponent<PRenderBufferComponent>();
 	RegisterComponent<PRenderComponent>();
-	RegisterSingleComponent<SocketComponent>();
+	RegisterSingletonComponent<SocketComponent>();
 	RegisterComponent<SpeedComponent>();
-	RegisterSingleComponent<UniformGridComponent>();
+	RegisterSingletonComponent<UniformGridComponent>();
 	RegisterComponent<BulletSpawnComponent>();
 	RegisterComponent<DestroyComponent>();
 	RegisterComponent<BulletComponent>();
 	RegisterComponent<BlockComponent>();
-	RegisterSingleComponent<RandComponent>();
+	RegisterSingletonComponent<RandComponent>();
+	RegisterSingletonComponent<EntitySpawnComponent>();
+	RegisterSingletonComponent<RollbackComponent>();
 
 	ComponentType attachCompType = GetComponentType<AttachComponent>();
 	ComponentType collisionCompType = GetComponentType<CollisionComponent>();
@@ -134,13 +138,67 @@ void XTankWorld::Init()
 	signature.reset();
 	signature.set(blockCompType);
 	SetSystemSignature<SceneChangeSystem>(signature);
+
+	mRollbackSystem = RegisterSystem<RollbackSystem>();
+}
+
+void XTankWorld::SystemInit()
+{
+	//获取初始信息
+	//mSocketSystem->Tick(dt);
+	mPlayerSpawnSystem->Init();
+
+	//初始化场景
+	mSceneChangeSystem->Init();
+}
+
+void XTankWorld::SystemTick(float dt)
+{
+	mInputSystem->Tick(dt);
+	mSocketSystem->Tick(dt);
+	//mRollbackSystem->Tick(dt);
+	mCommandSystem->Tick(dt);
+	mCollisionSystem->Tick(dt);
+	mSpeedChangeSystem->Tick(dt);
+	mObstacleSystem->Tick(dt);
+	mMoveSystem->Tick(dt);
+	mFireSystem->Tick(dt);
+	mBulletHitSystem->Tick(dt);
+	mSceneChangeSystem->Tick(dt);
+	mPlayerStateSystem->Tick(dt);
+	mEntityDestroySystem->Tick(dt);
+	mEntitySpawnSystem->Tick(dt);
+	mPRenderBufferSystem->Tick(dt);
+}
+
+void XTankWorld::SystemTickInRollback(const PlayersCommand& playersCmd)
+{
+
+	//设置命令
+	auto& rollbackComp = GetSingletonComponent<RollbackComponent>();
+	rollbackComp.curPredictedCmd = playersCmd;
+
+	//更新系统
+	mCommandSystem->Tick(0);
+	mCollisionSystem->Tick(0);
+	mSpeedChangeSystem->Tick(0);
+	mObstacleSystem->Tick(0);
+	mMoveSystem->Tick(0);
+	mFireSystem->Tick(0);
+	mBulletHitSystem->Tick(0);
+	mSceneChangeSystem->Tick(0);
+	mPlayerStateSystem->Tick(0);
+	mEntityDestroySystem->Tick(0);
+	mEntitySpawnSystem->Tick(0);
+
+	//帧数系统更新
+	mFrameSystem->TickInRollback();
 }
 
 void XTankWorld::Start()
 {
 
-	//初始化场景
-	mSceneChangeSystem->InitScene();
+	SystemInit();
 
 	using clock = std::chrono::high_resolution_clock;
 	using duration = std::chrono::duration<float, std::milli>;
@@ -163,21 +221,7 @@ void XTankWorld::Start()
 
 		//若需要回滚或已经过一个逻辑帧
 		if (frameComp.isNeedTick) {
-			mInputSystem->Tick(dt);
-			mSocketSystem->Tick(dt);
-			mPlayerSpawnSystem->Tick(dt);
-			mCommandSystem->Tick(dt);
-			mCollisionSystem->Tick(dt);
-			mSpeedChangeSystem->Tick(dt);
-			mObstacleSystem->Tick(dt);
-			mMoveSystem->Tick(dt);
-			mFireSystem->Tick(dt);
-			mBulletHitSystem->Tick(dt);
-			mSceneChangeSystem->Tick(dt);
-			mPlayerStateSystem->Tick(dt);
-			mEntityDestroySystem->Tick(dt);
-			mEntitySpawnSystem->Tick(dt);
-			mPRenderBufferSystem->Tick(dt);
+			SystemTick(dt);
 		}
 	}
 }

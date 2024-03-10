@@ -60,14 +60,20 @@
     <Filter Include="Source Files\QtWidget">
       <UniqueIdentifier>{bef153d3-ed1f-4b10-832e-ba68acbdb360}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\MidData">
-      <UniqueIdentifier>{60729c59-41ff-4029-b2c6-b714156ddce9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Util">
       <UniqueIdentifier>{7c71d79e-8d1f-401f-84bd-42e49584f0f9}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Math">
       <UniqueIdentifier>{8bc55fe5-b329-49c9-bf13-9712da37f00d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Protobuf">
+      <UniqueIdentifier>{54da13a4-1e42-40fa-9092-b0a1c2d3f203}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Socket">
+      <UniqueIdentifier>{71d9d448-b9d9-4665-a492-2002cde1575d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Thread">
+      <UniqueIdentifier>{841d3fdf-bcfc-4934-8b40-f9defefff837}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -299,6 +305,36 @@
     <ClInclude Include="ECS\Component\RandComponent.h">
       <Filter>Source Files\ECS\Component</Filter>
     </ClInclude>
+    <ClInclude Include="Socket\MessageQueue.h">
+      <Filter>Source Files\Socket</Filter>
+    </ClInclude>
+    <ClInclude Include="SocketConfig.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Socket\SocketClient.h">
+      <Filter>Source Files\Socket</Filter>
+    </ClInclude>
+    <ClInclude Include="SingleCompContainer.h">
+      <Filter>Source Files\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\System\RollbackSystem.h">
+      <Filter>Source Files\ECS\System</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Component\RollbackComponent.h">
+      <Filter>Source Files\ECS\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="QtWidget\WidgetManager.h">
+      <Filter>Source Files\QtWidget</Filter>
+    </ClInclude>
+    <ClInclude Include="QtWidget\WidgetConfig.h">
+      <Filter>Source Files\QtWidget</Filter>
+    </ClInclude>
+    <ClInclude Include="Thread\ThreadManager.h">
+      <Filter>Source Files\Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="Protobuf\XTankMsg.pb.h">
+      <Filter>Source Files\Protobuf</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="renderer\input\Face.cpp">
@@ -424,14 +460,65 @@
     <ClCompile Include="ECS\System\SceneChangeSystem.cpp">
       <Filter>Source Files\ECS\System</Filter>
     </ClCompile>
+    <ClCompile Include="ECS\System\RollbackSystem.cpp">
+      <Filter>Source Files\ECS\System</Filter>
+    </ClCompile>
+    <ClCompile Include="Socket\SocketClient.cpp">
+      <Filter>Source Files\Socket</Filter>
+    </ClCompile>
+    <ClCompile Include="QtWidget\MainMenuWidget.cpp">
+      <Filter>Source Files\QtWidget</Filter>
+    </ClCompile>
+    <ClCompile Include="QtWidget\LobbyWidget.cpp">
+      <Filter>Source Files\QtWidget</Filter>
+    </ClCompile>
+    <ClCompile Include="QtWidget\RoomWidget.cpp">
+      <Filter>Source Files\QtWidget</Filter>
+    </ClCompile>
+    <ClCompile Include="QtWidget\WidgetManager.cpp">
+      <Filter>Source Files\QtWidget</Filter>
+    </ClCompile>
+    <ClCompile Include="QtWidget\ReceiveWidget.cpp">
+      <Filter>Source Files\QtWidget</Filter>
+    </ClCompile>
+    <ClCompile Include="Thread\ThreadManager.cpp">
+      <Filter>Source Files\Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="Protobuf\XTankMsg.pb.cc">
+      <Filter>Source Files\Protobuf</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="QtWidget\PaintWidget.h">
       <Filter>Source Files\QtWidget</Filter>
     </QtMoc>
+    <QtMoc Include="QtWidget\LobbyWidget.h">
+      <Filter>Source Files\QtWidget</Filter>
+    </QtMoc>
+    <QtMoc Include="QtWidget\MainMenuWidget.h">
+      <Filter>Source Files\QtWidget</Filter>
+    </QtMoc>
+    <QtMoc Include="QtWidget\RoomWidget.h">
+      <Filter>Source Files\QtWidget</Filter>
+    </QtMoc>
+    <QtMoc Include="QtWidget\ReceiveWidget.h">
+      <Filter>Source Files\QtWidget</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="QtWidget\PaintWidget.ui">
+      <Filter>Source Files\QtWidget</Filter>
+    </QtUic>
+    <QtUic Include="QtWidget\RoomWidget.ui">
+      <Filter>Source Files\QtWidget</Filter>
+    </QtUic>
+    <QtUic Include="QtWidget\MainMenuWidget.ui">
+      <Filter>Source Files\QtWidget</Filter>
+    </QtUic>
+    <QtUic Include="QtWidget\LobbyWidget.ui">
+      <Filter>Source Files\QtWidget</Filter>
+    </QtUic>
+    <QtUic Include="QtWidget\ReceiveWidget.ui">
       <Filter>Source Files\QtWidget</Filter>
     </QtUic>
   </ItemGroup>

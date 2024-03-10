@@ -10,6 +10,15 @@
 class SystemManager
 {
 public:
+
+	SystemManager() = default;
+
+	//拷贝构造 system没有状态 此处应该可使用默认形式
+	SystemManager(const SystemManager& other) = default;
+
+	//移动赋值
+	SystemManager& operator = (SystemManager&& other)noexcept = default;
+
 	template<typename T>
 	std::shared_ptr<T> RegisterSystem()
 	{
@@ -61,6 +70,7 @@ public:
 			}
 		}
 	}
+
 
 private:
 	std::unordered_map<const char*, Signature> mSignatures{};

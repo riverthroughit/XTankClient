@@ -2,23 +2,18 @@
 #include "ECS/Component/PlayerComponent.h"
 #include "ECS/Component/CommandComponent.h"
 #include "ECS/World.h"
-#include "ECS/Component/EntitySpawnComponent.h"
-#include "ECS/Component/AttachComponent.h"
-#include "ECS/Component/CollisionComponent.h"
-#include "ECS/Component/ObstacleComponent.h"
-#include "ECS/Component/PosComponent.h"
-#include "ECS/Component/PRenderComponent.h"
-#include "ECS/Component/SpeedComponent.h"
 #include "Config.h"
 #include "ECS/Component/EntitySpawnComponent.h"
+#include "ECS/Component/EntitySpawnComponent.h"
 
-void PlayerSpawnSystem::Tick(float dt)
+void PlayerSpawnSystem::Init()
 {
 	//从socket中取得数据并判断是否需要添加用户
 	static bool temp = true;
 
 	auto& entitySpawnComp = mWorld->GetSingletonComponent<EntitySpawnComponent>();
-	
+
+
 	if (temp) {
 		unsigned int localPlayerId = 0;
 
@@ -42,4 +37,9 @@ void PlayerSpawnSystem::Tick(float dt)
 
 		temp = false;
 	}
+}
+
+void PlayerSpawnSystem::Tick(float dt)
+{
+
 }

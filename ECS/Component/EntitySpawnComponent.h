@@ -4,8 +4,6 @@
 #include "TypeConfig.h"
 #include <deque>
 #include <unordered_map>
-#include "Util/Macro.h"
-
 
 struct EntitySpawnArgs {
 	ENTITY::Type type;
@@ -15,7 +13,7 @@ struct EntitySpawnArgs {
 
 struct EntitySpawnComponent {
 
-	SINGLETON(EntitySpawnComponent);
+	//µ¥Àý×é¼þ
 
 
 	std::unordered_map<ENTITY::Type, std::deque<EntitySpawnArgs>> entitySpawnMap;

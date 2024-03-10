@@ -1,10 +1,9 @@
 #pragma once
 #include <cmath>
-#include "Util/Macro.h"
 
 struct RandComponent {
 
-	SINGLETON(RandComponent);
+	//µ¥Àý×é¼þ
 
 	unsigned int seed{};
 

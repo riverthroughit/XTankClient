@@ -16,6 +16,8 @@
 #include "ECS/System/BulletHitSystem.h"
 #include "ECS/System/PlayerStateSystem.h"
 #include "ECS/System/SceneChangeSystem.h"
+#include "ECS/System/RollbackSystem.h"
+#include "TypeConfig.h"
 
 class XTankWorld :public World {
 
@@ -36,14 +38,24 @@ private:
 	std::shared_ptr<BulletHitSystem> mBulletHitSystem;
 	std::shared_ptr<PlayerStateSystem> mPlayerStateSystem;
 	std::shared_ptr<SceneChangeSystem> mSceneChangeSystem;
+	std::shared_ptr<RollbackSystem> mRollbackSystem;
 
 public:
 
+	XTankWorld() = default;
+	XTankWorld(const XTankWorld&) = default;
+	XTankWorld& operator = (XTankWorld&&) noexcept = default;	
+	
 	virtual void Init() override;
 
-	void SendGameStartReq();
+	//系统初始化
+	void SystemInit();
 
-	void ReceiveGameStartRes();
+	//各个系统更新
+	void SystemTick(float dt);
+
+	//回滚过程中各个系统更新 部分系统不会像正常情况一样更新
+	void SystemTickInRollback(const PlayersCommand& playersCmd);
 
 	void Start();
 

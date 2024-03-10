@@ -42,9 +42,11 @@ constexpr float BULLET_SPEED{ (float)CUBE_SIDE_LENTH * 3 / LOCKSTEP_FPS };
 constexpr int PLAYER_HP = 3;
 //复活冷却时间
 constexpr int RESPAWN_TIME = LOCKSTEP_FPS;
+//玩家数量
+constexpr int PLAYER_NUM = 4;
 
 //四个玩家的出生点
-constexpr Vec2f PLAYERS_SPAWN_POS[4]{
+constexpr Vec2f PLAYERS_SPAWN_POS[PLAYER_NUM]{
 	{1.5 * CUBE_SIDE_LENTH,1.5 * CUBE_SIDE_LENTH},
 	{(SCENE_SIDE_NUM - 1.5) * CUBE_SIDE_LENTH ,1.5 * CUBE_SIDE_LENTH},
 	{1.5 * CUBE_SIDE_LENTH,(SCENE_SIDE_NUM - 1.5) * CUBE_SIDE_LENTH },
@@ -52,7 +54,7 @@ constexpr Vec2f PLAYERS_SPAWN_POS[4]{
 };
 
 //四个玩家初始方向
-constexpr Vec2f PLAYERS_SPAWN_DIREC[4]{
+constexpr Vec2f PLAYERS_SPAWN_DIREC[PLAYER_NUM]{
 	{0,1},
 	{0,1},
 	{0,-1},

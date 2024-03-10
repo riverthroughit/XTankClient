@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>LobbyWidgetClass</class>
+ <widget class="QWidget" name="LobbyWidgetClass">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>600</width>
+    <height>400</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>LobbyWidget</string>
+  </property>
+  <widget class="QTableWidget" name="roomTable">
+   <property name="geometry">
+    <rect>
+     <x>140</x>
+     <y>70</y>
+     <width>311</width>
+     <height>192</height>
+    </rect>
+   </property>
+   <property name="editTriggers">
+    <set>QAbstractItemView::NoEditTriggers</set>
+   </property>
+   <property name="rowCount">
+    <number>0</number>
+   </property>
+   <property name="columnCount">
+    <number>3</number>
+   </property>
+   <column>
+    <property name="text">
+     <string>房间id</string>
+    </property>
+    <property name="textAlignment">
+     <set>AlignCenter</set>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>人数</string>
+    </property>
+    <property name="textAlignment">
+     <set>AlignCenter</set>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>状态</string>
+    </property>
+    <property name="textAlignment">
+     <set>AlignCenter</set>
+    </property>
+   </column>
+  </widget>
+  <widget class="QPushButton" name="joinRoomBtn">
+   <property name="geometry">
+    <rect>
+     <x>480</x>
+     <y>110</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>加入房间</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="backBtn">
+   <property name="geometry">
+    <rect>
+     <x>480</x>
+     <y>220</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>返回菜单</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="createRoomBtn">
+   <property name="geometry">
+    <rect>
+     <x>480</x>
+     <y>160</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>创建房间</string>
+   </property>
+  </widget>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>backBtn</sender>
+   <signal>clicked()</signal>
+   <receiver>LobbyWidgetClass</receiver>
+   <slot>BackBtnClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>523</x>
+     <y>233</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>465</x>
+     <y>327</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>joinRoomBtn</sender>
+   <signal>clicked()</signal>
+   <receiver>LobbyWidgetClass</receiver>
+   <slot>JoinRoomBtnClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>502</x>
+     <y>117</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>533</x>
+     <y>165</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>createRoomBtn</sender>
+   <signal>clicked()</signal>
+   <receiver>LobbyWidgetClass</receiver>
+   <slot>CreateRoomBtnClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>491</x>
+     <y>167</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>466</x>
+     <y>187</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>roomTable</sender>
+   <signal>cellClicked(int,int)</signal>
+   <receiver>LobbyWidgetClass</receiver>
+   <slot>RoomTableClicked(int,int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>198</x>
+     <y>218</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>162</x>
+     <y>280</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>JoinRoomBtnClicked()</slot>
+  <slot>BackBtnClicked()</slot>
+  <slot>CreateRoomBtnClicked()</slot>
+  <slot>RoomTableClicked(int,int)</slot>
+ </slots>
+</ui>

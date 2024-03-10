@@ -2,12 +2,11 @@
 #include "Config.h"
 #include <array>
 #include "ECS/Types.h"
-#include "Util/Macro.h"
 #include <set>
 
 struct UniformGridComponent {
 
-	SINGLETON(UniformGridComponent);
+	//µ¥Àý×é¼þ
 
 	std::array<std::array<std::set<Entity>, SCENE_SIDE_NUM>, SCENE_SIDE_NUM> mGrids;
 

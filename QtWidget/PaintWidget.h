@@ -25,7 +25,7 @@ protected:
 	virtual void paintEvent(QPaintEvent* event) override;
 	virtual void keyPressEvent(QKeyEvent* event) override;
 	virtual void keyReleaseEvent(QKeyEvent* event) override;
-	void timerEvent(QTimerEvent* event);
+	void timerEvent(QTimerEvent* event) override;
 private:
 	void InitQPaint(QPainter& painter);
 

@@ -6,7 +6,7 @@
 
 void FrameSystem::Tick(float dt)
 {
-	FrameComponent& frameComp = mWorld->GetSingletonComponent<FrameComponent>();
+	auto& frameComp = mWorld->GetSingletonComponent<FrameComponent>();
 	
 	frameComp.frameTime += dt;
 
@@ -21,4 +21,13 @@ void FrameSystem::Tick(float dt)
 	}
 
 	frameComp.percent = frameComp.frameTime / LOCKSTEP_TICK;
+}
+
+void FrameSystem::TickInRollback()
+{
+	auto& frameComp = mWorld->GetSingletonComponent<FrameComponent>();
+	++frameComp.frameId;
+	frameComp.frameTime = 0;
+	frameComp.isNeedTick = true;
+	frameComp.percent = 0;
 }

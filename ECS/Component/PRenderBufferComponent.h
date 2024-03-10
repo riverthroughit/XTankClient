@@ -1,5 +1,4 @@
 #pragma once
-#include <Util/Macro.h>
 #include <array>
 #include <unordered_map>
 #include "TypeConfig.h"
@@ -18,9 +17,9 @@ struct PRenderData {
 };
 
 
-class PRenderBufferComponent {
+struct PRenderBufferComponent {
 
-	SINGLETON(PRenderBufferComponent);
+	//单例组件
 
 	//key:entity ID
 	using BufferMap = std::unordered_map<Entity,PRenderData>;
@@ -39,6 +38,18 @@ class PRenderBufferComponent {
 	int writeIndex{ 0 };
 
 public:
+
+	PRenderBufferComponent() = default;
+
+	//重写拷贝构造 shared_mutex
+	PRenderBufferComponent(const PRenderBufferComponent& other) :
+		wrMutex(std::shared_mutex()), renderBuffer(other.renderBuffer),
+		frameId(other.frameId), preIndex(other.preIndex),
+		curIndex(other.curIndex), writeIndex(other.writeIndex) {
+
+	}
+
+	PRenderBufferComponent(PRenderBufferComponent&&) = default;
 
 	std::pair<unsigned int, std::pair<BufferMap, BufferMap>> GetFrameIdAndReadBuffers() {
 		std::shared_lock sharedLock(wrMutex);

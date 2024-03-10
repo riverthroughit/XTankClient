@@ -2,29 +2,22 @@
 #include "ECS/XTankWorld.h"
 #include "QtWidget/PaintWidget.h"
 #include <thread>
+#include "Thread/ThreadManager.h"
 
-void StartWorld(XTankWorld* xTankWorld) {
-    xTankWorld->Init();
-    xTankWorld->Start();
-}
 
 int main(int argc, char* argv[]) {
 
     QApplication a(argc, argv);
 
-    XTankWorld* xTankWorld = new XTankWorld();
-
-    std::thread logicThread(StartWorld, xTankWorld);
+    ThreadManager::Instance().InvokeGameThread();
 
     PaintWidget paintWidget;
-    paintWidget.SetWorld(xTankWorld);
+    paintWidget.SetWorld(ThreadManager::Instance().GetXTankWorld());
     paintWidget.show();
 
     int res = a.exec();
 
-    logicThread.join();
-
-    delete xTankWorld;
+    ThreadManager::Instance().ShutDownGameThread();
 
     return res;
 }

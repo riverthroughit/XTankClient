@@ -4,6 +4,7 @@
 #include <array>
 #include <cassert>
 #include <unordered_map>
+#include <memory>
 
 
 class IComponentArray
@@ -11,6 +12,9 @@ class IComponentArray
 public:
 	virtual ~IComponentArray() = default;
 	virtual void EntityDestroyed(Entity entity) = 0;
+
+	//获取一份拷贝 用于回滚系统
+	virtual std::unique_ptr<IComponentArray> GetACopy() = 0;
 };
 
 
@@ -18,6 +22,13 @@ template<typename T>
 class ComponentArray : public IComponentArray
 {
 public:
+
+	ComponentArray() = default;
+
+	ComponentArray(const ComponentArray&) = default;
+
+	ComponentArray& operator = (ComponentArray&&) noexcept = default;
+
 	void InsertData(Entity entity, T component)
 	{
 		assert(mEntityToIndexMap.find(entity) == mEntityToIndexMap.end() && "Component added to same entity more than once.");
@@ -68,6 +79,10 @@ public:
 		{
 			RemoveData(entity);
 		}
+	}
+
+	std::unique_ptr<IComponentArray> GetACopy() override {
+		return std::make_unique<ComponentArray>(*this);
 	}
 
 private:
