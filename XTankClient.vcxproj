@@ -29,11 +29,9 @@
     <ClInclude Include="ECS\Component\DestroyComponent.h" />
     <ClInclude Include="ECS\Component\EntitySpawnComponent.h" />
     <ClInclude Include="ECS\Component\InputComponent.h" />
-    <ClInclude Include="ECS\Component\KeyboardComponent.h" />
     <ClInclude Include="ECS\Component\ObstacleComponent.h" />
     <ClInclude Include="ECS\Component\PlayerComponent.h" />
     <ClInclude Include="ECS\Component\PosComponent.h" />
-    <ClInclude Include="ECS\Component\PRenderBufferComponent.h" />
     <ClInclude Include="ECS\Component\PRenderComponent.h" />
     <ClInclude Include="ECS\Component\RandComponent.h" />
     <ClInclude Include="ECS\Component\RollbackComponent.h" />
@@ -69,6 +67,7 @@
     <ClInclude Include="Event\EventDefine.h" />
     <ClInclude Include="Event\EventQueue.h" />
     <ClInclude Include="Factory\Factory.h" />
+    <ClInclude Include="Input\KeyboardData.h" />
     <ClInclude Include="Math\FixedPoint.h" />
     <ClInclude Include="Math\Vec2.h" />
     <ClInclude Include="ObjectPool\ObjectPool.h" />
@@ -80,12 +79,14 @@
     <ClInclude Include="Protobuf\XTankMsg.pb.h" />
     <ClInclude Include="QtWidget\WidgetConfig.h" />
     <ClInclude Include="QtWidget\WidgetManager.h" />
+    <ClInclude Include="Renderer\PRenderBuffer.h" />
     <ClInclude Include="SingleCompContainer.h" />
     <ClInclude Include="SocketConfig.h" />
     <ClInclude Include="Socket\MessageQueue.h" />
     <ClInclude Include="Socket\SocketClient.h" />
     <ClInclude Include="Thread\ThreadManager.h" />
     <ClInclude Include="Util\Macro.h" />
+    <ClInclude Include="Util\TickUtil.h" />
     <ClInclude Include="Util\Util.h" />
     <ClInclude Include="renderer\input\Face.h" />
     <ClInclude Include="renderer\input\Material.h" />
@@ -150,6 +151,7 @@
     <ClCompile Include="renderer\output\FramesInRenderer.cpp" />
     <ClCompile Include="renderer\output\FuncCodes.cpp" />
     <ClCompile Include="renderer\output\UserSceneData.cpp" />
+    <ClCompile Include="Renderer\PRenderBuffer.cpp" />
     <ClCompile Include="renderer\render\Fragment.cpp" />
     <ClCompile Include="renderer\render\FragmentShader.cpp" />
     <ClCompile Include="renderer\render\Rasterization.cpp" />
@@ -158,6 +160,7 @@
     <ClCompile Include="renderer\scene\Camera.cpp" />
     <ClCompile Include="renderer\scene\Light.cpp" />
     <ClCompile Include="renderer\scene\Scene.cpp" />
+    <ClCompile Include="Socket\MessageQueue.cpp" />
     <ClCompile Include="Socket\SocketClient.cpp" />
     <ClCompile Include="Thread\ThreadManager.cpp" />
   </ItemGroup>

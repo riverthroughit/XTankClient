@@ -4,45 +4,20 @@
 #include "ECS/Component/PRenderComponent.h"
 #include "ECS/Component/PosComponent.h"
 #include "ECS/Component/SpeedComponent.h"
-#include "ECS/Component/PRenderBufferComponent.h"
 #include "ECS/Component/FrameComponent.h"
 #include "Util/Util.h"
+#include "Renderer/PRenderBuffer.h"
 
 void PRenderBufferSystem::Tick(float dt)
 {
 	UpdatePRenderBuffer();
 }
 
-void PRenderBufferSystem::WriteToPRenderBuffer(const PRenderData& data)
-{
-	auto& bufferComp = mWorld->GetSingletonComponent<PRenderBufferComponent>();
-	std::shared_lock sharedLock(bufferComp.wrMutex);
-	bufferComp.renderBuffer[bufferComp.writeIndex].insert({ data.entityId,data });
-}
-
-void PRenderBufferSystem::SwapPRenderBuffer()
-{
-	auto& bufferComp = mWorld->GetSingletonComponent<PRenderBufferComponent>();
-
-	std::unique_lock sharedLock(bufferComp.wrMutex);
-
-	bufferComp.preIndex = (bufferComp.preIndex + 1) % 3;
-	bufferComp.curIndex = (bufferComp.curIndex + 1) % 3;
-	bufferComp.writeIndex = (bufferComp.writeIndex + 1) % 3;
-
-	bufferComp.renderBuffer[bufferComp.writeIndex].clear();
-}
-
-void PRenderBufferSystem::UpdateFrameId()
-{
-	auto& bufferComp = mWorld->GetSingletonComponent<PRenderBufferComponent>();
-	auto& frameComp = mWorld->GetSingletonComponent<FrameComponent>();
-	bufferComp.frameId = frameComp.frameId;
-}
-
 
 void PRenderBufferSystem::UpdatePRenderBuffer()
 {
+
+	auto& pRenderBuffer = PRenderBuffer::Instance();
 
 	for (const Entity& entity : mEntities) {
 		PosComponent& posComp = mWorld->GetComponent<PosComponent>(entity);
@@ -52,10 +27,12 @@ void PRenderBufferSystem::UpdatePRenderBuffer()
 		Vec2f pos = { (float)(posComp.pos.x),(float)(posComp.pos.y) };
 		Vec2f direc = { (float)(posComp.direc.x),(float)(posComp.direc.y) };
 
-		WriteToPRenderBuffer(PRenderData{ entity, pRenderComp.shape,pos,direc});
+		pRenderBuffer.WriteToBuffer(PRenderData{ entity, pRenderComp.shape,pos,direc });
 	}
 
-	SwapPRenderBuffer();
+	pRenderBuffer.SwapPRenderBuffer();
 
-	UpdateFrameId();
+	auto& frameComp = mWorld->GetSingletonComponent<FrameComponent>();
+
+	pRenderBuffer.SetFrameId(frameComp.frameId);
 }

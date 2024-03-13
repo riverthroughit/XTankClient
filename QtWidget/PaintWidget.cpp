@@ -1,8 +1,8 @@
 #include "PaintWidget.h"
 #include "qpainter.h"
 #include "qevent.h"
-#include "ECS/Component/KeyboardComponent.h"
-#include "ECS/Component/PRenderBufferComponent.h"
+#include "Input/KeyboardData.h"
+#include "Renderer/PRenderBuffer.h"
 #include "ECS/World.h"
 #include <qDebug>
 #include "Util/Util.h"
@@ -14,19 +14,19 @@ PaintWidget::PaintWidget(QWidget* parent)
 {
 	ui.setupUi(this);
 	updateTimerId = startTimer(RENDER_TICK, Qt::PreciseTimer);
+	tickUtil.SetTickTime(LOCKSTEP_TICK);
 }
 
 PaintWidget::~PaintWidget()
 {}
 
-void PaintWidget::SetWorld(World * world)
-{
-	mXTankWorld = world;
-}
 
 
 void PaintWidget::paintEvent(QPaintEvent* event)
 {
+
+	tickUtil.Tick();
+
 	//更新屏幕分辨率
 	SCREEN_HEIGHT = height();
 	SCREEN_WIDTH = width();
@@ -35,14 +35,13 @@ void PaintWidget::paintEvent(QPaintEvent* event)
 	InitQPaint(painter);
 
 	//获取渲染队列
-	PRenderBufferComponent& bufferComp = mXTankWorld->GetSingletonComponent<PRenderBufferComponent>();
-	auto [renderFrameId, buffers] = bufferComp.GetFrameIdAndReadBuffers();
+	auto& pRenderBuffer = PRenderBuffer::Instance();
+	auto [renderFrameId, buffers] = pRenderBuffer.GetFrameIdAndReadBuffers();
 	auto& preBuffer = buffers.first, & curBuffer = buffers.second;
 
 	//帧组件
-	FrameComponent& framComp = mXTankWorld->GetSingletonComponent<FrameComponent>();
-	unsigned int frameId = framComp.frameId;
-	float percent = framComp.percent;
+	unsigned int frameId = tickUtil.GetFrameId();
+	float percent = tickUtil.GetPercent();
 
 	//若逻辑帧已更新至下一帧 则渲染帧使用的插值比例直接设为1
 	if (frameId > renderFrameId) {
@@ -96,8 +95,7 @@ void PaintWidget::keyPressEvent(QKeyEvent* event)
 	}
 
 	int key = event->key();
-	KeyboardComponent& keyboardComp = mXTankWorld->GetSingletonComponent<KeyboardComponent>();
-	keyboardComp.keysDown.insert(key);
+	KeyboardData::Instance().SetKeyDown(key, true);
 }
 
 void PaintWidget::keyReleaseEvent(QKeyEvent* event)
@@ -107,14 +105,14 @@ void PaintWidget::keyReleaseEvent(QKeyEvent* event)
 	}
 
 	int key = event->key();
-	KeyboardComponent& keyboardComp = mXTankWorld->GetSingletonComponent<KeyboardComponent>();
-	keyboardComp.keysDown.erase(key);
+	KeyboardData::Instance().SetKeyDown(key, false);
 }
 
 void PaintWidget::timerEvent(QTimerEvent* event)
 {
 	if (event->timerId() == updateTimerId) {
 		update();
+		//repaint();
 	}
 }
 

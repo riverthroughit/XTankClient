@@ -1,14 +1,32 @@
 #include "XTankWorld.h"
+
+#include "ECS/System/CollisionSystem.h"
+#include "ECS/System/CommandSystem.h"
+#include "ECS/System/FireSystem.h"
+#include "ECS/System/FrameSystem.h"
+#include "ECS/System/InputSystem.h"
+#include "ECS/System/MoveSystem.h"
+#include "ECS/System/ObstacleSystem.h"
+#include "ECS/System/PRenderBufferSystem.h"
+#include "ECS/System/SocketSystem.h"
+#include "ECS/System/SpeedChangeSystem.h"
+#include "ECS/System/PlayerSpawnSystem.h"
+#include "ECS/System/EntitySpawnSystem.h"
+#include "ECS/System/EntityDestroySystem.h"
+#include "ECS/System/BulletHitSystem.h"
+#include "ECS/System/PlayerStateSystem.h"
+#include "ECS/System/SceneChangeSystem.h"
+#include "ECS/System/RollbackSystem.h"
+
+
 #include "ECS/Component/AttachComponent.h"
 #include "ECS/Component/CollisionComponent.h"
 #include "ECS/Component/CommandComponent.h"
 #include "ECS/Component/FrameComponent.h"
 #include "ECS/Component/InputComponent.h"
-#include "ECS/Component/KeyboardComponent.h"
 #include "ECS/Component/ObstacleComponent.h"
 #include "ECS/Component/PlayerComponent.h"
 #include "ECS/Component/PosComponent.h"
-#include "ECS/Component/PRenderBufferComponent.h"
 #include "ECS/Component/PRenderComponent.h"
 #include "ECS/Component/SocketComponent.h"
 #include "ECS/Component/SpeedComponent.h"
@@ -20,9 +38,31 @@
 #include "ECS/Component/RandComponent.h"
 #include "ECS/Component/EntitySpawnComponent.h"
 #include "ECS/Component/RollbackComponent.h"
-#include <chrono>
 #include "Config.h"
 #include <thread>
+#include "QtWidget/WidgetManager.h"
+
+
+void XTankWorld::ResetSystemPtr()
+{
+	mCollisionSystem = GetSystem<CollisionSystem>();
+	mCommandSystem = GetSystem<CommandSystem>();
+	mFireSystem = GetSystem<FireSystem>();
+	mFrameSystem = GetSystem<FrameSystem>();
+	mInputSystem = GetSystem<InputSystem>();
+	mMoveSystem = GetSystem<MoveSystem>();
+	mObstacleSystem = GetSystem<ObstacleSystem>();
+	mPRenderBufferSystem = GetSystem<PRenderBufferSystem>();
+	mSocketSystem = GetSystem<SocketSystem>();
+	mSpeedChangeSystem = GetSystem<SpeedChangeSystem>();
+	mPlayerSpawnSystem = GetSystem<PlayerSpawnSystem>();
+	mEntitySpawnSystem = GetSystem<EntitySpawnSystem>();
+	mEntityDestroySystem = GetSystem<EntityDestroySystem>();
+	mBulletHitSystem = GetSystem<BulletHitSystem>();
+	mPlayerStateSystem = GetSystem<PlayerStateSystem>();
+	mSceneChangeSystem = GetSystem<SceneChangeSystem>();
+	mRollbackSystem = GetSystem<RollbackSystem>();
+}
 
 void XTankWorld::Init()
 {
@@ -34,11 +74,9 @@ void XTankWorld::Init()
 	RegisterComponent<CommandComponent>();
 	RegisterSingletonComponent<FrameComponent>();
 	RegisterSingletonComponent<InputComponent>();
-	RegisterSingletonComponent<KeyboardComponent>();
 	RegisterComponent<ObstacleComponent>();
 	RegisterComponent<PlayerComponent>();
 	RegisterComponent<PosComponent>();
-	RegisterSingletonComponent<PRenderBufferComponent>();
 	RegisterComponent<PRenderComponent>();
 	RegisterSingletonComponent<SocketComponent>();
 	RegisterComponent<SpeedComponent>();
@@ -144,19 +182,43 @@ void XTankWorld::Init()
 
 void XTankWorld::SystemInit()
 {
-	//获取初始信息
-	//mSocketSystem->Tick(dt);
-	mPlayerSpawnSystem->Init();
 
+	mFrameSystem->Init();
 	//初始化场景
 	mSceneChangeSystem->Init();
+	//获取初始信息
+	mSocketSystem->Init();
+	mPlayerSpawnSystem->Init();
+	//回滚初始化 拷贝当前世界状态
+	mRollbackSystem->Init();
 }
 
-void XTankWorld::SystemTick(float dt)
+void XTankWorld::SystemTickInLogic(float dt)
 {
 	mInputSystem->Tick(dt);
 	mSocketSystem->Tick(dt);
-	//mRollbackSystem->Tick(dt);
+	mRollbackSystem->Tick(dt);
+	mCommandSystem->Tick(dt);
+	mCollisionSystem->Tick(dt);
+	mSpeedChangeSystem->Tick(dt);
+	mObstacleSystem->Tick(dt);
+	mMoveSystem->Tick(dt);
+	mFireSystem->Tick(dt);
+	mBulletHitSystem->Tick(dt);
+	mSceneChangeSystem->Tick(dt);
+	mPlayerStateSystem->Tick(dt);
+	mEntityDestroySystem->Tick(dt);
+	mEntitySpawnSystem->Tick(dt);
+	//mPRenderBufferSystem->Tick(dt);
+}
+
+void XTankWorld::SystemTickInDuplicate(float dt,const PlayersCommand& playersCmd)
+{
+
+	//设置命令
+	auto& rollbackComp = GetSingletonComponent<RollbackComponent>();
+	rollbackComp.preciseCmd= playersCmd;
+
 	mCommandSystem->Tick(dt);
 	mCollisionSystem->Tick(dt);
 	mSpeedChangeSystem->Tick(dt);
@@ -169,59 +231,32 @@ void XTankWorld::SystemTick(float dt)
 	mEntityDestroySystem->Tick(dt);
 	mEntitySpawnSystem->Tick(dt);
 	mPRenderBufferSystem->Tick(dt);
+
 }
 
-void XTankWorld::SystemTickInRollback(const PlayersCommand& playersCmd)
-{
-
-	//设置命令
-	auto& rollbackComp = GetSingletonComponent<RollbackComponent>();
-	rollbackComp.curPredictedCmd = playersCmd;
-
-	//更新系统
-	mCommandSystem->Tick(0);
-	mCollisionSystem->Tick(0);
-	mSpeedChangeSystem->Tick(0);
-	mObstacleSystem->Tick(0);
-	mMoveSystem->Tick(0);
-	mFireSystem->Tick(0);
-	mBulletHitSystem->Tick(0);
-	mSceneChangeSystem->Tick(0);
-	mPlayerStateSystem->Tick(0);
-	mEntityDestroySystem->Tick(0);
-	mEntitySpawnSystem->Tick(0);
-
-	//帧数系统更新
-	mFrameSystem->TickInRollback();
-}
-
-void XTankWorld::Start()
+void XTankWorld::Start(const bool& isEnd)
 {
 
 	SystemInit();
 
-	using clock = std::chrono::high_resolution_clock;
-	using duration = std::chrono::duration<float, std::milli>;
-	using std::chrono::duration_cast;
+	//开启渲染窗口
+	//WidgetManager::Instance().ShowWidget(WIDGET_NAME::PAINT);
 
-	clock::time_point begTime = clock::now();
+	while (!isEnd) {
 
-	while (1) {
+		mFrameSystem->Tick();
 
-		//计算间隔
-		clock::time_point endTime = clock::now();
-		duration dtn = duration_cast<duration>(endTime - begTime);
-		begTime = endTime;
-		float dt = dtn.count();
+		if (mFrameSystem->IsNeedTick()) {
+			
+			float dt = mFrameSystem->GetDt();
 
-		//帧数系统Tick
-		mFrameSystem->Tick(dt);
-		FrameComponent& frameComp = GetSingletonComponent<FrameComponent>();
-		//回滚系统Tick
+			SystemTickInLogic(dt);
 
-		//若需要回滚或已经过一个逻辑帧
-		if (frameComp.isNeedTick) {
-			SystemTick(dt);
+			XTankWorld* dupWorld = mRollbackSystem->DuplicateWorld();
+			PlayersCommand cmd = mRollbackSystem->GetPredictedCmd();
+
+			dupWorld->SystemTickInDuplicate(dt, cmd);
+
 		}
 	}
 }

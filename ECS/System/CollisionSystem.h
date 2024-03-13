@@ -6,7 +6,7 @@ class PosComponent;
 class CollisionComponent;
 class UniformGridComponent;
 
-class CollisionSystem :public System{
+class CollisionSystem :public System<CollisionSystem>{
 
 public:
 	virtual void Tick(float dt)override;

@@ -6,23 +6,23 @@
 void ThreadManager::InvokeGameThread()
 {
 	if (gameThread == nullptr) {
+		isGameThreadEnd = false;
 		xTankWorld = new XTankWorld();
 		gameThread = std::make_unique<std::thread>([&]() {
 			xTankWorld->Init();
-			xTankWorld->Start();		
+			xTankWorld->Start(isGameThreadEnd);
 		});
-		isGameThreadEnd = false;
 	}
 }
 
 void ThreadManager::InvokeSocketThread()
 {
 	if (socketThread == nullptr) {
+		isSocketThreadEnd = false;
 		socketThread = std::make_unique<std::thread>([&]() {
 			SocketClient::Instance().ConnectToServer();
-			SocketClient::Instance().SocketClientThread();
+			SocketClient::Instance().SocketClientThread(isSocketThreadEnd);
 		});
-		isSocketThreadEnd = false;
 	}
 }
 

@@ -1,7 +1,6 @@
 #include "LobbyWidget.h"
 #include "Socket/MessageQueue.h"
 #include "WidgetManager.h"
-#include "Socket/SocketClient.h"
 #include "qstring.h"
 
 
@@ -16,7 +15,7 @@ LobbyWidget::~LobbyWidget()
 
 void LobbyWidget::ReceiveMsg()
 {
-	MessageData msg = MessageQueue::Instance().GetAndPopTopMsg();
+	MessageData msg = MsgRecvQueue::Instance().GetAndPopTopMsg();
 
 	if (msg.type == XTankMsg::LOBBY_NTF) {
 
@@ -52,7 +51,8 @@ void LobbyWidget::ReceiveMsg()
 
 void LobbyWidget::RefreshRoomTable(const RoomVector& rooms)
 {
-	ui.roomTable->clearContents();
+	//ui.roomTable->clearContents();
+	ui.roomTable->setRowCount(0);
 
 	for (auto& [id, num, isInGame] : rooms) {
 
@@ -64,10 +64,10 @@ void LobbyWidget::RefreshRoomTable(const RoomVector& rooms)
 		QTableWidgetItem* inGameItem = new QTableWidgetItem();
 
 		if (isInGame) {
-			inGameItem->setText("游戏中");
+			inGameItem->setText(u8"游戏中");
 		}
 		else {
-			inGameItem->setText("准备中");
+			inGameItem->setText(u8"准备中");
 		}
 
 		ui.roomTable->setItem(rowIndex, 0, idItem);
@@ -88,19 +88,19 @@ void LobbyWidget::JoinRoomBtnClicked()
 	}
 	else {
 		QTableWidgetItem* idItem = ui.roomTable->item(selectedRow, 0);
-		SocketClient::Instance().SendJoinRoomReq(idItem->text().toInt());
+		MsgSendQueue::Instance().SendJoinRoomReq(idItem->text().toInt());
 	}
 	
 }
 
 void LobbyWidget::CreateRoomBtnClicked()
 {
-	SocketClient::Instance().SendCreateRoomReq();
+	MsgSendQueue::Instance().SendCreateRoomReq();
 }
 
 void LobbyWidget::BackBtnClicked()
 {
-	SocketClient::Instance().SendLogoutReq();
+	MsgSendQueue::Instance().SendLogoutReq();
 
 }
 

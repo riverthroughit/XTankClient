@@ -16,5 +16,8 @@ struct SocketComponent{
 	//是否有新来的命令
 	bool hasNewCmdMsg{};
 
+	//服务器发来的命令
 	PlayersCommand curPlayersCmd{};
+
+
 };

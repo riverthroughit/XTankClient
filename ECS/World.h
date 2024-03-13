@@ -27,9 +27,29 @@ public:
 		mEntityManager(std::make_unique<EntityManager>(*other.mEntityManager)),
 		mSystemManager(std::make_unique<SystemManager>(*other.mSystemManager)){
 
+		mSystemManager->SetWorldOfSystems(this);
+
 	}
 
-	World& operator = (World&&) noexcept = default;
+	World& operator = (World&& other) noexcept {
+
+		mComponentManager = std::move(other.mComponentManager);
+		mEntityManager = std::move(other.mEntityManager);
+		mSystemManager = std::move(other.mSystemManager);
+		mSystemManager->SetWorldOfSystems(this);
+
+		return *this;
+	}
+
+	World& operator = (const World& other) {
+
+		mComponentManager = std::make_unique<ComponentManager>(*other.mComponentManager);
+		mEntityManager = std::make_unique<EntityManager>(*other.mEntityManager);
+		mSystemManager = std::make_unique<SystemManager>(*other.mSystemManager);
+		mSystemManager->SetWorldOfSystems(this);
+
+		return *this;
+	}
 
 	virtual void Init()
 	{
@@ -111,11 +131,17 @@ public:
 
 	// System methods
 	template<typename T>
-	std::shared_ptr<T> RegisterSystem()
+	T* RegisterSystem()
 	{
 		auto system = mSystemManager->RegisterSystem<T>();
 		system->SetWorld(this);
 		return system;
+	}
+
+	template<typename T>
+	T* GetSystem()
+	{
+		return mSystemManager->GetSystem<T>();
 	}
 
 	template<typename T>

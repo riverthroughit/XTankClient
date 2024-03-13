@@ -4,7 +4,7 @@
 #include "TypeConfig.h"
 #include <Windows.h>
 #include <algorithm>
-#include "ECS/Component/KeyboardComponent.h"
+#include "Input/KeyboardData.h"
 
 void InputSystem::Tick(float dt)
 {
@@ -32,10 +32,10 @@ void InputSystem::ResetInputKey()
 void InputSystem::ReceiveInputKey()
 {
 	InputComponent& inputComp = mWorld->GetSingletonComponent<InputComponent>();
-	KeyboardComponent& keyboardComp = mWorld->GetSingletonComponent<KeyboardComponent>();
+	auto& keyboardData = KeyboardData::Instance();
 
 	for (int key : inputComp.buttonToKey) {
-		if (keyboardComp.keysDown.find(key) != keyboardComp.keysDown.end()) {
+		if (keyboardData.IsKeyDown(key)) {
 			inputComp.keysDown.insert(key);
 		}
 		else {

@@ -3,7 +3,7 @@
 #include "ECS/System.h"
 #include "TypeConfig.h"
 
-class InputSystem :public System {
+class InputSystem :public System<InputSystem> {
 	
 public:
 

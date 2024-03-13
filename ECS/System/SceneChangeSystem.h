@@ -2,7 +2,7 @@
 
 #include "ECS/System.h"
 
-class SceneChangeSystem :public System {
+class SceneChangeSystem :public System<SceneChangeSystem> {
 
 public:
 	virtual void Tick(float dt) override;

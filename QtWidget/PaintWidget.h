@@ -4,8 +4,7 @@
 #include "ui_PaintWidget.h"
 #include "TypeConfig.h"
 #include "Math/Vec2.h"
-
-class World;
+#include "Util/TickUtil.h"
 
 class PaintWidget : public QWidget
 {
@@ -13,13 +12,14 @@ class PaintWidget : public QWidget
 
 private:
 	Ui::PaintWidgetClass ui;
-	World* mXTankWorld{};
 	int updateTimerId{};
+
+	//Ä£ÄâÂß¼­Ö¡
+	TickUtil tickUtil;
+
 public:
 	PaintWidget(QWidget *parent = nullptr);
 	~PaintWidget();
-
-	void SetWorld(World* world);
 
 protected:
 	virtual void paintEvent(QPaintEvent* event) override;

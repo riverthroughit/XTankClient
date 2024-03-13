@@ -8,6 +8,7 @@
 #include "ECS/Component/BlockComponent.h"
 #include "ECS/Component/BulletComponent.h"
 #include "Config.h"
+#include <ECS\Component\SpeedComponent.h>
 
 void BulletHitSystem::Tick(float dt)
 {
@@ -58,6 +59,7 @@ void BulletHitSystem::HitTank(Entity bulletId, Entity tankId)
 
 	auto& attachComp = mWorld->GetComponent<AttachComponent>(bulletId);
 	auto& playerComp = mWorld->GetComponent<PlayerComponent>(attachComp.ownerId);
+	auto& speedComp = mWorld->GetComponent<SpeedComponent>(playerComp.charId);
 	//若是自身的坦克则直接忽略
 	if (playerComp.charId == tankId) {
 		return;

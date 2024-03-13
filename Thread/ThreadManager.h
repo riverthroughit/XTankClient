@@ -34,5 +34,4 @@ public:
 
 	bool IsSocketThreadEnd() { return isSocketThreadEnd; }
 
-	XTankWorld* GetXTankWorld() { return xTankWorld; }
 };

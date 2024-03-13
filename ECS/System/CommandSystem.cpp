@@ -21,8 +21,7 @@ void CommandSystem::Tick(float dt)
 		cmdComp.frameId = frameComp.frameId;
 
 		//回滚组件中得到的命令
-		//cmdComp.cmd = rollbackComp.curPredictedCmd.commandArray[playerComp.playerId];
-		auto& inputComp = mWorld->GetSingletonComponent<InputComponent>();
-		cmdComp.cmd = inputComp.curBtn;
+		cmdComp.cmd = rollbackComp.preciseCmd.commandArray[playerComp.playerId];
+
 	}
 }

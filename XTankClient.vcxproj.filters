@@ -75,6 +75,9 @@
     <Filter Include="Source Files\Thread">
       <UniqueIdentifier>{841d3fdf-bcfc-4934-8b40-f9defefff837}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Input">
+      <UniqueIdentifier>{11700ff1-7875-4047-8d13-5832fa56e656}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="renderer\input\Face.h">
@@ -242,12 +245,6 @@
     <ClInclude Include="ECS\ECSUtil.h">
       <Filter>Source Files\ECS</Filter>
     </ClInclude>
-    <ClInclude Include="ECS\Component\KeyboardComponent.h">
-      <Filter>Source Files\ECS\Component</Filter>
-    </ClInclude>
-    <ClInclude Include="ECS\Component\PRenderBufferComponent.h">
-      <Filter>Source Files\ECS\Component</Filter>
-    </ClInclude>
     <ClInclude Include="ECS\Component\CommandComponent.h">
       <Filter>Source Files\ECS\Component</Filter>
     </ClInclude>
@@ -331,6 +328,15 @@
     </ClInclude>
     <ClInclude Include="Thread\ThreadManager.h">
       <Filter>Source Files\Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\PRenderBuffer.h">
+      <Filter>Source Files\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Input\KeyboardData.h">
+      <Filter>Source Files\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\TickUtil.h">
+      <Filter>Source Files\Util</Filter>
     </ClInclude>
     <ClInclude Include="Protobuf\XTankMsg.pb.h">
       <Filter>Source Files\Protobuf</Filter>
@@ -483,6 +489,12 @@
     </ClCompile>
     <ClCompile Include="Thread\ThreadManager.cpp">
       <Filter>Source Files\Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="Socket\MessageQueue.cpp">
+      <Filter>Source Files\Socket</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer\PRenderBuffer.cpp">
+      <Filter>Source Files\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="Protobuf\XTankMsg.pb.cc">
       <Filter>Source Files\Protobuf</Filter>

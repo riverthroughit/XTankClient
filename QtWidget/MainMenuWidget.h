@@ -18,7 +18,7 @@ private:
 
 private slots:
 	
-	void JoinLobbyBtnClicked();
+	void JoinBtnClicked();
 
 	void ExitBtnClicked();
 };

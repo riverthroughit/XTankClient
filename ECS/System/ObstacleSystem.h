@@ -2,7 +2,7 @@
 
 #include "ECS/System.h"
 
-class ObstacleSystem :public System {
+class ObstacleSystem :public System<ObstacleSystem> {
 
 public:
 	virtual void Tick(float dt) override;

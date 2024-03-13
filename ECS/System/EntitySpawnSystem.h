@@ -4,7 +4,7 @@
 #include "TypeConfig.h"
 #include <memory>
 
-class EntitySpawnSystem :public System {
+class EntitySpawnSystem :public System<EntitySpawnSystem> {
 
 public:
 	virtual void Tick(float dt) override;

@@ -12,10 +12,9 @@ std::pair<XTankMsg::MSG, int> SocketClient::ReceiveFromServer()
 	//读取头部以及id
 
 	int len = 0;
-	int headSize = MSG_HEAD_SIZE + MSG_TYPE_SIZE;
-	while (len != headSize) {
+	while (len != MSG_TOTAL_HEAD_SIZE) {
 		int curLen = 0;
-		curLen = recv(csocket, msgRcvData + len, headSize - len, 0);
+		curLen = recv(csocket, msgRcvData + len, MSG_TOTAL_HEAD_SIZE - len, 0);
 		if (curLen == 0 || curLen == -1) {
 			return {XTankMsg::NONE,XTankMsg::NONE };
 		}
@@ -30,7 +29,7 @@ std::pair<XTankMsg::MSG, int> SocketClient::ReceiveFromServer()
 	len = 0;
 	while (len != dataSize) {
 		int curLen = 0;
-		curLen = recv(csocket, msgRcvData + len, dataSize - len, 0);
+		curLen = recv(csocket, msgRcvData + MSG_TOTAL_HEAD_SIZE + len, dataSize - len, 0);
 		if (curLen == 0 || curLen == -1) {
 			return { XTankMsg::NONE,XTankMsg::NONE };
 		}
@@ -50,10 +49,6 @@ std::shared_ptr<Message> SocketClient::ParseMsg(int msgId, int dataSize)
 		msgPtr = nullptr;
 		break;
 
-	case XTankMsg::LOGIN_REQ:
-		msgPtr = std::make_shared<XTankMsg::LoginReq>();
-		break;
-
 	case XTankMsg::LOGIN_ACK:
 		msgPtr = std::make_shared<XTankMsg::LoginAck>();
 		break;
@@ -66,24 +61,12 @@ std::shared_ptr<Message> SocketClient::ParseMsg(int msgId, int dataSize)
 		msgPtr = std::make_shared<XTankMsg::LobbyNtf>();
 		break;
 
-	case XTankMsg::ROOM_CREATE_REQ:
-		msgPtr = std::make_shared<XTankMsg::RoomCreateReq>();
-		break;
-
 	case XTankMsg::ROOM_CREATE_ACK:
 		msgPtr = std::make_shared<XTankMsg::RoomCreateAck>();
 		break;
 
-	case XTankMsg::ROOM_JOIN_REQ:
-		msgPtr = std::make_shared<XTankMsg::RoomJoinReq>();
-		break;
-
 	case XTankMsg::ROOM_JOIN_ACK:
 		msgPtr = std::make_shared<XTankMsg::RoomJoinAck>();
-		break;
-
-	case XTankMsg::ROOM_EXIT_REQ:
-		msgPtr = std::make_shared<XTankMsg::RoomExitReq>();
 		break;
 
 	case XTankMsg::ROOM_EXIT_ACK:
@@ -94,32 +77,28 @@ std::shared_ptr<Message> SocketClient::ParseMsg(int msgId, int dataSize)
 		msgPtr = std::make_shared<XTankMsg::RoomNtf>();
 		break;
 
-	case XTankMsg::GAME_READY_REQ:
-		msgPtr = std::make_shared<XTankMsg::GameReadyReq>();
+	case XTankMsg::PLAYER_READY_ACK:
+		msgPtr = std::make_shared<XTankMsg::PlayerReadyAck>();
 		break;
 
-	case XTankMsg::GAME_READY_ACK:
-		msgPtr = std::make_shared<XTankMsg::GameReadyAck>();
+	case XTankMsg::PLAYER_READY_CANCEL_ACK:
+		msgPtr = std::make_shared<XTankMsg::PlayerReadyCancelAck>();
+		break;
+
+	case XTankMsg::GAME_READY_REQ:
+		msgPtr = std::make_shared<XTankMsg::GameReadyReq>();
 		break;
 
 	case XTankMsg::GAME_START_NTF:
 		msgPtr = std::make_shared<XTankMsg::GameStartNtf>();
 		break;
 
-	case XTankMsg::GAME_INPUT_NTF:
-		msgPtr = std::make_shared<XTankMsg::GameInputNtf>();
-		break;
-
 	case XTankMsg::GAME_FORWARD_NTF:
 		msgPtr = std::make_shared<XTankMsg::GameForwardNtf>();
 		break;
 
-	case XTankMsg::GAME_EXIT_REQ:
-		msgPtr = std::make_shared<XTankMsg::GameExitReq>();
-		break;
-
-	case XTankMsg::GAME_EXIT_ACK:
-		msgPtr = std::make_shared<XTankMsg::GameExitAck>();
+	case XTankMsg::PLAYER_EXIT_ACK:
+		msgPtr = std::make_shared<XTankMsg::PlayerExitAck>();
 		break;
 
 	default:
@@ -127,7 +106,7 @@ std::shared_ptr<Message> SocketClient::ParseMsg(int msgId, int dataSize)
 	}
 
 	if (msgPtr == nullptr
-		|| msgPtr->ParseFromArray(msgRcvData, dataSize)) {
+		|| !msgPtr->ParseFromArray(msgRcvData + MSG_TOTAL_HEAD_SIZE, dataSize)) {
 		return nullptr;
 	}
 	
@@ -156,47 +135,63 @@ bool SocketClient::ConnectToServer()
 	skin.sin_family = AF_INET;//与套接字中通信域相同
 	//skin.sin_addr.S_un.S_addr = inet_addr(ip.c_str());//绑定到的ip 即为服务器ip
 	inet_pton(AF_INET, SERVER_IP, &skin.sin_addr.s_addr);//绑定到的ip 即为服务器ip
-	skin.sin_port = htons(SERVER_PORT);//绑定到的端口 即服务器的端口号
+	skin.sin_port = htons(SOCKET_PORT);//绑定到的端口 即服务器的端口号
 
 	//建立socket与skin中所存地址的连接
 	if (connect(csocket, reinterpret_cast<sockaddr*>(&skin), sizeof(skin)) == SOCKET_ERROR) {
 		int r = WSAGetLastError();
 		closesocket(csocket);//关闭socket
 		WSACleanup();
-		assert(0);
+		assert(0 && "连接服务器失败");
 		return false;
 	}
+
+	u_long nonBlocking = 1;
+	//设置为非阻塞
+	ioctlsocket(csocket, FIONBIO, &nonBlocking);
 
 	return true;
 }
 
-void SocketClient::SocketClientThread()
+void SocketClient::SocketClientThread(const bool& isEnd)
 {
-	while (1) {
+	while (!isEnd) {
+
+		//收
 		auto [msgId, dataSize] = ReceiveFromServer();
-		std::shared_ptr<Message> msg = ParseMsg(msgId, dataSize);
-		if (msg != nullptr) {
-			MessageQueue::Instance().PushMsg({ msgId,msg });
+		if (msgId != XTankMsg::NONE) {
+			std::shared_ptr<Message> msg = ParseMsg(msgId, dataSize);
+			MsgRecvQueue::Instance().PushMsg({ msgId,msg });
 		}
+
+		//发
+		SendToServer();
 	}
 }
 
-bool SocketClient::SendToServer(XTankMsg::MSG msgType, const Message& msg)
+bool SocketClient::SendToServer()
 {
+
+	auto [msgType,msg] = MsgSendQueue::Instance().GetAndPopTopMsg();
+
+	if (msgType == XTankMsg::NONE) {
+		return true;
+	}
+
 	memset(msgSendData, 0, BUFFER_SIZE);
 
-	int msgByteSize = msg.ByteSize();
+	int msgByteSize = msg->ByteSize();
 
 	reinterpret_cast<int&>(*msgSendData) = msgByteSize;
 
 	reinterpret_cast<XTankMsg::MSG&>(*(msgSendData + MSG_HEAD_SIZE)) = msgType;
 
-	if (!msg.SerializeToArray(msgSendData + MSG_HEAD_SIZE + MSG_TYPE_SIZE, msgByteSize)) {
+	if (!msg->SerializeToArray(msgSendData + MSG_TOTAL_HEAD_SIZE, msgByteSize)) {
 		assert(0);
 		return false;
 	}
 
-	if (send(csocket, msgSendData, msgByteSize, 0) == -1) {
+	if (send(csocket, msgSendData, msgByteSize + MSG_TOTAL_HEAD_SIZE, 0) == -1) {
 		assert(0);
 		return false;
 	}
@@ -238,90 +233,4 @@ XTankMsg::PlayerId SocketClient::GetPlayerId()
 	return playerId;
 }
 
-void SocketClient::SendLoginReq()
-{
 
-	XTankMsg::PlayerId playerId = GetPlayerId();
-
-	XTankMsg::LoginReq loginReqMsg;
-	loginReqMsg.mutable_playerid()->CopyFrom(playerId);
-
-	SendToServer(XTankMsg::LOGIN_REQ, loginReqMsg);
-}
-
-void SocketClient::SendLogoutReq()
-{
-	XTankMsg::PlayerId playerId = GetPlayerId();
-	XTankMsg::LogoutReq logoutReq;
-	logoutReq.mutable_playerid()->CopyFrom(playerId);
-
-	SendToServer(XTankMsg::LOGOUT_REQ, logoutReq);
-}
-
-
-void SocketClient::SendJoinRoomReq(int roomId)
-{
-	XTankMsg::PlayerId playerId = GetPlayerId();
-	XTankMsg::RoomJoinReq joinReq;
-	joinReq.set_roomid(roomId);
-	joinReq.mutable_playerid()->CopyFrom(playerId);
-
-	SendToServer(XTankMsg::ROOM_JOIN_REQ, joinReq);
-}
-
-void SocketClient::SendCreateRoomReq()
-{
-	XTankMsg::PlayerId playerId = GetPlayerId();
-	XTankMsg::RoomCreateReq createReq;
-	createReq.mutable_playerid()->CopyFrom(playerId);
-
-	SendToServer(XTankMsg::ROOM_CREATE_REQ, createReq);
-}
-
-void SocketClient::SendGameReadyReq()
-{
-	XTankMsg::PlayerId playerId = GetPlayerId();
-	XTankMsg::GameReadyReq readyReq;
-	readyReq.mutable_playerid()->CopyFrom(playerId);
-
-	SendToServer(XTankMsg::GAME_READY_REQ, readyReq);
-}
-
-void SocketClient::SendGameReadyCancelReq()
-{
-	XTankMsg::PlayerId playerId = GetPlayerId();
-	XTankMsg::GameReadyCancelReq readyCancelReq;
-	readyCancelReq.mutable_playerid()->CopyFrom(playerId);
-
-	SendToServer(XTankMsg::GAME_READY_CANCEL_REQ, readyCancelReq);
-}
-
-void SocketClient::SendExitRoomReq()
-{
-	XTankMsg::PlayerId playerId = GetPlayerId();
-	XTankMsg::RoomExitReq exitReq;
-	exitReq.mutable_playerid()->CopyFrom(playerId);
-
-	SendToServer(XTankMsg::ROOM_EXIT_REQ, exitReq);
-}
-
-void SocketClient::SendGameInputNtf(int frameId, int cmdId)
-{
-	XTankMsg::PlayerId playerId = GetPlayerId();
-	XTankMsg::GameInputNtf inputNtf;
-	inputNtf.mutable_playerid()->CopyFrom(playerId);
-
-	inputNtf.set_frameid(frameId);
-	inputNtf.set_playercmd(cmdId);
-
-	SendToServer(XTankMsg::GAME_INPUT_NTF, inputNtf);
-}
-
-void SocketClient::SendExitGameReq()
-{
-	XTankMsg::PlayerId playerId = GetPlayerId();
-	XTankMsg::GameExitReq exitReq;
-	exitReq.mutable_playerid()->CopyFrom(playerId);
-
-	SendToServer(XTankMsg::GAME_EXIT_REQ, exitReq);
-}
