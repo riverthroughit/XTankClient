@@ -82,7 +82,7 @@ public:
 	void SystemTickInLogic(float dt);
 
 	//预测世界中各个系统更新
-	void SystemTickInDuplicate(float dt,const PlayersCommand& playersCmd);
+	void SystemTickInDuplicate(float dt,const std::vector<PlayersCommand>& playersCmds);
 
 	void Start(const bool& isEnd);
 

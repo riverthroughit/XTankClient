@@ -14,9 +14,6 @@ private:
 	Ui::PaintWidgetClass ui;
 	int updateTimerId{};
 
-	//Ä£ÄâÂß¼­Ö¡
-	TickUtil tickUtil;
-
 public:
 	PaintWidget(QWidget *parent = nullptr);
 	~PaintWidget();

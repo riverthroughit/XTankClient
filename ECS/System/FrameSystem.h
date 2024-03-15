@@ -15,17 +15,17 @@ public:
 
 	virtual void Init()override;
 
-	//回滚时的更新
-	void TickInRollback();
-
 	void Reset();
 
 	void SetTickTime(float val);
-
-	bool IsNeedTick();
 
 	//设置一次延迟
 	void SetDelay(float val);
 
 	float GetDt();
+
+	bool FrameSystem::IsNeedTick();
+
+	//在预测世界中的tick
+	void TickInDuplicate();
 };

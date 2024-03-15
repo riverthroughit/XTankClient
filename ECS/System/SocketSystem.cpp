@@ -36,8 +36,8 @@ void SocketSystem::Init()
 		}
 	}
 
-	//延迟执行 等待其他客户端
-	Sleep(msgPtr->latency());
+	////延迟执行 等待其他客户端
+	//Sleep(msgPtr->latency());
 
 }
 
@@ -84,10 +84,9 @@ void SocketSystem::UpdatePlayersCmd(const MessageData& msgData)
 
 	//更新用户操作指令
 	for (int i = 0; i < playersCmd.size(); ++i) {
+
 		socketComp.curPlayersCmd.commandArray[i] = static_cast<BUTTON::Type>(playersCmd.Get(i));
-		if (socketComp.curPlayersCmd.commandArray[i] == BUTTON::DOWN) {
-			int a = 1;
-		}
+
 	}
 }
 

@@ -23,6 +23,15 @@ public:
 		}
 	}
 
+	SystemManager& operator = (const SystemManager& other) {
+
+		mSignatures = other.mSignatures;
+
+		for (auto& [name, ptr] : other.mSystems) {
+			mSystems.insert({ name,ptr->GetACopy() });
+		}
+	}
+
 	//ÒÆ¶¯¸³Öµ
 	SystemManager& operator = (SystemManager&& other)noexcept = default;
 

@@ -14,6 +14,7 @@ void MoveSystem::Tick(float dt)
 		SpeedComponent& speedComp = mWorld->GetComponent<SpeedComponent>(entity);
 
 		//更新速度
+		posComp.prePos = posComp.pos;
 		posComp.pos += speedComp.direc * speedComp.speed;
 
 	}

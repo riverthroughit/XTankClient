@@ -17,10 +17,10 @@ struct RollbackComponent {
 	//预测的命令队列
 	std::deque<PlayersCommand> predCmdDeq{};
 
+	//最大预测次数
+	int maxPredictTimes{};
+
 	//当前到来的服务器命令
 	PlayersCommand preciseCmd{};
-
-	//当前预测的命令
-	PlayersCommand predictCmd{};
 
 };

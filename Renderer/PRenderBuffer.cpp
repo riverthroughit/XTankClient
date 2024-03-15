@@ -1,24 +1,23 @@
 #include "PRenderBuffer.h"
 
-std::pair<unsigned int, std::pair<BufferMap, BufferMap>> PRenderBuffer::GetFrameIdAndReadBuffers()
+std::vector<PRenderData> PRenderBuffer::GetReadBuffer()
 {
 	std::shared_lock sharedLock(wrMutex);
-	return { frameId,{ renderBuffer[preIndex],renderBuffer[curIndex] } };
+	return renderBuffer[readIndex];
 }
 
 void PRenderBuffer::WriteToBuffer(const PRenderData& data)
 {
 	std::shared_lock sharedLock(wrMutex);
-	renderBuffer[writeIndex].insert({ data.entityId,data });
+	renderBuffer[writeIndex].push_back(data);
 }
 
 void PRenderBuffer::SwapPRenderBuffer()
 {
 	std::unique_lock sharedLock(wrMutex);
 
-	preIndex = (preIndex + 1) % 3;
-	curIndex = (curIndex + 1) % 3;
-	writeIndex = (writeIndex + 1) % 3;
+	readIndex = (readIndex + 1) % 2;
+	writeIndex = (writeIndex + 1) % 2;
 
 	renderBuffer[writeIndex].clear();
 }

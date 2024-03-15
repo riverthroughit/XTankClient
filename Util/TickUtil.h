@@ -15,8 +15,6 @@ class TickUtil {
 	float frameTime{};
 	//当前帧进度
 	float percent{};
-	//是否经过一个逻辑帧周期
-	bool isNeedTick{};
 
 	clock::time_point preTime{};
 	clock::time_point curTime{};
@@ -32,7 +30,6 @@ public:
 		frameTime = tickTime;
 		frameId = -1;
 		percent = 0;
-		isNeedTick = false;
 		isStart = false;
 		preTime = curTime = clock::now();
 	}
@@ -47,7 +44,7 @@ public:
 
 		if (!isStart) {
 			isStart = true;
-			preTime = curTime = clock::now();
+			preTime = clock::now();
 		}
 
 		curTime = clock::now();
@@ -59,17 +56,9 @@ public:
 			int dframe = frameTime / tickTime;
 			frameTime -= dframe * tickTime;
 			frameId += dframe;
-			isNeedTick = true;
-		}
-		else {
-			isNeedTick = false;
 		}
 
 		percent = frameTime / tickTime;
-	}
-
-	bool IsNeedTick() {
-		return isNeedTick;
 	}
 
 	//设置一次延迟

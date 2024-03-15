@@ -35,10 +35,14 @@ void ObstacleSystem::BlockTypeSpeedTick(Entity entity)
 
 		for (Entity& hitEntity : collisionComp.hitEntities) {
 			
-			//如果两物体在移动后仍碰撞 则将速度置0
+			//如果两物体距离在变远 则可以分开
+			//否则继续碰撞 将速度置0
 
 			CollisionComponent& collisionComp1 = mWorld->GetComponent<CollisionComponent>(hitEntity);
 			PosComponent& posComp1 = mWorld->GetComponent<PosComponent>(hitEntity);
+			
+			FixedPoint preDist = (posComp.pos - posComp1.pos).squareLenth();
+			
 			PosComponent newPosComp1;
 
 			if (mWorld->HasComponent<SpeedComponent>(hitEntity)) {
@@ -49,7 +53,9 @@ void ObstacleSystem::BlockTypeSpeedTick(Entity entity)
 				newPosComp1 = posComp1;
 			}
 
-			if (isCollision(newPosComp, collisionComp, newPosComp1, collisionComp1)) {
+			FixedPoint curDist = (newPosComp.pos - newPosComp1.pos).squareLenth();
+			
+			if (curDist < preDist) {
 				isEnd = false;
 				break;
 			}

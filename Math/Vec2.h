@@ -124,3 +124,4 @@ bool operator != (const Vec2<T>& a, const Vec2<T>& b) {
 
 using Vec2Fixed = Vec2<FixedPoint>; 
 using Vec2f = Vec2<float>;
+using Vec2i = Vec2<int>;

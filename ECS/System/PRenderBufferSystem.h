@@ -10,6 +10,6 @@ public:
 
 private:
 
-	//添加信息至渲染队列
-	void UpdatePRenderBuffer();
+	//更新渲染信息至渲染队列
+	void UpdatePRenderBuffer(float dt);
 };

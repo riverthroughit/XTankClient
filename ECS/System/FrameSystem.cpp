@@ -18,14 +18,13 @@ void FrameSystem::Tick(float)
 
 	frameComp.curTime = clock::now();
 	duration dtn = std::chrono::duration_cast<duration>(frameComp.curTime - frameComp.preTime);
-	frameComp.dt = dtn.count();
 	frameComp.preTime = frameComp.curTime;
-	frameComp.frameTime += frameComp.dt;
+	frameComp.dt += dtn.count();
 
-	if (frameComp.frameTime > frameComp.tickTime) {
-		int dframe = frameComp.frameTime / frameComp.tickTime;
+	if (frameComp.dt > frameComp.tickTime) {
+		int dframe = frameComp.dt / frameComp.tickTime;
 		assert(dframe == 1 && "too slow");
-		frameComp.frameTime -= dframe * frameComp.tickTime;
+		frameComp.dt -= dframe * frameComp.tickTime;
 		frameComp.frameId += dframe;
 		frameComp.isNeedTick = true;
 	}
@@ -33,7 +32,7 @@ void FrameSystem::Tick(float)
 		frameComp.isNeedTick = false;
 	}
 
-	frameComp.percent = frameComp.frameTime / frameComp.tickTime;
+	frameComp.percent = frameComp.dt / frameComp.tickTime;
 }
 
 void FrameSystem::Init()
@@ -41,20 +40,13 @@ void FrameSystem::Init()
 	SetTickTime(LOCKSTEP_TICK);
 }
 
-void FrameSystem::TickInRollback()
-{
-	auto& frameComp = mWorld->GetSingletonComponent<FrameComponent>();
-	++frameComp.frameId;
-	frameComp.frameTime = 0;
-	frameComp.isNeedTick = true;
-	frameComp.percent = 0;
-}
+
 
 void FrameSystem::Reset()
 {
 	auto& frameComp = mWorld->GetSingletonComponent<FrameComponent>();
 
-	frameComp.frameTime = frameComp.tickTime;
+	frameComp.dt = frameComp.tickTime;
 	frameComp.frameId = -1;
 	frameComp.percent = 0;
 	frameComp.isNeedTick = false;
@@ -75,10 +67,20 @@ bool FrameSystem::IsNeedTick()
 	return mWorld->GetSingletonComponent<FrameComponent>().isNeedTick;
 }
 
+void FrameSystem::TickInDuplicate()
+{
+	auto& frameComp = mWorld->GetSingletonComponent<FrameComponent>();
+
+	frameComp.dt = frameComp.tickTime;
+	frameComp.percent = 0;
+	++frameComp.frameId;
+	frameComp.isNeedTick = false;
+}
+
 void FrameSystem::SetDelay(float val)
 {
 	auto& frameComp = mWorld->GetSingletonComponent<FrameComponent>();
-	frameComp.frameTime -= val;
+	frameComp.dt -= val;
 }
 
 float FrameSystem::GetDt()

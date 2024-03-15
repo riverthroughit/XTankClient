@@ -4,20 +4,20 @@
 #include "ECS/Component/PRenderComponent.h"
 #include "ECS/Component/PosComponent.h"
 #include "ECS/Component/SpeedComponent.h"
-#include "ECS/Component/FrameComponent.h"
 #include "Util/Util.h"
 #include "Renderer/PRenderBuffer.h"
 
 void PRenderBufferSystem::Tick(float dt)
 {
-	UpdatePRenderBuffer();
+	UpdatePRenderBuffer(dt);
 }
 
 
-void PRenderBufferSystem::UpdatePRenderBuffer()
+void PRenderBufferSystem::UpdatePRenderBuffer(float dt)
 {
 
 	auto& pRenderBuffer = PRenderBuffer::Instance();
+	float percent = dt / LOCKSTEP_TICK;
 
 	for (const Entity& entity : mEntities) {
 		PosComponent& posComp = mWorld->GetComponent<PosComponent>(entity);
@@ -27,12 +27,16 @@ void PRenderBufferSystem::UpdatePRenderBuffer()
 		Vec2f pos = { (float)(posComp.pos.x),(float)(posComp.pos.y) };
 		Vec2f direc = { (float)(posComp.direc.x),(float)(posComp.direc.y) };
 
-		pRenderBuffer.WriteToBuffer(PRenderData{ entity, pRenderComp.shape,pos,direc });
+		Vec2f prePos = { (float)(posComp.prePos.x),(float)(posComp.prePos.y) };
+		Vec2f preDirec = { (float)(posComp.preDirec.x),(float)(posComp.preDirec.y) };
+
+		//²åÖµ
+		Vec2f interpPos = linearInterp(prePos, pos, percent);
+		Vec2f interpDirec = linearInterp(preDirec, direc, percent);
+
+		pRenderBuffer.WriteToBuffer(PRenderData{ pRenderComp.shape,interpPos,interpDirec });
 	}
 
 	pRenderBuffer.SwapPRenderBuffer();
 
-	auto& frameComp = mWorld->GetSingletonComponent<FrameComponent>();
-
-	pRenderBuffer.SetFrameId(frameComp.frameId);
 }

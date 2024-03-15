@@ -2,6 +2,7 @@
 
 #include "ECS/System.h"
 #include "TypeConfig.h"
+#include <vector>
 
 class XTankWorld;
 
@@ -13,11 +14,11 @@ public:
 
 	void Init()override;
 
-	//复制世界并返回 需在真实世界更新后调用
-	XTankWorld* DuplicateWorld();
+	//获取复制的世界
+	XTankWorld* GetDuplicateWorld();
 
-	//返回预测的命令
-	PlayersCommand GetPredictedCmd();
+	//更新预测世界
+	void TickPredictWorld(float dt);
 
 private:
 
@@ -27,7 +28,9 @@ private:
 	//更新预测的命令
 	void UpdatePredictCmd();
 
-	//更新预测的世界
-	void JudgeDuplicateWorld();
+	//判断预测是否成功 若不成功 则用当前权威命令重新预测至当前状态
+	void RollbackPredictCmd();
 
+	//获取预测世界需执行的命令
+	std::vector<PlayersCommand> GetPredictCmds();
 };

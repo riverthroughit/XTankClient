@@ -14,18 +14,15 @@ PaintWidget::PaintWidget(QWidget* parent)
 {
 	ui.setupUi(this);
 	updateTimerId = startTimer(RENDER_TICK, Qt::PreciseTimer);
-	tickUtil.SetTickTime(LOCKSTEP_TICK);
+
 }
 
 PaintWidget::~PaintWidget()
 {}
 
 
-
 void PaintWidget::paintEvent(QPaintEvent* event)
 {
-
-	tickUtil.Tick();
 
 	//更新屏幕分辨率
 	SCREEN_HEIGHT = height();
@@ -34,55 +31,16 @@ void PaintWidget::paintEvent(QPaintEvent* event)
 	QPainter painter(this);
 	InitQPaint(painter);
 
-	//获取渲染队列
+	//获取需渲染的物体并渲染
 	auto& pRenderBuffer = PRenderBuffer::Instance();
-	auto [renderFrameId, buffers] = pRenderBuffer.GetFrameIdAndReadBuffers();
-	auto& preBuffer = buffers.first, & curBuffer = buffers.second;
+	auto buffer = pRenderBuffer.GetReadBuffer();
 
-	//帧组件
-	unsigned int frameId = tickUtil.GetFrameId();
-	float percent = tickUtil.GetPercent();
+	for (auto& [shape, pos,direc] : buffer) {
 
-	//若逻辑帧已更新至下一帧 则渲染帧使用的插值比例直接设为1
-	if (frameId > renderFrameId) {
-		percent = 1;
-	}
+		//变换坐标
+		pos = logicToScreen(pos);
 
-
-	//变换坐标
-	for (auto& [_, data] : curBuffer) {
-		data.pos = logicToScreen(data.pos);
-		data.direc = logicToScreen(data.direc);
-	}
-	for (auto& [_, data] : preBuffer) {
-		data.pos = logicToScreen(data.pos);
-		data.direc = logicToScreen(data.direc);
-	}
-
-
-	//插值得到各模型位置
-	for (auto& [id, preData] : preBuffer) {
-
-		Vec2f prePos = preData.pos;
-		Vec2f preDirec = preData.direc;
-
-		auto curPairIte = curBuffer.find(id);
-
-		//物体是否在两帧缓冲中均出现
-		if (curPairIte == curBuffer.end()) {
-			DrawEntityCollision(preData.shape, prePos, painter);			
-			continue;
-		}
-		else {
-			Vec2f curPos = curPairIte->second.pos;
-			Vec2f curDirec = curPairIte->second.direc;
-
-			
-			Vec2f pos = linearInterp(prePos, curPos, percent);
-			Vec2f direc = linearInterp(preDirec, curDirec, percent);
-
-			DrawEntityCollision(preData.shape, pos, painter);
-		}
+		DrawEntityCollision(shape, pos, painter);
 	}
 
 
@@ -123,7 +81,7 @@ void PaintWidget::InitQPaint(QPainter& painter)
 	//设置画笔
 	QPen pen;
 	pen.setWidth(3); //线宽
-	pen.setColor(Qt::red); //划线颜色
+	pen.setColor(Qt::black); //划线颜色
 	pen.setStyle(Qt::SolidLine);//线的样式，实线、虚线等
 	pen.setCapStyle(Qt::FlatCap);//线端点样式
 	pen.setJoinStyle(Qt::BevelJoin);//线的连接点样式

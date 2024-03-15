@@ -31,6 +31,23 @@ public:
 		}
 	}
 
+	ComponentManager& operator = (const ComponentManager& other) {
+
+		mComponentTypes = other.mComponentTypes;
+		mNextComponentType = other.mNextComponentType;
+		mSingleCompContainers.reserve(other.mSingleCompContainers.size());
+
+		for (const auto& [type, ptr] : other.mSingleCompContainers) {
+			mSingleCompContainers.insert({ type ,ptr->GetACopy() });
+		}
+
+		mComponentArrays.reserve(other.mComponentArrays.size());
+
+		for (const auto& [type, ptr] : other.mComponentArrays) {
+			mComponentArrays.insert({ type ,ptr->GetACopy() });
+		}
+	}
+
 	ComponentManager& operator = (ComponentManager&&)noexcept = default;
 
 	template<typename T>

@@ -53,7 +53,7 @@ void EntitySpawnSystem::BlockSpawn(std::shared_ptr<ENTITY_SPAWN_ARGS::Block> arg
 
 	CollisionComponent collComp{ LOGIC_SHAPE::CIRCLE,{CUBE_SIDE_LENTH_FIXED / FixedPoint(2)}};
 	ObstacleComponent obsComp{ OBSTACLE::BLOCK };
-	PosComponent posComp{ args->pos , args->direc };
+	PosComponent posComp{ args->pos , args->direc,args->pos , args->direc };
 	PRenderComponent pRenderComp{ PRENDER_SHAPE::BLOCK };
 	BlockComponent blockComp{ args->blockType,false };
 	mWorld->AddComponent(block, collComp);
@@ -74,8 +74,8 @@ void EntitySpawnSystem::TankSpawn(std::shared_ptr<ENTITY_SPAWN_ARGS::Tank> args)
 	AttachComponent attachComp{ args->ownerId };
 	CollisionComponent collComp{ LOGIC_SHAPE::CIRCLE,{TANK_RADIUS_FIXED} };
 	ObstacleComponent obsComp{ OBSTACLE::BLOCK };
-	PosComponent posComp{ args->pos , args->direc };
-	SpeedComponent speedComp{ Vec2Fixed(),TANK_SPEED_FIXED};
+	PosComponent posComp{ args->pos , args->direc,args->pos , args->direc };
+	SpeedComponent speedComp{ Vec2Fixed(),TANK_SPEED_FIXED,Vec2Fixed(),TANK_ACCSPEED_FIXED };
 	PRenderComponent pRenderComp{ PRENDER_SHAPE::TANK };
 	BulletSpawnComponent bulletSpawnComp{ args->direc,true };
 	BlockComponent blockComp{ BLOCK::FRAGILE,false };
@@ -95,8 +95,8 @@ void EntitySpawnSystem::BulletSpawn(std::shared_ptr<ENTITY_SPAWN_ARGS::Bullet> a
 
 	AttachComponent attachComp{ args->ownerId };
 	CollisionComponent collComp{ LOGIC_SHAPE::CIRCLE,{BULLET_RADIUS_FIXED} };
-	PosComponent posComp{ args->pos , args->speedDirec };
-	SpeedComponent speedComp{ args->speedDirec,BULLET_SPEED_FIXED };
+	PosComponent posComp{ args->pos , args->speedDirec,args->pos , args->speedDirec };
+	SpeedComponent speedComp{ args->speedDirec,BULLET_SPEED_FIXED,args->speedDirec ,BULLET_ACCSPEED_FIXED };
 	PRenderComponent pRenderComp{ PRENDER_SHAPE::BULLET };
 	mWorld->AddComponent(bullet, attachComp);
 	mWorld->AddComponent(bullet, collComp);

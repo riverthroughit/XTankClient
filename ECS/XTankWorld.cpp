@@ -178,6 +178,9 @@ void XTankWorld::Init()
 	SetSystemSignature<SceneChangeSystem>(signature);
 
 	mRollbackSystem = RegisterSystem<RollbackSystem>();
+	signature.reset();
+	signature.set(posCompType);
+	SetSystemSignature<RollbackSystem>(signature);
 }
 
 void XTankWorld::SystemInit()
@@ -212,26 +215,29 @@ void XTankWorld::SystemTickInLogic(float dt)
 	//mPRenderBufferSystem->Tick(dt);
 }
 
-void XTankWorld::SystemTickInDuplicate(float dt,const PlayersCommand& playersCmd)
+void XTankWorld::SystemTickInDuplicate(float dt, const std::vector<PlayersCommand>& playersCmds)
 {
 
 	//设置命令
 	auto& rollbackComp = GetSingletonComponent<RollbackComponent>();
-	rollbackComp.preciseCmd= playersCmd;
+	for (const PlayersCommand& cmd : playersCmds) {
+		
+		rollbackComp.preciseCmd = cmd;
 
-	mCommandSystem->Tick(dt);
-	mCollisionSystem->Tick(dt);
-	mSpeedChangeSystem->Tick(dt);
-	mObstacleSystem->Tick(dt);
-	mMoveSystem->Tick(dt);
-	mFireSystem->Tick(dt);
-	mBulletHitSystem->Tick(dt);
-	mSceneChangeSystem->Tick(dt);
-	mPlayerStateSystem->Tick(dt);
-	mEntityDestroySystem->Tick(dt);
-	mEntitySpawnSystem->Tick(dt);
-	mPRenderBufferSystem->Tick(dt);
+		mCommandSystem->Tick(dt);
+		mCollisionSystem->Tick(dt);
+		mSpeedChangeSystem->Tick(dt);
+		mObstacleSystem->Tick(dt);
+		mMoveSystem->Tick(dt);
+		mFireSystem->Tick(dt);
+		mBulletHitSystem->Tick(dt);
+		mSceneChangeSystem->Tick(dt);
+		mPlayerStateSystem->Tick(dt);
+		mEntityDestroySystem->Tick(dt);
+		mEntitySpawnSystem->Tick(dt);
 
+		mFrameSystem->TickInDuplicate();
+	}
 }
 
 void XTankWorld::Start(const bool& isEnd)
@@ -245,18 +251,22 @@ void XTankWorld::Start(const bool& isEnd)
 	while (!isEnd) {
 
 		mFrameSystem->Tick();
+		float dt = mFrameSystem->GetDt();
 
+		//逻辑
 		if (mFrameSystem->IsNeedTick()) {
 			
-			float dt = mFrameSystem->GetDt();
-
+			//真实世界更新
 			SystemTickInLogic(dt);
 
-			XTankWorld* dupWorld = mRollbackSystem->DuplicateWorld();
-			PlayersCommand cmd = mRollbackSystem->GetPredictedCmd();
-
-			dupWorld->SystemTickInDuplicate(dt, cmd);
+			//预测世界更新
+			mRollbackSystem->TickPredictWorld(dt);
 
 		}
+
+		//用预测的世界渲染
+		XTankWorld* dupWorld = mRollbackSystem->GetDuplicateWorld();
+		dupWorld->mPRenderBufferSystem->Tick(dt);
+
 	}
 }
