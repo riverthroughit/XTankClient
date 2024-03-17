@@ -5,6 +5,7 @@
 #include "ECS/Component/InputComponent.h"
 #include "ECS/Component/PosComponent.h"
 #include "ECS/Component/FrameComponent.h"
+#include "ECS/Component/RollbackPosComponent.h"
 #include <memory>
 
 
@@ -19,7 +20,7 @@ void RollbackSystem::Init()
 {
 	auto& rollbackComp = mWorld->GetSingletonComponent<RollbackComponent>();
 	rollbackComp.duplicateWorld = new XTankWorld(static_cast<XTankWorld&>(*mWorld));
-	rollbackComp.maxPredictTimes = 5;
+	rollbackComp.maxPredictTimes = 6;
 	rollbackComp.preciseCmd = { -1,std::array<BUTTON::Type, PLAYER_NUM>{BUTTON::NONE} };
 }
 
@@ -47,33 +48,43 @@ void RollbackSystem::UpdatePredictCmd()
 	auto& rollbackComp = mWorld->GetSingletonComponent<RollbackComponent>();
 	auto& socketComp = mWorld->GetSingletonComponent<SocketComponent>();
 
-	//判断之前的命令是否预测成功
-	RollbackPredictCmd();
-
+	if (!rollbackComp.predCmdDeq.empty()) {
+		//判断之前的命令是否预测成功
+		RollbackPredictCmd();
+	}
+	
 	//预测最新一帧的命令
 	PlayersCommand predCmd{};
-	auto& frameComp = mWorld->GetSingletonComponent<FrameComponent>();
 	
+	auto& frameComp = mWorld->GetSingletonComponent<FrameComponent>();
+	predCmd.frameId = frameComp.frameId;
 
-	//到达最大预测上限 则预测空指令
-	if (rollbackComp.predCmdDeq.size() >= rollbackComp.maxPredictTimes) {
+	//到达最大预测上限 则不预测 空指令
+	if (rollbackComp.predCmdDeq.size() < rollbackComp.maxPredictTimes) {
 		
-		predCmd.frameId = frameComp.frameId;
-	}
-	else {
-
-		predCmd = rollbackComp.preciseCmd;
-		predCmd.frameId = frameComp.frameId;
-
+		predCmd.commandArray = GetPredictCmdFrom(rollbackComp.preciseCmd.commandArray);
 		auto& inputComp = mWorld->GetSingletonComponent<InputComponent>();
 		//当前本地玩家的命令
 		predCmd.commandArray[socketComp.localPlayerId] = inputComp.curBtn;
-
 	}
 
 	//将当前预测命令放入队列
 	rollbackComp.predCmdDeq.push_back(predCmd);
 
+}
+
+std::array<BUTTON::Type, PLAYER_NUM> RollbackSystem::GetPredictCmdFrom(const std::array<BUTTON::Type, PLAYER_NUM>& preCmd)
+{
+	std::array<BUTTON::Type, PLAYER_NUM> predictCmd{};
+
+	for (int i = 0; i < PLAYER_NUM; ++i) {
+		
+		if (preCmd[i] != BUTTON::CUT_IN && preCmd[i] != BUTTON::FIRE) {
+			predictCmd[i] = preCmd[i];
+		}
+	}
+
+	return predictCmd;
 }
 
 void RollbackSystem::RollbackPredictCmd()
@@ -100,9 +111,7 @@ void RollbackSystem::RollbackPredictCmd()
 			for (PlayersCommand& cmd : rollbackComp.predCmdDeq) {
 				
 				BUTTON::Type localBtn = cmd.commandArray[socketComp.localPlayerId];
-				int framId = cmd.frameId;
-				cmd = preCmd;
-				cmd.frameId = framId;
+				cmd.commandArray = GetPredictCmdFrom(preCmd.commandArray);
 				cmd.commandArray[socketComp.localPlayerId] = localBtn;
 				preCmd = cmd;
 			}
@@ -122,34 +131,26 @@ void RollbackSystem::TickPredictWorld(float dt)
 	}
 	else {
 		//需要回滚
-		//位置组件需特殊处理 以便插值平滑 {entity,{prePos,preDirec}}
-		std::unordered_map<Entity, std::pair<Vec2Fixed, Vec2Fixed>> prePosMap;
+		//位置组件需特殊处理 以便插值平滑
 		
 		auto dupRollSystem = rollbackComp.duplicateWorld->GetSystem<RollbackSystem>();
 
+		std::unordered_map<Entity, Vec2Fixed> prePoses;
 		//记录当前位置
 		for (Entity entity : dupRollSystem->mEntities) {
 			const auto& posComp = rollbackComp.duplicateWorld->GetComponent<PosComponent>(entity);
-			prePosMap.insert({ entity,{posComp.pos,posComp.direc} });
+			prePoses[entity] = posComp.pos;
 		}
-
-		delete rollbackComp.duplicateWorld;
-		rollbackComp.duplicateWorld = new XTankWorld(static_cast<XTankWorld&>(*mWorld));
+		
+		*rollbackComp.duplicateWorld = XTankWorld(static_cast<XTankWorld&>(*mWorld));
 		rollbackComp.duplicateWorld->SystemTickInDuplicate(dt, cmds);
+		
 		dupRollSystem = rollbackComp.duplicateWorld->GetSystem<RollbackSystem>();
 
 		//修改预测世界的位置组件的上一帧位置
 		for (Entity entity : dupRollSystem->mEntities) {
-			
-			auto ite = prePosMap.find(entity);
-			if (ite != prePosMap.end()) {
-
-				auto& [pos, direc] = ite->second;
-
-				auto& posComp = rollbackComp.duplicateWorld->GetComponent<PosComponent>(entity);
-				posComp.prePos = pos;
-				posComp.preDirec = direc;
-			}
+			auto& posComp = rollbackComp.duplicateWorld->GetComponent<PosComponent>(entity);
+			posComp.prePos = prePoses[entity];
 		}
 	}
 }

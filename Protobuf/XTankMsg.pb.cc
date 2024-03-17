@@ -198,7 +198,8 @@ PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT RoomNtf_PlayerStateDefaultTypeI
 constexpr RoomNtf::RoomNtf(
   ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
   : playerstates_()
-  , roomid_(0u){}
+  , roomid_(0u)
+  , isingame_(false){}
 struct RoomNtfDefaultTypeInternal {
   constexpr RoomNtfDefaultTypeInternal()
     : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
@@ -270,6 +271,19 @@ struct GameReadyReqDefaultTypeInternal {
   };
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT GameReadyReqDefaultTypeInternal _GameReadyReq_default_instance_;
+constexpr GameInitNtf::GameInitNtf(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
+  : playerids_()
+  , randseed_(0){}
+struct GameInitNtfDefaultTypeInternal {
+  constexpr GameInitNtfDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~GameInitNtfDefaultTypeInternal() {}
+  union {
+    GameInitNtf _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT GameInitNtfDefaultTypeInternal _GameInitNtf_default_instance_;
 constexpr GameReadyAck::GameReadyAck(
   ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
   : playerid_(nullptr){}
@@ -284,8 +298,7 @@ struct GameReadyAckDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT GameReadyAckDefaultTypeInternal _GameReadyAck_default_instance_;
 constexpr GameStartNtf::GameStartNtf(
   ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
-  : playerids_()
-  , latency_(0){}
+  : latency_(0){}
 struct GameStartNtfDefaultTypeInternal {
   constexpr GameStartNtfDefaultTypeInternal()
     : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
@@ -348,8 +361,45 @@ struct PlayerExitAckDefaultTypeInternal {
   };
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PlayerExitAckDefaultTypeInternal _PlayerExitAck_default_instance_;
+constexpr PlayerCutInReq::PlayerCutInReq(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
+  : playerid_(nullptr){}
+struct PlayerCutInReqDefaultTypeInternal {
+  constexpr PlayerCutInReqDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~PlayerCutInReqDefaultTypeInternal() {}
+  union {
+    PlayerCutInReq _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PlayerCutInReqDefaultTypeInternal _PlayerCutInReq_default_instance_;
+constexpr PlayerCutInNtf::PlayerCutInNtf(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
+  : playerids_()
+  , cmds_(){}
+struct PlayerCutInNtfDefaultTypeInternal {
+  constexpr PlayerCutInNtfDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~PlayerCutInNtfDefaultTypeInternal() {}
+  union {
+    PlayerCutInNtf _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PlayerCutInNtfDefaultTypeInternal _PlayerCutInNtf_default_instance_;
+constexpr PlayerChaseUpNtf::PlayerChaseUpNtf(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
+  : playerid_(nullptr){}
+struct PlayerChaseUpNtfDefaultTypeInternal {
+  constexpr PlayerChaseUpNtfDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~PlayerChaseUpNtfDefaultTypeInternal() {}
+  union {
+    PlayerChaseUpNtf _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PlayerChaseUpNtfDefaultTypeInternal _PlayerChaseUpNtf_default_instance_;
 }  // namespace XTankMsg
-static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_XTankMsg_2eproto[26];
+static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_XTankMsg_2eproto[30];
 static const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* file_level_enum_descriptors_XTankMsg_2eproto[1];
 static constexpr ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor const** file_level_service_descriptors_XTankMsg_2eproto = nullptr;
 
@@ -470,6 +520,7 @@ const uint32_t TableStruct_XTankMsg_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::XTankMsg::RoomNtf, roomid_),
   PROTOBUF_FIELD_OFFSET(::XTankMsg::RoomNtf, playerstates_),
+  PROTOBUF_FIELD_OFFSET(::XTankMsg::RoomNtf, isingame_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::XTankMsg::PlayerReadyReq, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -508,6 +559,14 @@ const uint32_t TableStruct_XTankMsg_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::XTankMsg::GameReadyReq, success_),
   ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::XTankMsg::GameInitNtf, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::XTankMsg::GameInitNtf, randseed_),
+  PROTOBUF_FIELD_OFFSET(::XTankMsg::GameInitNtf, playerids_),
+  ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::XTankMsg::GameReadyAck, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
@@ -521,7 +580,6 @@ const uint32_t TableStruct_XTankMsg_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::XTankMsg::GameStartNtf, latency_),
-  PROTOBUF_FIELD_OFFSET(::XTankMsg::GameStartNtf, playerids_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::XTankMsg::PlayerInputNtf, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -554,6 +612,28 @@ const uint32_t TableStruct_XTankMsg_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::XTankMsg::PlayerExitAck, success_),
   PROTOBUF_FIELD_OFFSET(::XTankMsg::PlayerExitAck, msg_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::XTankMsg::PlayerCutInReq, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::XTankMsg::PlayerCutInReq, playerid_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::XTankMsg::PlayerCutInNtf, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::XTankMsg::PlayerCutInNtf, playerids_),
+  PROTOBUF_FIELD_OFFSET(::XTankMsg::PlayerCutInNtf, cmds_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::XTankMsg::PlayerChaseUpNtf, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::XTankMsg::PlayerChaseUpNtf, playerid_),
 };
 static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, -1, sizeof(::XTankMsg::PlayerId)},
@@ -571,17 +651,21 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOB
   { 92, -1, -1, sizeof(::XTankMsg::RoomExitAck)},
   { 100, -1, -1, sizeof(::XTankMsg::RoomNtf_PlayerState)},
   { 108, -1, -1, sizeof(::XTankMsg::RoomNtf)},
-  { 116, -1, -1, sizeof(::XTankMsg::PlayerReadyReq)},
-  { 123, -1, -1, sizeof(::XTankMsg::PlayerReadyAck)},
-  { 131, -1, -1, sizeof(::XTankMsg::PlayerReadyCancelReq)},
-  { 138, -1, -1, sizeof(::XTankMsg::PlayerReadyCancelAck)},
-  { 146, -1, -1, sizeof(::XTankMsg::GameReadyReq)},
-  { 153, -1, -1, sizeof(::XTankMsg::GameReadyAck)},
-  { 160, -1, -1, sizeof(::XTankMsg::GameStartNtf)},
-  { 168, -1, -1, sizeof(::XTankMsg::PlayerInputNtf)},
-  { 177, -1, -1, sizeof(::XTankMsg::GameForwardNtf)},
-  { 185, -1, -1, sizeof(::XTankMsg::PlayerExitReq)},
-  { 192, -1, -1, sizeof(::XTankMsg::PlayerExitAck)},
+  { 117, -1, -1, sizeof(::XTankMsg::PlayerReadyReq)},
+  { 124, -1, -1, sizeof(::XTankMsg::PlayerReadyAck)},
+  { 132, -1, -1, sizeof(::XTankMsg::PlayerReadyCancelReq)},
+  { 139, -1, -1, sizeof(::XTankMsg::PlayerReadyCancelAck)},
+  { 147, -1, -1, sizeof(::XTankMsg::GameReadyReq)},
+  { 154, -1, -1, sizeof(::XTankMsg::GameInitNtf)},
+  { 162, -1, -1, sizeof(::XTankMsg::GameReadyAck)},
+  { 169, -1, -1, sizeof(::XTankMsg::GameStartNtf)},
+  { 176, -1, -1, sizeof(::XTankMsg::PlayerInputNtf)},
+  { 185, -1, -1, sizeof(::XTankMsg::GameForwardNtf)},
+  { 193, -1, -1, sizeof(::XTankMsg::PlayerExitReq)},
+  { 200, -1, -1, sizeof(::XTankMsg::PlayerExitAck)},
+  { 208, -1, -1, sizeof(::XTankMsg::PlayerCutInReq)},
+  { 215, -1, -1, sizeof(::XTankMsg::PlayerCutInNtf)},
+  { 223, -1, -1, sizeof(::XTankMsg::PlayerChaseUpNtf)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -605,12 +689,16 @@ static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] =
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::XTankMsg::_PlayerReadyCancelReq_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::XTankMsg::_PlayerReadyCancelAck_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::XTankMsg::_GameReadyReq_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::XTankMsg::_GameInitNtf_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::XTankMsg::_GameReadyAck_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::XTankMsg::_GameStartNtf_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::XTankMsg::_PlayerInputNtf_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::XTankMsg::_GameForwardNtf_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::XTankMsg::_PlayerExitReq_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::XTankMsg::_PlayerExitAck_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::XTankMsg::_PlayerCutInReq_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::XTankMsg::_PlayerCutInNtf_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::XTankMsg::_PlayerChaseUpNtf_default_instance_),
 };
 
 const char descriptor_table_protodef_XTankMsg_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
@@ -630,44 +718,53 @@ const char descriptor_table_protodef_XTankMsg_2eproto[] PROTOBUF_SECTION_VARIABL
   "\016\n\006roomId\030\002 \001(\004\"+\n\013RoomJoinAck\022\017\n\007succes"
   "s\030\001 \001(\010\022\013\n\003msg\030\002 \001(\t\"3\n\013RoomExitReq\022$\n\010p"
   "layerId\030\001 \001(\0132\022.XTankMsg.PlayerId\"+\n\013Roo"
-  "mExitAck\022\017\n\007success\030\001 \001(\010\022\013\n\003msg\030\002 \001(\t\"\222"
+  "mExitAck\022\017\n\007success\030\001 \001(\010\022\013\n\003msg\030\002 \001(\t\"\244"
   "\001\n\007RoomNtf\022\016\n\006roomId\030\001 \001(\r\0223\n\014playerStat"
-  "es\030\002 \003(\0132\035.XTankMsg.RoomNtf.PlayerState\032"
-  "B\n\013PlayerState\022$\n\010playerId\030\001 \001(\0132\022.XTank"
-  "Msg.PlayerId\022\r\n\005ready\030\002 \001(\010\"6\n\016PlayerRea"
-  "dyReq\022$\n\010playerId\030\001 \001(\0132\022.XTankMsg.Playe"
-  "rId\".\n\016PlayerReadyAck\022\017\n\007success\030\001 \001(\010\022\013"
-  "\n\003msg\030\002 \001(\t\"<\n\024PlayerReadyCancelReq\022$\n\010p"
-  "layerId\030\001 \001(\0132\022.XTankMsg.PlayerId\"4\n\024Pla"
-  "yerReadyCancelAck\022\017\n\007success\030\001 \001(\010\022\013\n\003ms"
-  "g\030\002 \001(\t\"\037\n\014GameReadyReq\022\017\n\007success\030\001 \001(\010"
-  "\"4\n\014GameReadyAck\022$\n\010playerId\030\001 \001(\0132\022.XTa"
-  "nkMsg.PlayerId\"F\n\014GameStartNtf\022\017\n\007latenc"
-  "y\030\001 \001(\002\022%\n\tplayerIds\030\002 \003(\0132\022.XTankMsg.Pl"
-  "ayerId\"Z\n\016PlayerInputNtf\022$\n\010playerId\030\001 \001"
-  "(\0132\022.XTankMsg.PlayerId\022\017\n\007frameId\030\002 \001(\r\022"
-  "\021\n\tplayerCmd\030\003 \001(\r\"5\n\016GameForwardNtf\022\017\n\007"
-  "frameId\030\001 \001(\r\022\022\n\nplayerCmds\030\002 \003(\r\"5\n\rPla"
-  "yerExitReq\022$\n\010playerId\030\001 \001(\0132\022.XTankMsg."
-  "PlayerId\"-\n\rPlayerExitAck\022\017\n\007success\030\001 \001"
-  "(\010\022\013\n\003msg\030\002 \001(\t*\330\003\n\003MSG\022\010\n\004NONE\020\000\022\r\n\tLOG"
-  "IN_REQ\020\001\022\r\n\tLOGIN_ACK\020\002\022\016\n\nLOGOUT_REQ\020\003\022"
-  "\016\n\nLOGOUT_ACK\020\004\022\r\n\tLOBBY_NTF\020\005\022\023\n\017ROOM_C"
-  "REATE_REQ\020\006\022\023\n\017ROOM_CREATE_ACK\020\007\022\021\n\rROOM"
-  "_JOIN_REQ\020\010\022\021\n\rROOM_JOIN_ACK\020\t\022\021\n\rROOM_E"
-  "XIT_REQ\020\n\022\021\n\rROOM_EXIT_ACK\020\013\022\014\n\010ROOM_NTF"
-  "\020\014\022\024\n\020PLAYER_READY_REQ\020\r\022\024\n\020PLAYER_READY"
-  "_ACK\020\016\022\033\n\027PLAYER_READY_CANCEL_REQ\020\017\022\033\n\027P"
-  "LAYER_READY_CANCEL_ACK\020\020\022\022\n\016GAME_READY_R"
-  "EQ\020\021\022\022\n\016GAME_READY_ACK\020\022\022\022\n\016GAME_START_N"
-  "TF\020\023\022\024\n\020PLAYER_INPUT_NTF\020\024\022\024\n\020GAME_FORWA"
-  "RD_NTF\020\025\022\023\n\017PLAYER_EXIT_REQ\020\026\022\023\n\017PLAYER_"
-  "EXIT_ACK\020\027b\006proto3"
+  "es\030\002 \003(\0132\035.XTankMsg.RoomNtf.PlayerState\022"
+  "\020\n\010IsInGame\030\003 \001(\010\032B\n\013PlayerState\022$\n\010play"
+  "erId\030\001 \001(\0132\022.XTankMsg.PlayerId\022\r\n\005ready\030"
+  "\002 \001(\010\"6\n\016PlayerReadyReq\022$\n\010playerId\030\001 \001("
+  "\0132\022.XTankMsg.PlayerId\".\n\016PlayerReadyAck\022"
+  "\017\n\007success\030\001 \001(\010\022\013\n\003msg\030\002 \001(\t\"<\n\024PlayerR"
+  "eadyCancelReq\022$\n\010playerId\030\001 \001(\0132\022.XTankM"
+  "sg.PlayerId\"4\n\024PlayerReadyCancelAck\022\017\n\007s"
+  "uccess\030\001 \001(\010\022\013\n\003msg\030\002 \001(\t\"\037\n\014GameReadyRe"
+  "q\022\017\n\007success\030\001 \001(\010\"F\n\013GameInitNtf\022\020\n\010ran"
+  "dSeed\030\001 \001(\005\022%\n\tplayerIds\030\002 \003(\0132\022.XTankMs"
+  "g.PlayerId\"4\n\014GameReadyAck\022$\n\010playerId\030\001"
+  " \001(\0132\022.XTankMsg.PlayerId\"\037\n\014GameStartNtf"
+  "\022\017\n\007latency\030\001 \001(\002\"Z\n\016PlayerInputNtf\022$\n\010p"
+  "layerId\030\001 \001(\0132\022.XTankMsg.PlayerId\022\017\n\007fra"
+  "meId\030\002 \001(\r\022\021\n\tplayerCmd\030\003 \001(\r\"5\n\016GameFor"
+  "wardNtf\022\017\n\007frameId\030\001 \001(\r\022\022\n\nplayerCmds\030\002"
+  " \003(\r\"5\n\rPlayerExitReq\022$\n\010playerId\030\001 \001(\0132"
+  "\022.XTankMsg.PlayerId\"-\n\rPlayerExitAck\022\017\n\007"
+  "success\030\001 \001(\010\022\013\n\003msg\030\002 \001(\t\"6\n\016PlayerCutI"
+  "nReq\022$\n\010playerId\030\001 \001(\0132\022.XTankMsg.Player"
+  "Id\"_\n\016PlayerCutInNtf\022%\n\tplayerIds\030\001 \003(\0132"
+  "\022.XTankMsg.PlayerId\022&\n\004cmds\030\002 \003(\0132\030.XTan"
+  "kMsg.GameForwardNtf\"8\n\020PlayerChaseUpNtf\022"
+  "$\n\010playerId\030\001 \001(\0132\022.XTankMsg.PlayerId*\262\004"
+  "\n\003MSG\022\010\n\004NONE\020\000\022\r\n\tLOGIN_REQ\020\001\022\r\n\tLOGIN_"
+  "ACK\020\002\022\016\n\nLOGOUT_REQ\020\003\022\016\n\nLOGOUT_ACK\020\004\022\r\n"
+  "\tLOBBY_NTF\020\005\022\023\n\017ROOM_CREATE_REQ\020\006\022\023\n\017ROO"
+  "M_CREATE_ACK\020\007\022\021\n\rROOM_JOIN_REQ\020\010\022\021\n\rROO"
+  "M_JOIN_ACK\020\t\022\021\n\rROOM_EXIT_REQ\020\n\022\021\n\rROOM_"
+  "EXIT_ACK\020\013\022\014\n\010ROOM_NTF\020\014\022\024\n\020PLAYER_READY"
+  "_REQ\020\r\022\024\n\020PLAYER_READY_ACK\020\016\022\033\n\027PLAYER_R"
+  "EADY_CANCEL_REQ\020\017\022\033\n\027PLAYER_READY_CANCEL"
+  "_ACK\020\020\022\022\n\016GAME_READY_REQ\020\021\022\021\n\rGAME_INIT_"
+  "NTF\020\022\022\022\n\016GAME_READY_ACK\020\023\022\022\n\016GAME_START_"
+  "NTF\020\024\022\024\n\020PLAYER_INPUT_NTF\020\025\022\024\n\020GAME_FORW"
+  "ARD_NTF\020\026\022\023\n\017PLAYER_EXIT_REQ\020\027\022\023\n\017PLAYER"
+  "_EXIT_ACK\020\030\022\025\n\021PLAYER_CUT_IN_REQ\020\031\022\025\n\021PL"
+  "AYER_CUT_IN_NTF\020\032\022\027\n\023PLAYER_CHASE_UP_NTF"
+  "\020\033b\006proto3"
   ;
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_XTankMsg_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_XTankMsg_2eproto = {
-  false, false, 1938, descriptor_table_protodef_XTankMsg_2eproto, "XTankMsg.proto", 
-  &descriptor_table_XTankMsg_2eproto_once, nullptr, 0, 26,
+  false, false, 2290, descriptor_table_protodef_XTankMsg_2eproto, "XTankMsg.proto", 
+  &descriptor_table_XTankMsg_2eproto_once, nullptr, 0, 30,
   schemas, file_default_instances, TableStruct_XTankMsg_2eproto::offsets,
   file_level_metadata_XTankMsg_2eproto, file_level_enum_descriptors_XTankMsg_2eproto, file_level_service_descriptors_XTankMsg_2eproto,
 };
@@ -708,6 +805,10 @@ bool MSG_IsValid(int value) {
     case 21:
     case 22:
     case 23:
+    case 24:
+    case 25:
+    case 26:
+    case 27:
       return true;
     default:
       return false;
@@ -3762,12 +3863,17 @@ RoomNtf::RoomNtf(const RoomNtf& from)
   : ::PROTOBUF_NAMESPACE_ID::Message(),
       playerstates_(from.playerstates_) {
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  roomid_ = from.roomid_;
+  ::memcpy(&roomid_, &from.roomid_,
+    static_cast<size_t>(reinterpret_cast<char*>(&isingame_) -
+    reinterpret_cast<char*>(&roomid_)) + sizeof(isingame_));
   // @@protoc_insertion_point(copy_constructor:XTankMsg.RoomNtf)
 }
 
 inline void RoomNtf::SharedCtor() {
-roomid_ = 0u;
+::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
+    reinterpret_cast<char*>(&roomid_) - reinterpret_cast<char*>(this)),
+    0, static_cast<size_t>(reinterpret_cast<char*>(&isingame_) -
+    reinterpret_cast<char*>(&roomid_)) + sizeof(isingame_));
 }
 
 RoomNtf::~RoomNtf() {
@@ -3798,7 +3904,9 @@ void RoomNtf::Clear() {
   (void) cached_has_bits;
 
   playerstates_.Clear();
-  roomid_ = 0u;
+  ::memset(&roomid_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&isingame_) -
+      reinterpret_cast<char*>(&roomid_)) + sizeof(isingame_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -3826,6 +3934,14 @@ const char* RoomNtf::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::in
             CHK_(ptr);
             if (!ctx->DataAvailable(ptr)) break;
           } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<18>(ptr));
+        } else
+          goto handle_unusual;
+        continue;
+      // bool IsInGame = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
+          isingame_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
         } else
           goto handle_unusual;
         continue;
@@ -3872,6 +3988,12 @@ uint8_t* RoomNtf::_InternalSerialize(
       InternalWriteMessage(2, this->_internal_playerstates(i), target, stream);
   }
 
+  // bool IsInGame = 3;
+  if (this->_internal_isingame() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteBoolToArray(3, this->_internal_isingame(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -3900,6 +4022,11 @@ size_t RoomNtf::ByteSizeLong() const {
     total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::UInt32SizePlusOne(this->_internal_roomid());
   }
 
+  // bool IsInGame = 3;
+  if (this->_internal_isingame() != 0) {
+    total_size += 1 + 1;
+  }
+
   return MaybeComputeUnknownFieldsSize(total_size, &_cached_size_);
 }
 
@@ -3926,6 +4053,9 @@ void RoomNtf::MergeFrom(const RoomNtf& from) {
   if (from._internal_roomid() != 0) {
     _internal_set_roomid(from._internal_roomid());
   }
+  if (from._internal_isingame() != 0) {
+    _internal_set_isingame(from._internal_isingame());
+  }
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
@@ -3944,7 +4074,12 @@ void RoomNtf::InternalSwap(RoomNtf* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   playerstates_.InternalSwap(&other->playerstates_);
-  swap(roomid_, other->roomid_);
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(RoomNtf, isingame_)
+      + sizeof(RoomNtf::isingame_)
+      - PROTOBUF_FIELD_OFFSET(RoomNtf, roomid_)>(
+          reinterpret_cast<char*>(&roomid_),
+          reinterpret_cast<char*>(&other->roomid_));
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata RoomNtf::GetMetadata() const {
@@ -4981,6 +5116,217 @@ void GameReadyReq::InternalSwap(GameReadyReq* other) {
 
 // ===================================================================
 
+class GameInitNtf::_Internal {
+ public:
+};
+
+GameInitNtf::GameInitNtf(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned),
+  playerids_(arena) {
+  SharedCtor();
+  if (!is_message_owned) {
+    RegisterArenaDtor(arena);
+  }
+  // @@protoc_insertion_point(arena_constructor:XTankMsg.GameInitNtf)
+}
+GameInitNtf::GameInitNtf(const GameInitNtf& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message(),
+      playerids_(from.playerids_) {
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  randseed_ = from.randseed_;
+  // @@protoc_insertion_point(copy_constructor:XTankMsg.GameInitNtf)
+}
+
+inline void GameInitNtf::SharedCtor() {
+randseed_ = 0;
+}
+
+GameInitNtf::~GameInitNtf() {
+  // @@protoc_insertion_point(destructor:XTankMsg.GameInitNtf)
+  if (GetArenaForAllocation() != nullptr) return;
+  SharedDtor();
+  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+inline void GameInitNtf::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+}
+
+void GameInitNtf::ArenaDtor(void* object) {
+  GameInitNtf* _this = reinterpret_cast< GameInitNtf* >(object);
+  (void)_this;
+}
+void GameInitNtf::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+}
+void GameInitNtf::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+
+void GameInitNtf::Clear() {
+// @@protoc_insertion_point(message_clear_start:XTankMsg.GameInitNtf)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  playerids_.Clear();
+  randseed_ = 0;
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* GameInitNtf::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // int32 randSeed = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
+          randseed_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // repeated .XTankMsg.PlayerId playerIds = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
+          ptr -= 1;
+          do {
+            ptr += 1;
+            ptr = ctx->ParseMessage(_internal_add_playerids(), ptr);
+            CHK_(ptr);
+            if (!ctx->DataAvailable(ptr)) break;
+          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<18>(ptr));
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* GameInitNtf::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:XTankMsg.GameInitNtf)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // int32 randSeed = 1;
+  if (this->_internal_randseed() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(1, this->_internal_randseed(), target);
+  }
+
+  // repeated .XTankMsg.PlayerId playerIds = 2;
+  for (unsigned int i = 0,
+      n = static_cast<unsigned int>(this->_internal_playerids_size()); i < n; i++) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(2, this->_internal_playerids(i), target, stream);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:XTankMsg.GameInitNtf)
+  return target;
+}
+
+size_t GameInitNtf::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:XTankMsg.GameInitNtf)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // repeated .XTankMsg.PlayerId playerIds = 2;
+  total_size += 1UL * this->_internal_playerids_size();
+  for (const auto& msg : this->playerids_) {
+    total_size +=
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
+  }
+
+  // int32 randSeed = 1;
+  if (this->_internal_randseed() != 0) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32SizePlusOne(this->_internal_randseed());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData GameInitNtf::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSizeCheck,
+    GameInitNtf::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GameInitNtf::GetClassData() const { return &_class_data_; }
+
+void GameInitNtf::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to,
+                      const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+  static_cast<GameInitNtf *>(to)->MergeFrom(
+      static_cast<const GameInitNtf &>(from));
+}
+
+
+void GameInitNtf::MergeFrom(const GameInitNtf& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:XTankMsg.GameInitNtf)
+  GOOGLE_DCHECK_NE(&from, this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  playerids_.MergeFrom(from.playerids_);
+  if (from._internal_randseed() != 0) {
+    _internal_set_randseed(from._internal_randseed());
+  }
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void GameInitNtf::CopyFrom(const GameInitNtf& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:XTankMsg.GameInitNtf)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool GameInitNtf::IsInitialized() const {
+  return true;
+}
+
+void GameInitNtf::InternalSwap(GameInitNtf* other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  playerids_.InternalSwap(&other->playerids_);
+  swap(randseed_, other->randseed_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata GameInitNtf::GetMetadata() const {
+  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+      &descriptor_table_XTankMsg_2eproto_getter, &descriptor_table_XTankMsg_2eproto_once,
+      file_level_metadata_XTankMsg_2eproto[20]);
+}
+
+// ===================================================================
+
 class GameReadyAck::_Internal {
  public:
   static const ::XTankMsg::PlayerId& playerid(const GameReadyAck* msg);
@@ -5171,7 +5517,7 @@ void GameReadyAck::InternalSwap(GameReadyAck* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata GameReadyAck::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_XTankMsg_2eproto_getter, &descriptor_table_XTankMsg_2eproto_once,
-      file_level_metadata_XTankMsg_2eproto[20]);
+      file_level_metadata_XTankMsg_2eproto[21]);
 }
 
 // ===================================================================
@@ -5182,8 +5528,7 @@ class GameStartNtf::_Internal {
 
 GameStartNtf::GameStartNtf(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
-  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned),
-  playerids_(arena) {
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
   SharedCtor();
   if (!is_message_owned) {
     RegisterArenaDtor(arena);
@@ -5191,8 +5536,7 @@ GameStartNtf::GameStartNtf(::PROTOBUF_NAMESPACE_ID::Arena* arena,
   // @@protoc_insertion_point(arena_constructor:XTankMsg.GameStartNtf)
 }
 GameStartNtf::GameStartNtf(const GameStartNtf& from)
-  : ::PROTOBUF_NAMESPACE_ID::Message(),
-      playerids_(from.playerids_) {
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
   latency_ = from.latency_;
   // @@protoc_insertion_point(copy_constructor:XTankMsg.GameStartNtf)
@@ -5229,7 +5573,6 @@ void GameStartNtf::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  playerids_.Clear();
   latency_ = 0;
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
@@ -5245,19 +5588,6 @@ const char* GameStartNtf::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_I
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 13)) {
           latency_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
           ptr += sizeof(float);
-        } else
-          goto handle_unusual;
-        continue;
-      // repeated .XTankMsg.PlayerId playerIds = 2;
-      case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
-          ptr -= 1;
-          do {
-            ptr += 1;
-            ptr = ctx->ParseMessage(_internal_add_playerids(), ptr);
-            CHK_(ptr);
-            if (!ctx->DataAvailable(ptr)) break;
-          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<18>(ptr));
         } else
           goto handle_unusual;
         continue;
@@ -5300,14 +5630,6 @@ uint8_t* GameStartNtf::_InternalSerialize(
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteFloatToArray(1, this->_internal_latency(), target);
   }
 
-  // repeated .XTankMsg.PlayerId playerIds = 2;
-  for (unsigned int i = 0,
-      n = static_cast<unsigned int>(this->_internal_playerids_size()); i < n; i++) {
-    target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(2, this->_internal_playerids(i), target, stream);
-  }
-
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -5323,13 +5645,6 @@ size_t GameStartNtf::ByteSizeLong() const {
   uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
-
-  // repeated .XTankMsg.PlayerId playerIds = 2;
-  total_size += 1UL * this->_internal_playerids_size();
-  for (const auto& msg : this->playerids_) {
-    total_size +=
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
-  }
 
   // float latency = 1;
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
@@ -5362,7 +5677,6 @@ void GameStartNtf::MergeFrom(const GameStartNtf& from) {
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  playerids_.MergeFrom(from.playerids_);
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
   float tmp_latency = from._internal_latency();
   uint32_t raw_latency;
@@ -5387,14 +5701,13 @@ bool GameStartNtf::IsInitialized() const {
 void GameStartNtf::InternalSwap(GameStartNtf* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  playerids_.InternalSwap(&other->playerids_);
   swap(latency_, other->latency_);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata GameStartNtf::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_XTankMsg_2eproto_getter, &descriptor_table_XTankMsg_2eproto_once,
-      file_level_metadata_XTankMsg_2eproto[21]);
+      file_level_metadata_XTankMsg_2eproto[22]);
 }
 
 // ===================================================================
@@ -5647,7 +5960,7 @@ void PlayerInputNtf::InternalSwap(PlayerInputNtf* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata PlayerInputNtf::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_XTankMsg_2eproto_getter, &descriptor_table_XTankMsg_2eproto_once,
-      file_level_metadata_XTankMsg_2eproto[22]);
+      file_level_metadata_XTankMsg_2eproto[23]);
 }
 
 // ===================================================================
@@ -5865,7 +6178,7 @@ void GameForwardNtf::InternalSwap(GameForwardNtf* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata GameForwardNtf::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_XTankMsg_2eproto_getter, &descriptor_table_XTankMsg_2eproto_once,
-      file_level_metadata_XTankMsg_2eproto[23]);
+      file_level_metadata_XTankMsg_2eproto[24]);
 }
 
 // ===================================================================
@@ -6060,7 +6373,7 @@ void PlayerExitReq::InternalSwap(PlayerExitReq* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata PlayerExitReq::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_XTankMsg_2eproto_getter, &descriptor_table_XTankMsg_2eproto_once,
-      file_level_metadata_XTankMsg_2eproto[24]);
+      file_level_metadata_XTankMsg_2eproto[25]);
 }
 
 // ===================================================================
@@ -6289,7 +6602,615 @@ void PlayerExitAck::InternalSwap(PlayerExitAck* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata PlayerExitAck::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_XTankMsg_2eproto_getter, &descriptor_table_XTankMsg_2eproto_once,
-      file_level_metadata_XTankMsg_2eproto[25]);
+      file_level_metadata_XTankMsg_2eproto[26]);
+}
+
+// ===================================================================
+
+class PlayerCutInReq::_Internal {
+ public:
+  static const ::XTankMsg::PlayerId& playerid(const PlayerCutInReq* msg);
+};
+
+const ::XTankMsg::PlayerId&
+PlayerCutInReq::_Internal::playerid(const PlayerCutInReq* msg) {
+  return *msg->playerid_;
+}
+PlayerCutInReq::PlayerCutInReq(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor();
+  if (!is_message_owned) {
+    RegisterArenaDtor(arena);
+  }
+  // @@protoc_insertion_point(arena_constructor:XTankMsg.PlayerCutInReq)
+}
+PlayerCutInReq::PlayerCutInReq(const PlayerCutInReq& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  if (from._internal_has_playerid()) {
+    playerid_ = new ::XTankMsg::PlayerId(*from.playerid_);
+  } else {
+    playerid_ = nullptr;
+  }
+  // @@protoc_insertion_point(copy_constructor:XTankMsg.PlayerCutInReq)
+}
+
+inline void PlayerCutInReq::SharedCtor() {
+playerid_ = nullptr;
+}
+
+PlayerCutInReq::~PlayerCutInReq() {
+  // @@protoc_insertion_point(destructor:XTankMsg.PlayerCutInReq)
+  if (GetArenaForAllocation() != nullptr) return;
+  SharedDtor();
+  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+inline void PlayerCutInReq::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  if (this != internal_default_instance()) delete playerid_;
+}
+
+void PlayerCutInReq::ArenaDtor(void* object) {
+  PlayerCutInReq* _this = reinterpret_cast< PlayerCutInReq* >(object);
+  (void)_this;
+}
+void PlayerCutInReq::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+}
+void PlayerCutInReq::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+
+void PlayerCutInReq::Clear() {
+// @@protoc_insertion_point(message_clear_start:XTankMsg.PlayerCutInReq)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  if (GetArenaForAllocation() == nullptr && playerid_ != nullptr) {
+    delete playerid_;
+  }
+  playerid_ = nullptr;
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* PlayerCutInReq::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // .XTankMsg.PlayerId playerId = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
+          ptr = ctx->ParseMessage(_internal_mutable_playerid(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* PlayerCutInReq::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:XTankMsg.PlayerCutInReq)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // .XTankMsg.PlayerId playerId = 1;
+  if (this->_internal_has_playerid()) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(
+        1, _Internal::playerid(this), target, stream);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:XTankMsg.PlayerCutInReq)
+  return target;
+}
+
+size_t PlayerCutInReq::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:XTankMsg.PlayerCutInReq)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // .XTankMsg.PlayerId playerId = 1;
+  if (this->_internal_has_playerid()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *playerid_);
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData PlayerCutInReq::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSizeCheck,
+    PlayerCutInReq::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*PlayerCutInReq::GetClassData() const { return &_class_data_; }
+
+void PlayerCutInReq::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to,
+                      const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+  static_cast<PlayerCutInReq *>(to)->MergeFrom(
+      static_cast<const PlayerCutInReq &>(from));
+}
+
+
+void PlayerCutInReq::MergeFrom(const PlayerCutInReq& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:XTankMsg.PlayerCutInReq)
+  GOOGLE_DCHECK_NE(&from, this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from._internal_has_playerid()) {
+    _internal_mutable_playerid()->::XTankMsg::PlayerId::MergeFrom(from._internal_playerid());
+  }
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void PlayerCutInReq::CopyFrom(const PlayerCutInReq& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:XTankMsg.PlayerCutInReq)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool PlayerCutInReq::IsInitialized() const {
+  return true;
+}
+
+void PlayerCutInReq::InternalSwap(PlayerCutInReq* other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  swap(playerid_, other->playerid_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata PlayerCutInReq::GetMetadata() const {
+  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+      &descriptor_table_XTankMsg_2eproto_getter, &descriptor_table_XTankMsg_2eproto_once,
+      file_level_metadata_XTankMsg_2eproto[27]);
+}
+
+// ===================================================================
+
+class PlayerCutInNtf::_Internal {
+ public:
+};
+
+PlayerCutInNtf::PlayerCutInNtf(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned),
+  playerids_(arena),
+  cmds_(arena) {
+  SharedCtor();
+  if (!is_message_owned) {
+    RegisterArenaDtor(arena);
+  }
+  // @@protoc_insertion_point(arena_constructor:XTankMsg.PlayerCutInNtf)
+}
+PlayerCutInNtf::PlayerCutInNtf(const PlayerCutInNtf& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message(),
+      playerids_(from.playerids_),
+      cmds_(from.cmds_) {
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  // @@protoc_insertion_point(copy_constructor:XTankMsg.PlayerCutInNtf)
+}
+
+inline void PlayerCutInNtf::SharedCtor() {
+}
+
+PlayerCutInNtf::~PlayerCutInNtf() {
+  // @@protoc_insertion_point(destructor:XTankMsg.PlayerCutInNtf)
+  if (GetArenaForAllocation() != nullptr) return;
+  SharedDtor();
+  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+inline void PlayerCutInNtf::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+}
+
+void PlayerCutInNtf::ArenaDtor(void* object) {
+  PlayerCutInNtf* _this = reinterpret_cast< PlayerCutInNtf* >(object);
+  (void)_this;
+}
+void PlayerCutInNtf::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+}
+void PlayerCutInNtf::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+
+void PlayerCutInNtf::Clear() {
+// @@protoc_insertion_point(message_clear_start:XTankMsg.PlayerCutInNtf)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  playerids_.Clear();
+  cmds_.Clear();
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* PlayerCutInNtf::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // repeated .XTankMsg.PlayerId playerIds = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
+          ptr -= 1;
+          do {
+            ptr += 1;
+            ptr = ctx->ParseMessage(_internal_add_playerids(), ptr);
+            CHK_(ptr);
+            if (!ctx->DataAvailable(ptr)) break;
+          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<10>(ptr));
+        } else
+          goto handle_unusual;
+        continue;
+      // repeated .XTankMsg.GameForwardNtf cmds = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
+          ptr -= 1;
+          do {
+            ptr += 1;
+            ptr = ctx->ParseMessage(_internal_add_cmds(), ptr);
+            CHK_(ptr);
+            if (!ctx->DataAvailable(ptr)) break;
+          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<18>(ptr));
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* PlayerCutInNtf::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:XTankMsg.PlayerCutInNtf)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // repeated .XTankMsg.PlayerId playerIds = 1;
+  for (unsigned int i = 0,
+      n = static_cast<unsigned int>(this->_internal_playerids_size()); i < n; i++) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(1, this->_internal_playerids(i), target, stream);
+  }
+
+  // repeated .XTankMsg.GameForwardNtf cmds = 2;
+  for (unsigned int i = 0,
+      n = static_cast<unsigned int>(this->_internal_cmds_size()); i < n; i++) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(2, this->_internal_cmds(i), target, stream);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:XTankMsg.PlayerCutInNtf)
+  return target;
+}
+
+size_t PlayerCutInNtf::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:XTankMsg.PlayerCutInNtf)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // repeated .XTankMsg.PlayerId playerIds = 1;
+  total_size += 1UL * this->_internal_playerids_size();
+  for (const auto& msg : this->playerids_) {
+    total_size +=
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
+  }
+
+  // repeated .XTankMsg.GameForwardNtf cmds = 2;
+  total_size += 1UL * this->_internal_cmds_size();
+  for (const auto& msg : this->cmds_) {
+    total_size +=
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData PlayerCutInNtf::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSizeCheck,
+    PlayerCutInNtf::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*PlayerCutInNtf::GetClassData() const { return &_class_data_; }
+
+void PlayerCutInNtf::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to,
+                      const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+  static_cast<PlayerCutInNtf *>(to)->MergeFrom(
+      static_cast<const PlayerCutInNtf &>(from));
+}
+
+
+void PlayerCutInNtf::MergeFrom(const PlayerCutInNtf& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:XTankMsg.PlayerCutInNtf)
+  GOOGLE_DCHECK_NE(&from, this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  playerids_.MergeFrom(from.playerids_);
+  cmds_.MergeFrom(from.cmds_);
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void PlayerCutInNtf::CopyFrom(const PlayerCutInNtf& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:XTankMsg.PlayerCutInNtf)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool PlayerCutInNtf::IsInitialized() const {
+  return true;
+}
+
+void PlayerCutInNtf::InternalSwap(PlayerCutInNtf* other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  playerids_.InternalSwap(&other->playerids_);
+  cmds_.InternalSwap(&other->cmds_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata PlayerCutInNtf::GetMetadata() const {
+  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+      &descriptor_table_XTankMsg_2eproto_getter, &descriptor_table_XTankMsg_2eproto_once,
+      file_level_metadata_XTankMsg_2eproto[28]);
+}
+
+// ===================================================================
+
+class PlayerChaseUpNtf::_Internal {
+ public:
+  static const ::XTankMsg::PlayerId& playerid(const PlayerChaseUpNtf* msg);
+};
+
+const ::XTankMsg::PlayerId&
+PlayerChaseUpNtf::_Internal::playerid(const PlayerChaseUpNtf* msg) {
+  return *msg->playerid_;
+}
+PlayerChaseUpNtf::PlayerChaseUpNtf(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor();
+  if (!is_message_owned) {
+    RegisterArenaDtor(arena);
+  }
+  // @@protoc_insertion_point(arena_constructor:XTankMsg.PlayerChaseUpNtf)
+}
+PlayerChaseUpNtf::PlayerChaseUpNtf(const PlayerChaseUpNtf& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  if (from._internal_has_playerid()) {
+    playerid_ = new ::XTankMsg::PlayerId(*from.playerid_);
+  } else {
+    playerid_ = nullptr;
+  }
+  // @@protoc_insertion_point(copy_constructor:XTankMsg.PlayerChaseUpNtf)
+}
+
+inline void PlayerChaseUpNtf::SharedCtor() {
+playerid_ = nullptr;
+}
+
+PlayerChaseUpNtf::~PlayerChaseUpNtf() {
+  // @@protoc_insertion_point(destructor:XTankMsg.PlayerChaseUpNtf)
+  if (GetArenaForAllocation() != nullptr) return;
+  SharedDtor();
+  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+inline void PlayerChaseUpNtf::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  if (this != internal_default_instance()) delete playerid_;
+}
+
+void PlayerChaseUpNtf::ArenaDtor(void* object) {
+  PlayerChaseUpNtf* _this = reinterpret_cast< PlayerChaseUpNtf* >(object);
+  (void)_this;
+}
+void PlayerChaseUpNtf::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+}
+void PlayerChaseUpNtf::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+
+void PlayerChaseUpNtf::Clear() {
+// @@protoc_insertion_point(message_clear_start:XTankMsg.PlayerChaseUpNtf)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  if (GetArenaForAllocation() == nullptr && playerid_ != nullptr) {
+    delete playerid_;
+  }
+  playerid_ = nullptr;
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* PlayerChaseUpNtf::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // .XTankMsg.PlayerId playerId = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
+          ptr = ctx->ParseMessage(_internal_mutable_playerid(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* PlayerChaseUpNtf::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:XTankMsg.PlayerChaseUpNtf)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // .XTankMsg.PlayerId playerId = 1;
+  if (this->_internal_has_playerid()) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(
+        1, _Internal::playerid(this), target, stream);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:XTankMsg.PlayerChaseUpNtf)
+  return target;
+}
+
+size_t PlayerChaseUpNtf::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:XTankMsg.PlayerChaseUpNtf)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // .XTankMsg.PlayerId playerId = 1;
+  if (this->_internal_has_playerid()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *playerid_);
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData PlayerChaseUpNtf::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSizeCheck,
+    PlayerChaseUpNtf::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*PlayerChaseUpNtf::GetClassData() const { return &_class_data_; }
+
+void PlayerChaseUpNtf::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to,
+                      const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+  static_cast<PlayerChaseUpNtf *>(to)->MergeFrom(
+      static_cast<const PlayerChaseUpNtf &>(from));
+}
+
+
+void PlayerChaseUpNtf::MergeFrom(const PlayerChaseUpNtf& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:XTankMsg.PlayerChaseUpNtf)
+  GOOGLE_DCHECK_NE(&from, this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from._internal_has_playerid()) {
+    _internal_mutable_playerid()->::XTankMsg::PlayerId::MergeFrom(from._internal_playerid());
+  }
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void PlayerChaseUpNtf::CopyFrom(const PlayerChaseUpNtf& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:XTankMsg.PlayerChaseUpNtf)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool PlayerChaseUpNtf::IsInitialized() const {
+  return true;
+}
+
+void PlayerChaseUpNtf::InternalSwap(PlayerChaseUpNtf* other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  swap(playerid_, other->playerid_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata PlayerChaseUpNtf::GetMetadata() const {
+  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+      &descriptor_table_XTankMsg_2eproto_getter, &descriptor_table_XTankMsg_2eproto_once,
+      file_level_metadata_XTankMsg_2eproto[29]);
 }
 
 // @@protoc_insertion_point(namespace_scope)
@@ -6355,6 +7276,9 @@ template<> PROTOBUF_NOINLINE ::XTankMsg::PlayerReadyCancelAck* Arena::CreateMayb
 template<> PROTOBUF_NOINLINE ::XTankMsg::GameReadyReq* Arena::CreateMaybeMessage< ::XTankMsg::GameReadyReq >(Arena* arena) {
   return Arena::CreateMessageInternal< ::XTankMsg::GameReadyReq >(arena);
 }
+template<> PROTOBUF_NOINLINE ::XTankMsg::GameInitNtf* Arena::CreateMaybeMessage< ::XTankMsg::GameInitNtf >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::XTankMsg::GameInitNtf >(arena);
+}
 template<> PROTOBUF_NOINLINE ::XTankMsg::GameReadyAck* Arena::CreateMaybeMessage< ::XTankMsg::GameReadyAck >(Arena* arena) {
   return Arena::CreateMessageInternal< ::XTankMsg::GameReadyAck >(arena);
 }
@@ -6372,6 +7296,15 @@ template<> PROTOBUF_NOINLINE ::XTankMsg::PlayerExitReq* Arena::CreateMaybeMessag
 }
 template<> PROTOBUF_NOINLINE ::XTankMsg::PlayerExitAck* Arena::CreateMaybeMessage< ::XTankMsg::PlayerExitAck >(Arena* arena) {
   return Arena::CreateMessageInternal< ::XTankMsg::PlayerExitAck >(arena);
+}
+template<> PROTOBUF_NOINLINE ::XTankMsg::PlayerCutInReq* Arena::CreateMaybeMessage< ::XTankMsg::PlayerCutInReq >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::XTankMsg::PlayerCutInReq >(arena);
+}
+template<> PROTOBUF_NOINLINE ::XTankMsg::PlayerCutInNtf* Arena::CreateMaybeMessage< ::XTankMsg::PlayerCutInNtf >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::XTankMsg::PlayerCutInNtf >(arena);
+}
+template<> PROTOBUF_NOINLINE ::XTankMsg::PlayerChaseUpNtf* Arena::CreateMaybeMessage< ::XTankMsg::PlayerChaseUpNtf >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::XTankMsg::PlayerChaseUpNtf >(arena);
 }
 PROTOBUF_NAMESPACE_CLOSE
 

@@ -22,10 +22,13 @@ public:
 	//设置一次延迟
 	void SetDelay(float val);
 
+	//设置帧id
+	void SetFrameId(int id);
+
 	float GetDt();
 
 	bool FrameSystem::IsNeedTick();
 
-	//在预测世界中的tick
-	void TickInDuplicate();
+	//增加一次帧id
+	void AddFrameId();
 };

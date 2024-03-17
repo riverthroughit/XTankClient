@@ -31,26 +31,26 @@ void SpeedChangeSystem::Tick(float dt)
 		switch (cmdComp.cmd)
 		{
 		case BUTTON::UP:
-			bulletSpawnComp.spawnDirec = speedComp.direc;
 			speedComp.accDirec = Vec2Fixed(FixedPoint(0), FixedPoint(-1));
+			bulletSpawnComp.spawnDirec = speedComp.accDirec;
 			speedComp.direc.y = std::max(FixedPoint(-1), speedComp.direc.y - speedComp.accSpeed);
 			break;
 
 		case BUTTON::DOWN:
-			bulletSpawnComp.spawnDirec = speedComp.direc;
 			speedComp.accDirec = Vec2Fixed(FixedPoint(0), FixedPoint(1));
+			bulletSpawnComp.spawnDirec = speedComp.accDirec;
 			speedComp.direc.y = std::min(FixedPoint(1), speedComp.direc.y + speedComp.accSpeed);
 			break;
 
 		case BUTTON::LEFT:
-			bulletSpawnComp.spawnDirec = speedComp.direc;
 			speedComp.accDirec = Vec2Fixed(FixedPoint(-1), FixedPoint(0));
+			bulletSpawnComp.spawnDirec = speedComp.accDirec;
 			speedComp.direc.x = std::max(FixedPoint(-1), speedComp.direc.x - speedComp.accSpeed);
 			break;
 
 		case BUTTON::RIGHT:
-			bulletSpawnComp.spawnDirec = speedComp.direc;
 			speedComp.accDirec = Vec2Fixed(FixedPoint(1), FixedPoint(0));
+			bulletSpawnComp.spawnDirec = speedComp.accDirec;
 			speedComp.direc.x = std::min(FixedPoint(1), speedComp.direc.x + speedComp.accSpeed);
 			break;
 

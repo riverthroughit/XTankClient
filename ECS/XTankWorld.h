@@ -65,6 +65,9 @@ public:
 
 		World::operator=(std::move(other));
 		ResetSystemPtr();
+
+		return *this;
+
 	}
 
 	XTankWorld& operator = (const XTankWorld& other) {
@@ -83,6 +86,9 @@ public:
 
 	//预测世界中各个系统更新
 	void SystemTickInDuplicate(float dt,const std::vector<PlayersCommand>& playersCmds);
+
+	//中途加入 追帧
+	void SystemTickInChasing();
 
 	void Start(const bool& isEnd);
 

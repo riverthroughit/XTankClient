@@ -1,6 +1,6 @@
 #pragma once
 #include "ECS/System.h"
-#include <set>
+#include <vector>
 
 class PosComponent;
 class CollisionComponent;
@@ -10,6 +10,7 @@ class CollisionSystem :public System<CollisionSystem>{
 
 public:
 	virtual void Tick(float dt)override;
+	virtual void Init()override;
 
 private:
 
@@ -19,10 +20,14 @@ private:
 	//清除当前碰撞数据
 	void ClearHitEntities();
 
-	//均匀格子中entity的相交情况
-	void JudgeCollisionInGrids();
+	//更新碰撞情况
+	void UpdateCollision();
 
-	//一个entity与周围所有entity的相交情况
-	void JudgeCollisionByEntity(const Entity& entity, int row, int col, UniformGridComponent& gridComp);
+	//更新一个格子内部的碰撞情况
+	void UpdateCollisionInGrid(const std::vector<Entity>& entities);
+	//void UpdateCollisionInGrid2(const std::set<Entity>& entities);
+
+	//两个entity是否碰撞
+	bool isCollision(PosComponent& p1, CollisionComponent& c1, PosComponent& p2, CollisionComponent& c2);
 
 };

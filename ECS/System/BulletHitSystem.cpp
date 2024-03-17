@@ -38,7 +38,9 @@ void BulletHitSystem::BulletDestroy(Entity bulletId)
 	auto& bulletSpawnComp = mWorld->GetComponent<BulletSpawnComponent>(playerComp.charId);
 	bulletSpawnComp.canFire = true;
 
-	mWorld->AddComponent(bulletId, DestroyComponent());
+	if (!mWorld->HasComponent<DestroyComponent>(bulletId)) {
+		mWorld->AddComponent(bulletId, DestroyComponent());
+	}
 }
 
 void BulletHitSystem::HitBlock(Entity bulletId, Entity blockId)

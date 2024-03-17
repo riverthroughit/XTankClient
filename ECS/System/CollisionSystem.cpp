@@ -3,17 +3,38 @@
 #include "ECS/World.h"
 #include "ECS/Component/PosComponent.h"
 #include "ECS/Component/CollisionComponent.h"
-#include "ECS/ECSUtil.h"
 #include "Event/EventDefine.h"
+#include "Util/TickUtil.h"
+#include <set>
+#include <ECS/ECSUtil.h>
+
 
 void CollisionSystem::Tick(float dt)
 {
-	UpdateGrids();
+
+	TickUtil tickUtil;
+	tickUtil.SetTickTime(1000);
+	float dts[3]{0};
+
+	tickUtil.Tick();
+	//UpdateGrids();
+	tickUtil.Tick();
+	dts[0] = tickUtil.GetDt();
 	
+	tickUtil.Tick();
 	ClearHitEntities();
+	tickUtil.Tick();
+	dts[1] = tickUtil.GetDt();
 
-	JudgeCollisionInGrids();
+	tickUtil.Tick();
+	UpdateCollision();
+	tickUtil.Tick();
+	dts[2] = tickUtil.GetDt();
+}
 
+void CollisionSystem::Init()
+{
+	UpdateGrids();
 }
 
 void CollisionSystem::UpdateGrids()
@@ -23,10 +44,8 @@ void CollisionSystem::UpdateGrids()
 
 	for (Entity entity : mEntities) {
 		auto& posComp = mWorld->GetComponent<PosComponent>(entity);
-		Vec2<FixedPoint>& pos = posComp.pos;
-		int x = static_cast<int>(pos.x / CUBE_SIDE_LENTH_FIXED);
-		int y = static_cast<int>(pos.y / CUBE_SIDE_LENTH_FIXED);
-		gridComp.mGrids[y][x].insert(entity);
+		auto& collComp = mWorld->GetComponent<CollisionComponent>(entity);
+		UpdateGridOfEntity(entity, posComp, collComp, gridComp);
 	}
 }
 
@@ -38,47 +57,86 @@ void CollisionSystem::ClearHitEntities()
 	}
 }
 
-
-void CollisionSystem::JudgeCollisionInGrids()
+void CollisionSystem::UpdateCollision()
 {
 	auto& gridComp = mWorld->GetSingletonComponent<UniformGridComponent>();
 	//遍历每个grid中的entity 判断其是否与周围entity相交
 	for (int row = 0; row < SCENE_SIDE_NUM; ++row) {
 		for (int col = 0; col < SCENE_SIDE_NUM; ++col) {
 			std::set<Entity>& curGrid = gridComp.mGrids[row][col];
-			for (auto ite = curGrid.begin(); ite != curGrid.end(); ++ite) {
-				JudgeCollisionByEntity(*ite, row, col, gridComp);
-			}
+			UpdateCollisionInGrid(std::vector<Entity>(curGrid.begin(), curGrid.end()));
+			//UpdateCollisionInGrid2(curGrid);
 		}
 	}
 }
 
-void CollisionSystem::JudgeCollisionByEntity(const Entity& entity, int row, int col, UniformGridComponent& gridComp)
+void CollisionSystem::UpdateCollisionInGrid(const std::vector<Entity>& entities)
 {
-	//auto& collisionEventQueue = mWorld->GetEventQueue<CollisionEventQueue>();
+	for (size_t i = 0; i + 1 < entities.size();++i) {
 
-	for (int irow = row - 1; irow < row + 2; ++irow) {
-		if (irow < 0 || irow >= SCENE_SIDE_NUM)continue;
-		for (int icol = col - 1; icol < col + 2; ++icol) {
-			if (icol < 0 || icol >= SCENE_SIDE_NUM)continue;
+		PosComponent& p1 = mWorld->GetComponent<PosComponent>(entities[i]);
+		CollisionComponent& c1 = mWorld->GetComponent<CollisionComponent>(entities[i]);
 
-			for (const Entity& otherEntity : gridComp.mGrids[irow][icol]) {
-				
-				if (entity == otherEntity)continue;
+		for (size_t t = i + 1; t < entities.size(); ++t) {
 
-				PosComponent& p1 = mWorld->GetComponent<PosComponent>(entity);
-				PosComponent& p2 = mWorld->GetComponent<PosComponent>(otherEntity);
-				CollisionComponent& c1 = mWorld->GetComponent<CollisionComponent>(entity);
-				CollisionComponent& c2 = mWorld->GetComponent<CollisionComponent>(otherEntity);
+			PosComponent& p2 = mWorld->GetComponent<PosComponent>(entities[t]);
+			CollisionComponent& c2 = mWorld->GetComponent<CollisionComponent>(entities[t]);
 
-				if (isCollision(p1, c1, p2, c2)) {
-					//collisionEventQueue.PushEventArgs(entity, otherEntity);
-					c1.hitEntities.push_back(otherEntity);
-				}
+			if (isCollision(p1, c1, p2, c2)) {
+
+				c1.hitEntities.push_back(entities[t]);
+				c2.hitEntities.push_back(entities[i]);
 			}
 		}
 	}
 }
 
+//void CollisionSystem::UpdateCollisionInGrid2(const std::set<Entity>& entities)
+//{
+//
+//	auto endIte = entities.empty() ? entities.end() : --entities.end();
+//
+//	for (auto ite = entities.begin(); ite != endIte && ite != entities.end();++ite) {
+//
+//		PosComponent& p1 = mWorld->GetComponent<PosComponent>(*ite);
+//		CollisionComponent& c1 = mWorld->GetComponent<CollisionComponent>(*ite);
+//
+//		for (auto ite2 = ite; ite2 != entities.end(); ++ite2) {
+//			
+//			if (ite2 == ite) {
+//				++ite2;
+//			}
+//			
+//			PosComponent& p2 = mWorld->GetComponent<PosComponent>(*ite2);
+//			CollisionComponent& c2 = mWorld->GetComponent<CollisionComponent>(*ite2);
+//
+//			if (isCollision(p1, c1, p2, c2)) {
+//
+//				c1.hitEntities.push_back(*ite2);
+//				c2.hitEntities.push_back(*ite);
+//			}
+//		}
+//	}
+//}
+
+
+
+bool CollisionSystem::isCollision(PosComponent& p1, CollisionComponent& c1, PosComponent& p2, CollisionComponent& c2)
+{
+	bool res = false;
+
+	if (c1.shape == LOGIC_SHAPE::CIRCLE && c2.shape == LOGIC_SHAPE::CIRCLE) {
+		//两圆相交
+		Vec2Fixed pp = p1.pos - p2.pos;
+
+		FixedPoint rr = c1.shapeData.r + c2.shapeData.r;
+
+		if (pp * pp < rr * rr) {
+			res = true;
+		}
+	}
+
+	return res;
+}
 
 

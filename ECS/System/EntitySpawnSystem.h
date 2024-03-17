@@ -8,6 +8,7 @@ class EntitySpawnSystem :public System<EntitySpawnSystem> {
 
 public:
 	virtual void Tick(float dt) override;
+	virtual void Init() override;
 
 private:
 	void BlockSpawn(std::shared_ptr<ENTITY_SPAWN_ARGS::Block> args);

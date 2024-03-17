@@ -21,7 +21,24 @@ void RoomWidget::ReceiveMsg()
 	MessageData msg = MsgRecvQueue::Instance().GetAndPopTopMsg();
 
 	if (msg.type == XTankMsg::ROOM_NTF) {
+		
 		const XTankMsg::RoomNtf& msgData = static_cast<XTankMsg::RoomNtf&>(*msg.msgPtr);
+		
+		isInGame = msgData.isingame();
+		
+		if (ui.readyBtn->text().isEmpty()) {
+			
+			if (isInGame) {
+				JoinBtnText = u8"加入游戏";
+			}
+			else {
+				JoinBtnText = u8"准备游戏";
+			}
+
+			ui.readyBtn->setText(JoinBtnText);
+
+		}
+
 		PlayerVec players;
 
 		for (auto& room : msgData.playerstates()) {
@@ -36,12 +53,12 @@ void RoomWidget::ReceiveMsg()
 	else if (msg.type == XTankMsg::PLAYER_READY_ACK) {
 		isReady = true;
 		ui.readyBtn->setEnabled(true);
-		ui.readyBtn->setText(u8"取消准备");
+		ui.readyBtn->setText(u8"取消");
 	}
 	else if (msg.type == XTankMsg::PLAYER_READY_CANCEL_ACK) {
 		isReady = false;
 		ui.readyBtn->setEnabled(true);
-		ui.readyBtn->setText(u8"准备");
+		ui.readyBtn->setText(JoinBtnText);
 	}
 	else if (msg.type == XTankMsg::ROOM_EXIT_ACK) {
 		WidgetManager::Instance().CloseWidget(WIDGET_NAME::ROOM);
@@ -56,7 +73,6 @@ void RoomWidget::ReceiveMsg()
 
 void RoomWidget::ReadyToGame()
 {
-	MsgSendQueue::Instance().SendGameReadyAck();
 	WidgetManager::Instance().CloseWidget(WIDGET_NAME::ROOM);
 	ThreadManager::Instance().InvokeGameThread();
 	WidgetManager::Instance().ShowWidget(WIDGET_NAME::PAINT);
@@ -99,7 +115,13 @@ void RoomWidget::ReadyBtnClicked()
 {
 	if (!isReady) {
 		ui.readyBtn->setEnabled(false);
-		MsgSendQueue::Instance().SendPlayerReadyReq();
+		
+		if (isInGame) {
+			MsgSendQueue::Instance().SendPlayerCutInReq();
+		}
+		else {
+			MsgSendQueue::Instance().SendPlayerReadyReq();
+		}
 	}
 	else {
 		ui.readyBtn->setEnabled(false);

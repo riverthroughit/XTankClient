@@ -2,28 +2,76 @@
 
 #include "ECS/Component/PosComponent.h"
 #include "ECS/Component/CollisionComponent.h"
+#include "ECS/Component/UniformGridComponent.h"
 
-bool isCollision(PosComponent& p1, CollisionComponent& c1, PosComponent& p2, CollisionComponent& c2)
+void UpdateGridOfEntity(Entity entity,const PosComponent& posComp, 
+	const CollisionComponent& collComp, UniformGridComponent& gridComp)
 {
-	bool res = false;
 
-	if (c1.shape == LOGIC_SHAPE::CIRCLE && c2.shape == LOGIC_SHAPE::CIRCLE) {
-		//两圆相交
-		Vec2Fixed pp = p1.pos - p2.pos;
+	Vec2Fixed pos = posComp.pos;
+	Vec2Fixed prePos = posComp.prePos;
 
-		float ppx = static_cast<float>(pp.x);
-		float ppy = static_cast<float>(pp.y);
+	LOGIC_SHAPE::Type shape = collComp.shape;
 
-		float p1x = static_cast<float>(p1.pos.x);
-		float p1y = static_cast<float>(p1.pos.y);
-		float p2x = static_cast<float>(p2.pos.x);
-		float p2y = static_cast<float>(p2.pos.y);
-		FixedPoint rr = c1.shapeData.r + c2.shapeData.r;
-		float rrr = static_cast<float>(rr);
-		if (pp * pp < rr * rr) {
-			res = true;
+	if (shape == LOGIC_SHAPE::CIRCLE) {
+		//根据上下左右四个点改变对应格子
+		FixedPoint r = collComp.shapeData.r;
+
+		const static Vec2Fixed direc[4] = {
+			{FixedPoint(1),FixedPoint(0)},
+			{FixedPoint(-1),FixedPoint(0)},
+			{FixedPoint(0),FixedPoint(1)},
+			{FixedPoint(0),FixedPoint(-1)},
+		};
+
+		for (int i = 0; i < 4; ++i) {
+			int x = static_cast<int>((prePos.x + direc[i].x * r) / CUBE_SIDE_LENTH_FIXED);
+			int y = static_cast<int>((prePos.y + direc[i].y * r) / CUBE_SIDE_LENTH_FIXED);
+			if (x < 0 || y < 0 || x >= SCENE_SIDE_NUM || y >= SCENE_SIDE_NUM) {
+				continue;
+			}
+
+			gridComp.mGrids[y][x].erase(entity);
+		}
+
+		for (int i = 0; i < 4; ++i) {
+			int x = static_cast<int>((pos.x + direc[i].x * r) / CUBE_SIDE_LENTH_FIXED);
+			int y = static_cast<int>((pos.y + direc[i].y * r) / CUBE_SIDE_LENTH_FIXED);
+			if (x < 0 || y < 0 || x >= SCENE_SIDE_NUM || y >= SCENE_SIDE_NUM) {
+				continue;
+			}
+
+			gridComp.mGrids[y][x].insert(entity);
 		}
 	}
+}
 
-	return res;
+void RemoveEntityFromGrid(Entity entity, const PosComponent& posComp, 
+	const CollisionComponent& collComp, UniformGridComponent& gridComp)
+{
+	Vec2Fixed pos = posComp.pos;
+
+	LOGIC_SHAPE::Type shape = collComp.shape;
+
+	if (shape == LOGIC_SHAPE::CIRCLE) {
+		//根据上下左右四个点改变对应格子
+		FixedPoint r = collComp.shapeData.r;
+
+		const static Vec2Fixed direc[4] = {
+			{FixedPoint(1),FixedPoint(0)},
+			{FixedPoint(-1),FixedPoint(0)},
+			{FixedPoint(0),FixedPoint(1)},
+			{FixedPoint(0),FixedPoint(-1)},
+		};
+
+		for (int i = 0; i < 4; ++i) {
+			int x = static_cast<int>((pos.x + direc[i].x * r) / CUBE_SIDE_LENTH_FIXED);
+			int y = static_cast<int>((pos.y + direc[i].y * r) / CUBE_SIDE_LENTH_FIXED);
+			if (x < 0 || y < 0 || x >= SCENE_SIDE_NUM || y >= SCENE_SIDE_NUM) {
+				continue;
+			}
+
+			gridComp.mGrids[y][x].erase(entity);
+		}
+	}
 }

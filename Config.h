@@ -5,12 +5,15 @@
 //渲染刷新率
 constexpr int RENDER_FPS{ 60 };
 //逻辑帧刷新率
-constexpr int LOCKSTEP_FPS{ 25 };
+constexpr int LOCKSTEP_FPS{ 10 };
+//追帧时刷新率
+constexpr int CHASING_FPS{ LOCKSTEP_FPS * 2 };
 //逻辑帧周期
 constexpr float LOCKSTEP_TICK{ 1.0 / LOCKSTEP_FPS * 1000 };
 //渲染帧周期
 constexpr float RENDER_TICK{ 1.0 / RENDER_FPS * 1000 };
-
+//追帧周期
+constexpr float CHASING_TICK{ 1.0 / CHASING_FPS * 1000 };
 
 //窗口设计宽
 constexpr int SCREEN_DESIGN_WIDTH{ 1280 };
@@ -24,6 +27,8 @@ extern int SCREEN_HEIGHT;
 
 //方格边长
 constexpr int CUBE_SIDE_LENTH{ 10 };
+//障碍物半径
+constexpr float BLOCK_RADIUS{ 2.5 };
 //坦克半径
 constexpr int TANK_RADIUS{ 3 };
 //炮弹半径
@@ -36,14 +41,14 @@ constexpr int SCENE_SIDE_LENTH{ SCENE_SIDE_NUM * CUBE_SIDE_LENTH };
 constexpr std::pair<int, int> BLOCK_DENSITY{ 1,2 };
 
 //坦克速度 注意单位是每个逻辑帧
-constexpr float TANK_SPEED{ (float)CUBE_SIDE_LENTH * 4 / LOCKSTEP_FPS };
+constexpr float TANK_SPEED{ (float)CUBE_SIDE_LENTH * 2 / LOCKSTEP_FPS };
 //子弹速度
 constexpr float BULLET_SPEED{ (float)CUBE_SIDE_LENTH * 3 / LOCKSTEP_FPS };
 
 //坦克加速度 注意单位是每个逻辑帧
-constexpr float TANK_ACCSPEED{ (1.f / 1) / LOCKSTEP_FPS };
+constexpr float TANK_ACCSPEED{ 1.f / LOCKSTEP_FPS };
 //子弹加速度
-constexpr float BULLET_ACCSPEED{ 2.f / LOCKSTEP_FPS };
+constexpr float BULLET_ACCSPEED{ 100.f / LOCKSTEP_FPS };
 
 //玩家hp
 constexpr int PLAYER_HP = 3;
@@ -73,6 +78,7 @@ constexpr Vec2f PLAYERS_SPAWN_DIREC[PLAYER_NUM]{
 
 //定点数表示
 constexpr FixedPoint CUBE_SIDE_LENTH_FIXED{ CUBE_SIDE_LENTH };
+constexpr FixedPoint BLOCK_RADIUS_FIXED{ BLOCK_RADIUS };
 constexpr FixedPoint TANK_RADIUS_FIXED{ TANK_RADIUS };
 constexpr FixedPoint BULLET_RADIUS_FIXED{ BULLET_RADIUS };
 constexpr FixedPoint SCENE_SIDE_NUM_FIXED{ SCENE_SIDE_NUM };

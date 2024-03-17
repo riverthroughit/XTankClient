@@ -35,23 +35,35 @@ void SceneChangeSystem::Init()
 				continue;
 			}
 
+
+			const static float offest[4][2] = { {0.25,0.25},{0.75,0.25},{0.25,0.75},{0.75,0.75} };
+
 			//±ß½ç
 			if (row == 0 || col == 0 || row == SCENE_SIDE_NUM - 1 || col == SCENE_SIDE_NUM - 1) {
-				auto args = std::make_shared<ENTITY_SPAWN_ARGS::Block>();
-				args->blockType = BLOCK::HARD;
-				args->direc = { FixedPoint(0),FixedPoint(-1) };
-				args->pos = { FixedPoint((col + (float)0.5) * CUBE_SIDE_LENTH),FixedPoint((row + (float)0.5) * CUBE_SIDE_LENTH) };
-				entitySpawnComp.entitySpawnMap[ENTITY::BLOCK].push_back({ ENTITY::BLOCK, args });
+
+				for (int i = 0; i < 4; ++i) {
+					
+					auto args = std::make_shared<ENTITY_SPAWN_ARGS::Block>();
+					args->blockType = BLOCK::HARD;
+					args->direc = { FixedPoint(0),FixedPoint(-1) };
+					args->pos = { FixedPoint((col + offest[i][0]) * CUBE_SIDE_LENTH),FixedPoint((row + offest[i][1]) * CUBE_SIDE_LENTH)};
+					entitySpawnComp.entitySpawnMap[ENTITY::BLOCK].push_back({ ENTITY::BLOCK, args });
+				}
+
 				continue;
 			}
 
 			//¸ÅÂÊÂú×ã
 			if (randComp.IsTrueByProb(BLOCK_DENSITY.first, BLOCK_DENSITY.second)) {
-				auto args = std::make_shared<ENTITY_SPAWN_ARGS::Block>();
-				args->blockType = BLOCK::FRAGILE;
-				args->direc = { FixedPoint(0),FixedPoint(-1) };
-				args->pos = { FixedPoint((col + (float)0.5) * CUBE_SIDE_LENTH),FixedPoint((row + (float)0.5) * CUBE_SIDE_LENTH) };
-				entitySpawnComp.entitySpawnMap[ENTITY::BLOCK].push_back({ ENTITY::BLOCK, args });
+				
+				for (int i = 0; i < 4; ++i) {
+
+					auto args = std::make_shared<ENTITY_SPAWN_ARGS::Block>();
+					args->blockType = BLOCK::FRAGILE;
+					args->direc = { FixedPoint(0),FixedPoint(-1) };
+					args->pos = { FixedPoint((col + offest[i][0]) * CUBE_SIDE_LENTH),FixedPoint((row + offest[i][1]) * CUBE_SIDE_LENTH) };
+					entitySpawnComp.entitySpawnMap[ENTITY::BLOCK].push_back({ ENTITY::BLOCK, args });
+				}
 			}
 		}
 	}

@@ -8,10 +8,6 @@ struct RandComponent {
 	unsigned int seed{};
 
 public:
-	void SetSeed(unsigned int s) {
-		seed = s;
-		std::srand(seed);
-	}
 
 	//概率函数 numerator/denominator 的概率为真
 	bool IsTrueByProb(int numerator, int denominator) {

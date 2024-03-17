@@ -1,7 +1,16 @@
 #pragma once
 
-class PosComponent;
-class CollisionComponent;
+#include "ECS/Types.h"
 
-//两个entity是否碰撞
-bool isCollision(PosComponent& p1, CollisionComponent& c1, PosComponent& p2, CollisionComponent& c2);
+struct PosComponent;
+struct CollisionComponent;
+struct UniformGridComponent;
+
+
+//更新对应entity所处的grid
+void UpdateGridOfEntity(Entity entity,const PosComponent& posComp, 
+	const CollisionComponent& collComp,UniformGridComponent& gridComp);
+
+//将entity从对应grid中删除
+void RemoveEntityFromGrid(Entity entity, const PosComponent& posComp,
+	const CollisionComponent& collComp, UniformGridComponent& gridComp);

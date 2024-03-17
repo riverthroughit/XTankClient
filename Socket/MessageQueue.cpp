@@ -50,6 +50,15 @@ void MsgSendQueue::SendPlayerReadyReq()
 	PushMsg({XTankMsg::PLAYER_READY_REQ ,std::make_shared<XTankMsg::PlayerReadyReq>(req)});
 }
 
+void MsgSendQueue::SendPlayerCutInReq()
+{
+	XTankMsg::PlayerId playerId = SocketClient::Instance().GetPlayerId();
+	XTankMsg::PlayerCutInReq req;
+	req.mutable_playerid()->CopyFrom(playerId);
+
+	PushMsg({ XTankMsg::PLAYER_CUT_IN_REQ ,std::make_shared<XTankMsg::PlayerCutInReq>(req) });
+}
+
 void MsgSendQueue::SendPlayerReadyCancelReq()
 {
 	XTankMsg::PlayerId playerId = SocketClient::Instance().GetPlayerId();
@@ -87,6 +96,15 @@ void MsgSendQueue::SendPlayerInputNtf(int frameId, int cmdId)
 	inputNtf.set_playercmd(cmdId);
 
 	PushMsg({XTankMsg::PLAYER_INPUT_NTF ,std::make_shared<XTankMsg::PlayerInputNtf>(inputNtf)});
+}
+
+void MsgSendQueue::SendPlayerChaseUpNtf()
+{
+	XTankMsg::PlayerId playerId = SocketClient::Instance().GetPlayerId();
+	XTankMsg::PlayerChaseUpNtf ntf;
+	ntf.mutable_playerid()->CopyFrom(playerId);
+
+	PushMsg({ XTankMsg::PLAYER_CHASE_UP_NTF ,std::make_shared<XTankMsg::PlayerChaseUpNtf>(ntf) });
 }
 
 void MsgSendQueue::SendExitGameReq()

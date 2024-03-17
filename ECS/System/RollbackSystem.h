@@ -3,6 +3,7 @@
 #include "ECS/System.h"
 #include "TypeConfig.h"
 #include <vector>
+#include <array>
 
 class XTankWorld;
 
@@ -27,6 +28,9 @@ private:
 
 	//更新预测的命令
 	void UpdatePredictCmd();
+
+	//根据命令预测下一命令
+	std::array<BUTTON::Type, PLAYER_NUM> GetPredictCmdFrom(const std::array<BUTTON::Type, PLAYER_NUM>& preCmd);
 
 	//判断预测是否成功 若不成功 则用当前权威命令重新预测至当前状态
 	void RollbackPredictCmd();

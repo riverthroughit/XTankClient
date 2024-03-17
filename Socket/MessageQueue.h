@@ -142,6 +142,9 @@ public:
 	//玩家准备游戏请求
 	void SendPlayerReadyReq();
 
+	//玩家加入游戏请求
+	void SendPlayerCutInReq();
+
 	//玩家准备游戏请求
 	void SendPlayerReadyCancelReq();
 
@@ -153,6 +156,9 @@ public:
 
 	//本地用户输入通知
 	void SendPlayerInputNtf(int frameId, int cmdId);
+
+	//本地用户追帧完成通知
+	void SendPlayerChaseUpNtf();
 
 	//退出游戏请求
 	void SendExitGameReq();

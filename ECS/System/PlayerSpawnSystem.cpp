@@ -5,6 +5,7 @@
 #include "Config.h"
 #include "ECS/Component/EntitySpawnComponent.h"
 #include "ECS/Component/SocketComponent.h"
+#include "ECS/Component/RollbackComponent.h"
 
 void PlayerSpawnSystem::Init()
 {
@@ -16,7 +17,15 @@ void PlayerSpawnSystem::Init()
 
 void PlayerSpawnSystem::Tick(float dt)
 {
+	auto& rollComp = mWorld->GetSingletonComponent<RollbackComponent>();
+	auto& playersCmds = rollComp.preciseCmd.commandArray;
 
+	//判断是否有中途加入的玩家
+	for (int i = 0; i < playersCmds.size(); ++i) {
+		if (playersCmds[i] == BUTTON::CUT_IN) {
+			CreatePlayerEntity(i);
+		}
+	}
 }
 
 void PlayerSpawnSystem::CreatePlayerEntity(int id)

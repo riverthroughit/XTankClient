@@ -89,6 +89,10 @@ std::shared_ptr<Message> SocketClient::ParseMsg(int msgId, int dataSize)
 		msgPtr = std::make_shared<XTankMsg::GameReadyReq>();
 		break;
 
+	case XTankMsg::GAME_INIT_NTF:
+		msgPtr = std::make_shared<XTankMsg::GameInitNtf>();
+		break;
+
 	case XTankMsg::GAME_START_NTF:
 		msgPtr = std::make_shared<XTankMsg::GameStartNtf>();
 		break;
@@ -99,6 +103,10 @@ std::shared_ptr<Message> SocketClient::ParseMsg(int msgId, int dataSize)
 
 	case XTankMsg::PLAYER_EXIT_ACK:
 		msgPtr = std::make_shared<XTankMsg::PlayerExitAck>();
+		break;
+
+	case XTankMsg::PLAYER_CUT_IN_NTF:
+		msgPtr = std::make_shared<XTankMsg::PlayerCutInNtf>();
 		break;
 
 	default:

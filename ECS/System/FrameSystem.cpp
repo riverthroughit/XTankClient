@@ -67,7 +67,7 @@ bool FrameSystem::IsNeedTick()
 	return mWorld->GetSingletonComponent<FrameComponent>().isNeedTick;
 }
 
-void FrameSystem::TickInDuplicate()
+void FrameSystem::AddFrameId()
 {
 	auto& frameComp = mWorld->GetSingletonComponent<FrameComponent>();
 
@@ -81,6 +81,12 @@ void FrameSystem::SetDelay(float val)
 {
 	auto& frameComp = mWorld->GetSingletonComponent<FrameComponent>();
 	frameComp.dt -= val;
+}
+
+void FrameSystem::SetFrameId(int id)
+{
+	auto& frameComp = mWorld->GetSingletonComponent<FrameComponent>();
+	frameComp.frameId = id;
 }
 
 float FrameSystem::GetDt()

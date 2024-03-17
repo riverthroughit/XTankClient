@@ -3,6 +3,8 @@
 #include "ECS/Component/PosComponent.h"
 #include "ECS/Component/SpeedComponent.h"
 #include "ECS/Component/UniformGridComponent.h"
+#include "ECS/Component/CollisionComponent.h"
+#include "ECS/ECSUtil.h"
 
 void MoveSystem::Tick(float dt)
 {
@@ -10,12 +12,18 @@ void MoveSystem::Tick(float dt)
 	UniformGridComponent& gridComp = mWorld->GetSingletonComponent<UniformGridComponent>();
 
 	for (const Entity& entity : mEntities) {
-		PosComponent& posComp = mWorld->GetComponent<PosComponent>(entity);
-		SpeedComponent& speedComp = mWorld->GetComponent<SpeedComponent>(entity);
+		auto& posComp = mWorld->GetComponent<PosComponent>(entity);
+		auto& speedComp = mWorld->GetComponent<SpeedComponent>(entity);
 
 		//更新速度
 		posComp.prePos = posComp.pos;
 		posComp.pos += speedComp.direc * speedComp.speed;
+
+		//更新碰撞位置
+		if (mWorld->HasComponent<CollisionComponent>(entity)) {
+			auto& collComp = mWorld->GetComponent<CollisionComponent>(entity);
+			UpdateGridOfEntity(entity, posComp, collComp, gridComp);
+		}
 
 	}
 }

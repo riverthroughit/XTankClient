@@ -47,7 +47,7 @@ struct TableStruct_XTankMsg_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxiliaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[26]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[30]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -58,6 +58,9 @@ namespace XTankMsg {
 class GameForwardNtf;
 struct GameForwardNtfDefaultTypeInternal;
 extern GameForwardNtfDefaultTypeInternal _GameForwardNtf_default_instance_;
+class GameInitNtf;
+struct GameInitNtfDefaultTypeInternal;
+extern GameInitNtfDefaultTypeInternal _GameInitNtf_default_instance_;
 class GameReadyAck;
 struct GameReadyAckDefaultTypeInternal;
 extern GameReadyAckDefaultTypeInternal _GameReadyAck_default_instance_;
@@ -85,6 +88,15 @@ extern LogoutAckDefaultTypeInternal _LogoutAck_default_instance_;
 class LogoutReq;
 struct LogoutReqDefaultTypeInternal;
 extern LogoutReqDefaultTypeInternal _LogoutReq_default_instance_;
+class PlayerChaseUpNtf;
+struct PlayerChaseUpNtfDefaultTypeInternal;
+extern PlayerChaseUpNtfDefaultTypeInternal _PlayerChaseUpNtf_default_instance_;
+class PlayerCutInNtf;
+struct PlayerCutInNtfDefaultTypeInternal;
+extern PlayerCutInNtfDefaultTypeInternal _PlayerCutInNtf_default_instance_;
+class PlayerCutInReq;
+struct PlayerCutInReqDefaultTypeInternal;
+extern PlayerCutInReqDefaultTypeInternal _PlayerCutInReq_default_instance_;
 class PlayerExitAck;
 struct PlayerExitAckDefaultTypeInternal;
 extern PlayerExitAckDefaultTypeInternal _PlayerExitAck_default_instance_;
@@ -136,6 +148,7 @@ extern RoomNtf_PlayerStateDefaultTypeInternal _RoomNtf_PlayerState_default_insta
 }  // namespace XTankMsg
 PROTOBUF_NAMESPACE_OPEN
 template<> ::XTankMsg::GameForwardNtf* Arena::CreateMaybeMessage<::XTankMsg::GameForwardNtf>(Arena*);
+template<> ::XTankMsg::GameInitNtf* Arena::CreateMaybeMessage<::XTankMsg::GameInitNtf>(Arena*);
 template<> ::XTankMsg::GameReadyAck* Arena::CreateMaybeMessage<::XTankMsg::GameReadyAck>(Arena*);
 template<> ::XTankMsg::GameReadyReq* Arena::CreateMaybeMessage<::XTankMsg::GameReadyReq>(Arena*);
 template<> ::XTankMsg::GameStartNtf* Arena::CreateMaybeMessage<::XTankMsg::GameStartNtf>(Arena*);
@@ -145,6 +158,9 @@ template<> ::XTankMsg::LoginAck* Arena::CreateMaybeMessage<::XTankMsg::LoginAck>
 template<> ::XTankMsg::LoginReq* Arena::CreateMaybeMessage<::XTankMsg::LoginReq>(Arena*);
 template<> ::XTankMsg::LogoutAck* Arena::CreateMaybeMessage<::XTankMsg::LogoutAck>(Arena*);
 template<> ::XTankMsg::LogoutReq* Arena::CreateMaybeMessage<::XTankMsg::LogoutReq>(Arena*);
+template<> ::XTankMsg::PlayerChaseUpNtf* Arena::CreateMaybeMessage<::XTankMsg::PlayerChaseUpNtf>(Arena*);
+template<> ::XTankMsg::PlayerCutInNtf* Arena::CreateMaybeMessage<::XTankMsg::PlayerCutInNtf>(Arena*);
+template<> ::XTankMsg::PlayerCutInReq* Arena::CreateMaybeMessage<::XTankMsg::PlayerCutInReq>(Arena*);
 template<> ::XTankMsg::PlayerExitAck* Arena::CreateMaybeMessage<::XTankMsg::PlayerExitAck>(Arena*);
 template<> ::XTankMsg::PlayerExitReq* Arena::CreateMaybeMessage<::XTankMsg::PlayerExitReq>(Arena*);
 template<> ::XTankMsg::PlayerId* Arena::CreateMaybeMessage<::XTankMsg::PlayerId>(Arena*);
@@ -183,18 +199,22 @@ enum MSG : int {
   PLAYER_READY_CANCEL_REQ = 15,
   PLAYER_READY_CANCEL_ACK = 16,
   GAME_READY_REQ = 17,
-  GAME_READY_ACK = 18,
-  GAME_START_NTF = 19,
-  PLAYER_INPUT_NTF = 20,
-  GAME_FORWARD_NTF = 21,
-  PLAYER_EXIT_REQ = 22,
-  PLAYER_EXIT_ACK = 23,
+  GAME_INIT_NTF = 18,
+  GAME_READY_ACK = 19,
+  GAME_START_NTF = 20,
+  PLAYER_INPUT_NTF = 21,
+  GAME_FORWARD_NTF = 22,
+  PLAYER_EXIT_REQ = 23,
+  PLAYER_EXIT_ACK = 24,
+  PLAYER_CUT_IN_REQ = 25,
+  PLAYER_CUT_IN_NTF = 26,
+  PLAYER_CHASE_UP_NTF = 27,
   MSG_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
   MSG_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
 };
 bool MSG_IsValid(int value);
 constexpr MSG MSG_MIN = NONE;
-constexpr MSG MSG_MAX = PLAYER_EXIT_ACK;
+constexpr MSG MSG_MAX = PLAYER_CHASE_UP_NTF;
 constexpr int MSG_ARRAYSIZE = MSG_MAX + 1;
 
 const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* MSG_descriptor();
@@ -2588,6 +2608,7 @@ class RoomNtf final :
   enum : int {
     kPlayerStatesFieldNumber = 2,
     kRoomIdFieldNumber = 1,
+    kIsInGameFieldNumber = 3,
   };
   // repeated .XTankMsg.RoomNtf.PlayerState playerStates = 2;
   int playerstates_size() const;
@@ -2616,6 +2637,15 @@ class RoomNtf final :
   void _internal_set_roomid(uint32_t value);
   public:
 
+  // bool IsInGame = 3;
+  void clear_isingame();
+  bool isingame() const;
+  void set_isingame(bool value);
+  private:
+  bool _internal_isingame() const;
+  void _internal_set_isingame(bool value);
+  public:
+
   // @@protoc_insertion_point(class_scope:XTankMsg.RoomNtf)
  private:
   class _Internal;
@@ -2625,6 +2655,7 @@ class RoomNtf final :
   typedef void DestructorSkippable_;
   ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::XTankMsg::RoomNtf_PlayerState > playerstates_;
   uint32_t roomid_;
+  bool isingame_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_XTankMsg_2eproto;
 };
@@ -3410,6 +3441,172 @@ class GameReadyReq final :
 };
 // -------------------------------------------------------------------
 
+class GameInitNtf final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:XTankMsg.GameInitNtf) */ {
+ public:
+  inline GameInitNtf() : GameInitNtf(nullptr) {}
+  ~GameInitNtf() override;
+  explicit constexpr GameInitNtf(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  GameInitNtf(const GameInitNtf& from);
+  GameInitNtf(GameInitNtf&& from) noexcept
+    : GameInitNtf() {
+    *this = ::std::move(from);
+  }
+
+  inline GameInitNtf& operator=(const GameInitNtf& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline GameInitNtf& operator=(GameInitNtf&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const GameInitNtf& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const GameInitNtf* internal_default_instance() {
+    return reinterpret_cast<const GameInitNtf*>(
+               &_GameInitNtf_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    20;
+
+  friend void swap(GameInitNtf& a, GameInitNtf& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(GameInitNtf* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(GameInitNtf* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  GameInitNtf* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<GameInitNtf>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const GameInitNtf& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom(const GameInitNtf& from);
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(GameInitNtf* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "XTankMsg.GameInitNtf";
+  }
+  protected:
+  explicit GameInitNtf(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kPlayerIdsFieldNumber = 2,
+    kRandSeedFieldNumber = 1,
+  };
+  // repeated .XTankMsg.PlayerId playerIds = 2;
+  int playerids_size() const;
+  private:
+  int _internal_playerids_size() const;
+  public:
+  void clear_playerids();
+  ::XTankMsg::PlayerId* mutable_playerids(int index);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::XTankMsg::PlayerId >*
+      mutable_playerids();
+  private:
+  const ::XTankMsg::PlayerId& _internal_playerids(int index) const;
+  ::XTankMsg::PlayerId* _internal_add_playerids();
+  public:
+  const ::XTankMsg::PlayerId& playerids(int index) const;
+  ::XTankMsg::PlayerId* add_playerids();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::XTankMsg::PlayerId >&
+      playerids() const;
+
+  // int32 randSeed = 1;
+  void clear_randseed();
+  int32_t randseed() const;
+  void set_randseed(int32_t value);
+  private:
+  int32_t _internal_randseed() const;
+  void _internal_set_randseed(int32_t value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:XTankMsg.GameInitNtf)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::XTankMsg::PlayerId > playerids_;
+  int32_t randseed_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_XTankMsg_2eproto;
+};
+// -------------------------------------------------------------------
+
 class GameReadyAck final :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:XTankMsg.GameReadyAck) */ {
  public:
@@ -3458,7 +3655,7 @@ class GameReadyAck final :
                &_GameReadyAck_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    20;
+    21;
 
   friend void swap(GameReadyAck& a, GameReadyAck& b) {
     a.Swap(&b);
@@ -3613,7 +3810,7 @@ class GameStartNtf final :
                &_GameStartNtf_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    21;
+    22;
 
   friend void swap(GameStartNtf& a, GameStartNtf& b) {
     a.Swap(&b);
@@ -3687,27 +3884,8 @@ class GameStartNtf final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kPlayerIdsFieldNumber = 2,
     kLatencyFieldNumber = 1,
   };
-  // repeated .XTankMsg.PlayerId playerIds = 2;
-  int playerids_size() const;
-  private:
-  int _internal_playerids_size() const;
-  public:
-  void clear_playerids();
-  ::XTankMsg::PlayerId* mutable_playerids(int index);
-  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::XTankMsg::PlayerId >*
-      mutable_playerids();
-  private:
-  const ::XTankMsg::PlayerId& _internal_playerids(int index) const;
-  ::XTankMsg::PlayerId* _internal_add_playerids();
-  public:
-  const ::XTankMsg::PlayerId& playerids(int index) const;
-  ::XTankMsg::PlayerId* add_playerids();
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::XTankMsg::PlayerId >&
-      playerids() const;
-
   // float latency = 1;
   void clear_latency();
   float latency() const;
@@ -3724,7 +3902,6 @@ class GameStartNtf final :
   template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
-  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::XTankMsg::PlayerId > playerids_;
   float latency_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_XTankMsg_2eproto;
@@ -3779,7 +3956,7 @@ class PlayerInputNtf final :
                &_PlayerInputNtf_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    22;
+    23;
 
   friend void swap(PlayerInputNtf& a, PlayerInputNtf& b) {
     a.Swap(&b);
@@ -3956,7 +4133,7 @@ class GameForwardNtf final :
                &_GameForwardNtf_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    23;
+    24;
 
   friend void swap(GameForwardNtf& a, GameForwardNtf& b) {
     a.Swap(&b);
@@ -4127,7 +4304,7 @@ class PlayerExitReq final :
                &_PlayerExitReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    24;
+    25;
 
   friend void swap(PlayerExitReq& a, PlayerExitReq& b) {
     a.Swap(&b);
@@ -4282,7 +4459,7 @@ class PlayerExitAck final :
                &_PlayerExitAck_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    25;
+    26;
 
   friend void swap(PlayerExitAck& a, PlayerExitAck& b) {
     a.Swap(&b);
@@ -4391,6 +4568,491 @@ class PlayerExitAck final :
   typedef void DestructorSkippable_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr msg_;
   bool success_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_XTankMsg_2eproto;
+};
+// -------------------------------------------------------------------
+
+class PlayerCutInReq final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:XTankMsg.PlayerCutInReq) */ {
+ public:
+  inline PlayerCutInReq() : PlayerCutInReq(nullptr) {}
+  ~PlayerCutInReq() override;
+  explicit constexpr PlayerCutInReq(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  PlayerCutInReq(const PlayerCutInReq& from);
+  PlayerCutInReq(PlayerCutInReq&& from) noexcept
+    : PlayerCutInReq() {
+    *this = ::std::move(from);
+  }
+
+  inline PlayerCutInReq& operator=(const PlayerCutInReq& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline PlayerCutInReq& operator=(PlayerCutInReq&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const PlayerCutInReq& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const PlayerCutInReq* internal_default_instance() {
+    return reinterpret_cast<const PlayerCutInReq*>(
+               &_PlayerCutInReq_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    27;
+
+  friend void swap(PlayerCutInReq& a, PlayerCutInReq& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(PlayerCutInReq* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(PlayerCutInReq* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  PlayerCutInReq* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<PlayerCutInReq>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const PlayerCutInReq& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom(const PlayerCutInReq& from);
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(PlayerCutInReq* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "XTankMsg.PlayerCutInReq";
+  }
+  protected:
+  explicit PlayerCutInReq(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kPlayerIdFieldNumber = 1,
+  };
+  // .XTankMsg.PlayerId playerId = 1;
+  bool has_playerid() const;
+  private:
+  bool _internal_has_playerid() const;
+  public:
+  void clear_playerid();
+  const ::XTankMsg::PlayerId& playerid() const;
+  PROTOBUF_NODISCARD ::XTankMsg::PlayerId* release_playerid();
+  ::XTankMsg::PlayerId* mutable_playerid();
+  void set_allocated_playerid(::XTankMsg::PlayerId* playerid);
+  private:
+  const ::XTankMsg::PlayerId& _internal_playerid() const;
+  ::XTankMsg::PlayerId* _internal_mutable_playerid();
+  public:
+  void unsafe_arena_set_allocated_playerid(
+      ::XTankMsg::PlayerId* playerid);
+  ::XTankMsg::PlayerId* unsafe_arena_release_playerid();
+
+  // @@protoc_insertion_point(class_scope:XTankMsg.PlayerCutInReq)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::XTankMsg::PlayerId* playerid_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_XTankMsg_2eproto;
+};
+// -------------------------------------------------------------------
+
+class PlayerCutInNtf final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:XTankMsg.PlayerCutInNtf) */ {
+ public:
+  inline PlayerCutInNtf() : PlayerCutInNtf(nullptr) {}
+  ~PlayerCutInNtf() override;
+  explicit constexpr PlayerCutInNtf(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  PlayerCutInNtf(const PlayerCutInNtf& from);
+  PlayerCutInNtf(PlayerCutInNtf&& from) noexcept
+    : PlayerCutInNtf() {
+    *this = ::std::move(from);
+  }
+
+  inline PlayerCutInNtf& operator=(const PlayerCutInNtf& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline PlayerCutInNtf& operator=(PlayerCutInNtf&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const PlayerCutInNtf& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const PlayerCutInNtf* internal_default_instance() {
+    return reinterpret_cast<const PlayerCutInNtf*>(
+               &_PlayerCutInNtf_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    28;
+
+  friend void swap(PlayerCutInNtf& a, PlayerCutInNtf& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(PlayerCutInNtf* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(PlayerCutInNtf* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  PlayerCutInNtf* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<PlayerCutInNtf>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const PlayerCutInNtf& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom(const PlayerCutInNtf& from);
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(PlayerCutInNtf* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "XTankMsg.PlayerCutInNtf";
+  }
+  protected:
+  explicit PlayerCutInNtf(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kPlayerIdsFieldNumber = 1,
+    kCmdsFieldNumber = 2,
+  };
+  // repeated .XTankMsg.PlayerId playerIds = 1;
+  int playerids_size() const;
+  private:
+  int _internal_playerids_size() const;
+  public:
+  void clear_playerids();
+  ::XTankMsg::PlayerId* mutable_playerids(int index);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::XTankMsg::PlayerId >*
+      mutable_playerids();
+  private:
+  const ::XTankMsg::PlayerId& _internal_playerids(int index) const;
+  ::XTankMsg::PlayerId* _internal_add_playerids();
+  public:
+  const ::XTankMsg::PlayerId& playerids(int index) const;
+  ::XTankMsg::PlayerId* add_playerids();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::XTankMsg::PlayerId >&
+      playerids() const;
+
+  // repeated .XTankMsg.GameForwardNtf cmds = 2;
+  int cmds_size() const;
+  private:
+  int _internal_cmds_size() const;
+  public:
+  void clear_cmds();
+  ::XTankMsg::GameForwardNtf* mutable_cmds(int index);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::XTankMsg::GameForwardNtf >*
+      mutable_cmds();
+  private:
+  const ::XTankMsg::GameForwardNtf& _internal_cmds(int index) const;
+  ::XTankMsg::GameForwardNtf* _internal_add_cmds();
+  public:
+  const ::XTankMsg::GameForwardNtf& cmds(int index) const;
+  ::XTankMsg::GameForwardNtf* add_cmds();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::XTankMsg::GameForwardNtf >&
+      cmds() const;
+
+  // @@protoc_insertion_point(class_scope:XTankMsg.PlayerCutInNtf)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::XTankMsg::PlayerId > playerids_;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::XTankMsg::GameForwardNtf > cmds_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_XTankMsg_2eproto;
+};
+// -------------------------------------------------------------------
+
+class PlayerChaseUpNtf final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:XTankMsg.PlayerChaseUpNtf) */ {
+ public:
+  inline PlayerChaseUpNtf() : PlayerChaseUpNtf(nullptr) {}
+  ~PlayerChaseUpNtf() override;
+  explicit constexpr PlayerChaseUpNtf(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  PlayerChaseUpNtf(const PlayerChaseUpNtf& from);
+  PlayerChaseUpNtf(PlayerChaseUpNtf&& from) noexcept
+    : PlayerChaseUpNtf() {
+    *this = ::std::move(from);
+  }
+
+  inline PlayerChaseUpNtf& operator=(const PlayerChaseUpNtf& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline PlayerChaseUpNtf& operator=(PlayerChaseUpNtf&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const PlayerChaseUpNtf& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const PlayerChaseUpNtf* internal_default_instance() {
+    return reinterpret_cast<const PlayerChaseUpNtf*>(
+               &_PlayerChaseUpNtf_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    29;
+
+  friend void swap(PlayerChaseUpNtf& a, PlayerChaseUpNtf& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(PlayerChaseUpNtf* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(PlayerChaseUpNtf* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  PlayerChaseUpNtf* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<PlayerChaseUpNtf>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const PlayerChaseUpNtf& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom(const PlayerChaseUpNtf& from);
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(PlayerChaseUpNtf* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "XTankMsg.PlayerChaseUpNtf";
+  }
+  protected:
+  explicit PlayerChaseUpNtf(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kPlayerIdFieldNumber = 1,
+  };
+  // .XTankMsg.PlayerId playerId = 1;
+  bool has_playerid() const;
+  private:
+  bool _internal_has_playerid() const;
+  public:
+  void clear_playerid();
+  const ::XTankMsg::PlayerId& playerid() const;
+  PROTOBUF_NODISCARD ::XTankMsg::PlayerId* release_playerid();
+  ::XTankMsg::PlayerId* mutable_playerid();
+  void set_allocated_playerid(::XTankMsg::PlayerId* playerid);
+  private:
+  const ::XTankMsg::PlayerId& _internal_playerid() const;
+  ::XTankMsg::PlayerId* _internal_mutable_playerid();
+  public:
+  void unsafe_arena_set_allocated_playerid(
+      ::XTankMsg::PlayerId* playerid);
+  ::XTankMsg::PlayerId* unsafe_arena_release_playerid();
+
+  // @@protoc_insertion_point(class_scope:XTankMsg.PlayerChaseUpNtf)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::XTankMsg::PlayerId* playerid_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_XTankMsg_2eproto;
 };
@@ -5627,6 +6289,26 @@ RoomNtf::playerstates() const {
   return playerstates_;
 }
 
+// bool IsInGame = 3;
+inline void RoomNtf::clear_isingame() {
+  isingame_ = false;
+}
+inline bool RoomNtf::_internal_isingame() const {
+  return isingame_;
+}
+inline bool RoomNtf::isingame() const {
+  // @@protoc_insertion_point(field_get:XTankMsg.RoomNtf.IsInGame)
+  return _internal_isingame();
+}
+inline void RoomNtf::_internal_set_isingame(bool value) {
+  
+  isingame_ = value;
+}
+inline void RoomNtf::set_isingame(bool value) {
+  _internal_set_isingame(value);
+  // @@protoc_insertion_point(field_set:XTankMsg.RoomNtf.IsInGame)
+}
+
 // -------------------------------------------------------------------
 
 // PlayerReadyReq
@@ -5991,6 +6673,70 @@ inline void GameReadyReq::set_success(bool value) {
 
 // -------------------------------------------------------------------
 
+// GameInitNtf
+
+// int32 randSeed = 1;
+inline void GameInitNtf::clear_randseed() {
+  randseed_ = 0;
+}
+inline int32_t GameInitNtf::_internal_randseed() const {
+  return randseed_;
+}
+inline int32_t GameInitNtf::randseed() const {
+  // @@protoc_insertion_point(field_get:XTankMsg.GameInitNtf.randSeed)
+  return _internal_randseed();
+}
+inline void GameInitNtf::_internal_set_randseed(int32_t value) {
+  
+  randseed_ = value;
+}
+inline void GameInitNtf::set_randseed(int32_t value) {
+  _internal_set_randseed(value);
+  // @@protoc_insertion_point(field_set:XTankMsg.GameInitNtf.randSeed)
+}
+
+// repeated .XTankMsg.PlayerId playerIds = 2;
+inline int GameInitNtf::_internal_playerids_size() const {
+  return playerids_.size();
+}
+inline int GameInitNtf::playerids_size() const {
+  return _internal_playerids_size();
+}
+inline void GameInitNtf::clear_playerids() {
+  playerids_.Clear();
+}
+inline ::XTankMsg::PlayerId* GameInitNtf::mutable_playerids(int index) {
+  // @@protoc_insertion_point(field_mutable:XTankMsg.GameInitNtf.playerIds)
+  return playerids_.Mutable(index);
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::XTankMsg::PlayerId >*
+GameInitNtf::mutable_playerids() {
+  // @@protoc_insertion_point(field_mutable_list:XTankMsg.GameInitNtf.playerIds)
+  return &playerids_;
+}
+inline const ::XTankMsg::PlayerId& GameInitNtf::_internal_playerids(int index) const {
+  return playerids_.Get(index);
+}
+inline const ::XTankMsg::PlayerId& GameInitNtf::playerids(int index) const {
+  // @@protoc_insertion_point(field_get:XTankMsg.GameInitNtf.playerIds)
+  return _internal_playerids(index);
+}
+inline ::XTankMsg::PlayerId* GameInitNtf::_internal_add_playerids() {
+  return playerids_.Add();
+}
+inline ::XTankMsg::PlayerId* GameInitNtf::add_playerids() {
+  ::XTankMsg::PlayerId* _add = _internal_add_playerids();
+  // @@protoc_insertion_point(field_add:XTankMsg.GameInitNtf.playerIds)
+  return _add;
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::XTankMsg::PlayerId >&
+GameInitNtf::playerids() const {
+  // @@protoc_insertion_point(field_list:XTankMsg.GameInitNtf.playerIds)
+  return playerids_;
+}
+
+// -------------------------------------------------------------------
+
 // GameReadyAck
 
 // .XTankMsg.PlayerId playerId = 1;
@@ -6105,46 +6851,6 @@ inline void GameStartNtf::_internal_set_latency(float value) {
 inline void GameStartNtf::set_latency(float value) {
   _internal_set_latency(value);
   // @@protoc_insertion_point(field_set:XTankMsg.GameStartNtf.latency)
-}
-
-// repeated .XTankMsg.PlayerId playerIds = 2;
-inline int GameStartNtf::_internal_playerids_size() const {
-  return playerids_.size();
-}
-inline int GameStartNtf::playerids_size() const {
-  return _internal_playerids_size();
-}
-inline void GameStartNtf::clear_playerids() {
-  playerids_.Clear();
-}
-inline ::XTankMsg::PlayerId* GameStartNtf::mutable_playerids(int index) {
-  // @@protoc_insertion_point(field_mutable:XTankMsg.GameStartNtf.playerIds)
-  return playerids_.Mutable(index);
-}
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::XTankMsg::PlayerId >*
-GameStartNtf::mutable_playerids() {
-  // @@protoc_insertion_point(field_mutable_list:XTankMsg.GameStartNtf.playerIds)
-  return &playerids_;
-}
-inline const ::XTankMsg::PlayerId& GameStartNtf::_internal_playerids(int index) const {
-  return playerids_.Get(index);
-}
-inline const ::XTankMsg::PlayerId& GameStartNtf::playerids(int index) const {
-  // @@protoc_insertion_point(field_get:XTankMsg.GameStartNtf.playerIds)
-  return _internal_playerids(index);
-}
-inline ::XTankMsg::PlayerId* GameStartNtf::_internal_add_playerids() {
-  return playerids_.Add();
-}
-inline ::XTankMsg::PlayerId* GameStartNtf::add_playerids() {
-  ::XTankMsg::PlayerId* _add = _internal_add_playerids();
-  // @@protoc_insertion_point(field_add:XTankMsg.GameStartNtf.playerIds)
-  return _add;
-}
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::XTankMsg::PlayerId >&
-GameStartNtf::playerids() const {
-  // @@protoc_insertion_point(field_list:XTankMsg.GameStartNtf.playerIds)
-  return playerids_;
 }
 
 // -------------------------------------------------------------------
@@ -6521,9 +7227,289 @@ inline void PlayerExitAck::set_allocated_msg(std::string* msg) {
   // @@protoc_insertion_point(field_set_allocated:XTankMsg.PlayerExitAck.msg)
 }
 
+// -------------------------------------------------------------------
+
+// PlayerCutInReq
+
+// .XTankMsg.PlayerId playerId = 1;
+inline bool PlayerCutInReq::_internal_has_playerid() const {
+  return this != internal_default_instance() && playerid_ != nullptr;
+}
+inline bool PlayerCutInReq::has_playerid() const {
+  return _internal_has_playerid();
+}
+inline void PlayerCutInReq::clear_playerid() {
+  if (GetArenaForAllocation() == nullptr && playerid_ != nullptr) {
+    delete playerid_;
+  }
+  playerid_ = nullptr;
+}
+inline const ::XTankMsg::PlayerId& PlayerCutInReq::_internal_playerid() const {
+  const ::XTankMsg::PlayerId* p = playerid_;
+  return p != nullptr ? *p : reinterpret_cast<const ::XTankMsg::PlayerId&>(
+      ::XTankMsg::_PlayerId_default_instance_);
+}
+inline const ::XTankMsg::PlayerId& PlayerCutInReq::playerid() const {
+  // @@protoc_insertion_point(field_get:XTankMsg.PlayerCutInReq.playerId)
+  return _internal_playerid();
+}
+inline void PlayerCutInReq::unsafe_arena_set_allocated_playerid(
+    ::XTankMsg::PlayerId* playerid) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(playerid_);
+  }
+  playerid_ = playerid;
+  if (playerid) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:XTankMsg.PlayerCutInReq.playerId)
+}
+inline ::XTankMsg::PlayerId* PlayerCutInReq::release_playerid() {
+  
+  ::XTankMsg::PlayerId* temp = playerid_;
+  playerid_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::XTankMsg::PlayerId* PlayerCutInReq::unsafe_arena_release_playerid() {
+  // @@protoc_insertion_point(field_release:XTankMsg.PlayerCutInReq.playerId)
+  
+  ::XTankMsg::PlayerId* temp = playerid_;
+  playerid_ = nullptr;
+  return temp;
+}
+inline ::XTankMsg::PlayerId* PlayerCutInReq::_internal_mutable_playerid() {
+  
+  if (playerid_ == nullptr) {
+    auto* p = CreateMaybeMessage<::XTankMsg::PlayerId>(GetArenaForAllocation());
+    playerid_ = p;
+  }
+  return playerid_;
+}
+inline ::XTankMsg::PlayerId* PlayerCutInReq::mutable_playerid() {
+  ::XTankMsg::PlayerId* _msg = _internal_mutable_playerid();
+  // @@protoc_insertion_point(field_mutable:XTankMsg.PlayerCutInReq.playerId)
+  return _msg;
+}
+inline void PlayerCutInReq::set_allocated_playerid(::XTankMsg::PlayerId* playerid) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete playerid_;
+  }
+  if (playerid) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper<::XTankMsg::PlayerId>::GetOwningArena(playerid);
+    if (message_arena != submessage_arena) {
+      playerid = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, playerid, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  playerid_ = playerid;
+  // @@protoc_insertion_point(field_set_allocated:XTankMsg.PlayerCutInReq.playerId)
+}
+
+// -------------------------------------------------------------------
+
+// PlayerCutInNtf
+
+// repeated .XTankMsg.PlayerId playerIds = 1;
+inline int PlayerCutInNtf::_internal_playerids_size() const {
+  return playerids_.size();
+}
+inline int PlayerCutInNtf::playerids_size() const {
+  return _internal_playerids_size();
+}
+inline void PlayerCutInNtf::clear_playerids() {
+  playerids_.Clear();
+}
+inline ::XTankMsg::PlayerId* PlayerCutInNtf::mutable_playerids(int index) {
+  // @@protoc_insertion_point(field_mutable:XTankMsg.PlayerCutInNtf.playerIds)
+  return playerids_.Mutable(index);
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::XTankMsg::PlayerId >*
+PlayerCutInNtf::mutable_playerids() {
+  // @@protoc_insertion_point(field_mutable_list:XTankMsg.PlayerCutInNtf.playerIds)
+  return &playerids_;
+}
+inline const ::XTankMsg::PlayerId& PlayerCutInNtf::_internal_playerids(int index) const {
+  return playerids_.Get(index);
+}
+inline const ::XTankMsg::PlayerId& PlayerCutInNtf::playerids(int index) const {
+  // @@protoc_insertion_point(field_get:XTankMsg.PlayerCutInNtf.playerIds)
+  return _internal_playerids(index);
+}
+inline ::XTankMsg::PlayerId* PlayerCutInNtf::_internal_add_playerids() {
+  return playerids_.Add();
+}
+inline ::XTankMsg::PlayerId* PlayerCutInNtf::add_playerids() {
+  ::XTankMsg::PlayerId* _add = _internal_add_playerids();
+  // @@protoc_insertion_point(field_add:XTankMsg.PlayerCutInNtf.playerIds)
+  return _add;
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::XTankMsg::PlayerId >&
+PlayerCutInNtf::playerids() const {
+  // @@protoc_insertion_point(field_list:XTankMsg.PlayerCutInNtf.playerIds)
+  return playerids_;
+}
+
+// repeated .XTankMsg.GameForwardNtf cmds = 2;
+inline int PlayerCutInNtf::_internal_cmds_size() const {
+  return cmds_.size();
+}
+inline int PlayerCutInNtf::cmds_size() const {
+  return _internal_cmds_size();
+}
+inline void PlayerCutInNtf::clear_cmds() {
+  cmds_.Clear();
+}
+inline ::XTankMsg::GameForwardNtf* PlayerCutInNtf::mutable_cmds(int index) {
+  // @@protoc_insertion_point(field_mutable:XTankMsg.PlayerCutInNtf.cmds)
+  return cmds_.Mutable(index);
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::XTankMsg::GameForwardNtf >*
+PlayerCutInNtf::mutable_cmds() {
+  // @@protoc_insertion_point(field_mutable_list:XTankMsg.PlayerCutInNtf.cmds)
+  return &cmds_;
+}
+inline const ::XTankMsg::GameForwardNtf& PlayerCutInNtf::_internal_cmds(int index) const {
+  return cmds_.Get(index);
+}
+inline const ::XTankMsg::GameForwardNtf& PlayerCutInNtf::cmds(int index) const {
+  // @@protoc_insertion_point(field_get:XTankMsg.PlayerCutInNtf.cmds)
+  return _internal_cmds(index);
+}
+inline ::XTankMsg::GameForwardNtf* PlayerCutInNtf::_internal_add_cmds() {
+  return cmds_.Add();
+}
+inline ::XTankMsg::GameForwardNtf* PlayerCutInNtf::add_cmds() {
+  ::XTankMsg::GameForwardNtf* _add = _internal_add_cmds();
+  // @@protoc_insertion_point(field_add:XTankMsg.PlayerCutInNtf.cmds)
+  return _add;
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::XTankMsg::GameForwardNtf >&
+PlayerCutInNtf::cmds() const {
+  // @@protoc_insertion_point(field_list:XTankMsg.PlayerCutInNtf.cmds)
+  return cmds_;
+}
+
+// -------------------------------------------------------------------
+
+// PlayerChaseUpNtf
+
+// .XTankMsg.PlayerId playerId = 1;
+inline bool PlayerChaseUpNtf::_internal_has_playerid() const {
+  return this != internal_default_instance() && playerid_ != nullptr;
+}
+inline bool PlayerChaseUpNtf::has_playerid() const {
+  return _internal_has_playerid();
+}
+inline void PlayerChaseUpNtf::clear_playerid() {
+  if (GetArenaForAllocation() == nullptr && playerid_ != nullptr) {
+    delete playerid_;
+  }
+  playerid_ = nullptr;
+}
+inline const ::XTankMsg::PlayerId& PlayerChaseUpNtf::_internal_playerid() const {
+  const ::XTankMsg::PlayerId* p = playerid_;
+  return p != nullptr ? *p : reinterpret_cast<const ::XTankMsg::PlayerId&>(
+      ::XTankMsg::_PlayerId_default_instance_);
+}
+inline const ::XTankMsg::PlayerId& PlayerChaseUpNtf::playerid() const {
+  // @@protoc_insertion_point(field_get:XTankMsg.PlayerChaseUpNtf.playerId)
+  return _internal_playerid();
+}
+inline void PlayerChaseUpNtf::unsafe_arena_set_allocated_playerid(
+    ::XTankMsg::PlayerId* playerid) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(playerid_);
+  }
+  playerid_ = playerid;
+  if (playerid) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:XTankMsg.PlayerChaseUpNtf.playerId)
+}
+inline ::XTankMsg::PlayerId* PlayerChaseUpNtf::release_playerid() {
+  
+  ::XTankMsg::PlayerId* temp = playerid_;
+  playerid_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::XTankMsg::PlayerId* PlayerChaseUpNtf::unsafe_arena_release_playerid() {
+  // @@protoc_insertion_point(field_release:XTankMsg.PlayerChaseUpNtf.playerId)
+  
+  ::XTankMsg::PlayerId* temp = playerid_;
+  playerid_ = nullptr;
+  return temp;
+}
+inline ::XTankMsg::PlayerId* PlayerChaseUpNtf::_internal_mutable_playerid() {
+  
+  if (playerid_ == nullptr) {
+    auto* p = CreateMaybeMessage<::XTankMsg::PlayerId>(GetArenaForAllocation());
+    playerid_ = p;
+  }
+  return playerid_;
+}
+inline ::XTankMsg::PlayerId* PlayerChaseUpNtf::mutable_playerid() {
+  ::XTankMsg::PlayerId* _msg = _internal_mutable_playerid();
+  // @@protoc_insertion_point(field_mutable:XTankMsg.PlayerChaseUpNtf.playerId)
+  return _msg;
+}
+inline void PlayerChaseUpNtf::set_allocated_playerid(::XTankMsg::PlayerId* playerid) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete playerid_;
+  }
+  if (playerid) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper<::XTankMsg::PlayerId>::GetOwningArena(playerid);
+    if (message_arena != submessage_arena) {
+      playerid = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, playerid, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  playerid_ = playerid;
+  // @@protoc_insertion_point(field_set_allocated:XTankMsg.PlayerChaseUpNtf.playerId)
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

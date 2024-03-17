@@ -1,5 +1,4 @@
 #include "CommandSystem.h"
-#include "ECS/Event.h"
 #include "ECS/World.h"
 #include "ECS/Component/PlayerComponent.h"
 #include "ECS/Component/CommandComponent.h"

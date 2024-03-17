@@ -155,12 +155,6 @@
     <ClInclude Include="ECS\EntityManager.h">
       <Filter>Source Files\ECS</Filter>
     </ClInclude>
-    <ClInclude Include="ECS\Event.h">
-      <Filter>Source Files\ECS</Filter>
-    </ClInclude>
-    <ClInclude Include="ECS\EventManager.h">
-      <Filter>Source Files\ECS</Filter>
-    </ClInclude>
     <ClInclude Include="ECS\System.h">
       <Filter>Source Files\ECS</Filter>
     </ClInclude>
@@ -337,6 +331,9 @@
     </ClInclude>
     <ClInclude Include="Util\TickUtil.h">
       <Filter>Source Files\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Component\RollbackPosComponent.h">
+      <Filter>Source Files\ECS\Component</Filter>
     </ClInclude>
     <ClInclude Include="Protobuf\XTankMsg.pb.h">
       <Filter>Source Files\Protobuf</Filter>

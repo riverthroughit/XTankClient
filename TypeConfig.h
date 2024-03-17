@@ -29,6 +29,7 @@ namespace BUTTON {
 		RIGHT,
 		FIRE,
 		IDLE,
+		CUT_IN,	//ÖÐÍ¾¼ÓÈë
 		MAX,
 	};
 }

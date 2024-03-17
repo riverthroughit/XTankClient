@@ -5,6 +5,7 @@
 #include <vector>
 #include <utility>
 #include <string>
+#include "qstring.h"
 
 class RoomWidget : public ReceiveWidget
 {
@@ -17,8 +18,14 @@ public:
 private:
 	Ui::RoomWidgetClass ui;
 
-	//是否已准备
+	//玩家是否已准备
 	bool isReady{};
+
+	//房间是否已开赛
+	bool isInGame{};
+
+	//准备按钮或加入按钮上的文字
+	QString JoinBtnText;
 
 	void ReceiveMsg() override;
 

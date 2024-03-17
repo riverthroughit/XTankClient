@@ -2,7 +2,6 @@
 
 #include "ComponentManager.h"
 #include "EntityManager.h"
-#include "EventManager.h"
 #include "SystemManager.h"
 #include "Types.h"
 #include <memory>

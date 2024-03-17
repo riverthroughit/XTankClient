@@ -11,6 +11,6 @@ constexpr int MSG_TYPE_SIZE = 4;
 //整个包头大小
 constexpr int MSG_TOTAL_HEAD_SIZE = MSG_HEAD_SIZE + MSG_TYPE_SIZE;
 //接收和发送缓冲大小
-constexpr int BUFFER_SIZE = 1024;
+constexpr int BUFFER_SIZE = 102400;
 //游戏外接受消息周期 ms
 constexpr int OUT_GAME_MSG_TICK = 200;

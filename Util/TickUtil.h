@@ -15,6 +15,8 @@ class TickUtil {
 	float frameTime{};
 	//当前帧进度
 	float percent{};
+	//间隔时间
+	float dt{};
 
 	clock::time_point preTime{};
 	clock::time_point curTime{};
@@ -50,7 +52,8 @@ public:
 		curTime = clock::now();
 		duration dtn = std::chrono::duration_cast<duration>(curTime - preTime);
 		preTime = curTime;
-		frameTime += dtn.count();
+		dt = dtn.count();
+		frameTime += dt;
 
 		if (frameTime > tickTime) {
 			int dframe = frameTime / tickTime;
@@ -72,6 +75,10 @@ public:
 
 	float GetPercent() {
 		return percent;
+	}
+
+	float GetDt() {
+		return dt;
 	}
 
 };

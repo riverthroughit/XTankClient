@@ -12,6 +12,7 @@
 #include "ECS/Component/BulletSpawnComponent.h"
 #include "ECS/Component/BlockComponent.h"
 #include "ECS/Component/BulletComponent.h"
+#include "ECS/Component/RollbackPosComponent.h"
 #include "Config.h"
 
 void EntitySpawnSystem::Tick(float dt)
@@ -47,11 +48,16 @@ void EntitySpawnSystem::Tick(float dt)
 
 }
 
+void EntitySpawnSystem::Init()
+{
+	Tick(0);
+}
+
 void EntitySpawnSystem::BlockSpawn(std::shared_ptr<ENTITY_SPAWN_ARGS::Block> args)
 {
 	Entity block = mWorld->CreateEntity();
 
-	CollisionComponent collComp{ LOGIC_SHAPE::CIRCLE,{CUBE_SIDE_LENTH_FIXED / FixedPoint(2)}};
+	CollisionComponent collComp{ LOGIC_SHAPE::CIRCLE,{BLOCK_RADIUS_FIXED}};
 	ObstacleComponent obsComp{ OBSTACLE::BLOCK };
 	PosComponent posComp{ args->pos , args->direc,args->pos , args->direc };
 	PRenderComponent pRenderComp{ PRENDER_SHAPE::BLOCK };
@@ -79,6 +85,7 @@ void EntitySpawnSystem::TankSpawn(std::shared_ptr<ENTITY_SPAWN_ARGS::Tank> args)
 	PRenderComponent pRenderComp{ PRENDER_SHAPE::TANK };
 	BulletSpawnComponent bulletSpawnComp{ args->direc,true };
 	BlockComponent blockComp{ BLOCK::FRAGILE,false };
+	RollbackPosComponent rollbackPosComp{ Vec2Fixed() };
 	mWorld->AddComponent(tank, attachComp);
 	mWorld->AddComponent(tank, collComp);
 	mWorld->AddComponent(tank, obsComp);
@@ -87,6 +94,7 @@ void EntitySpawnSystem::TankSpawn(std::shared_ptr<ENTITY_SPAWN_ARGS::Tank> args)
 	mWorld->AddComponent(tank, pRenderComp);
 	mWorld->AddComponent(tank, bulletSpawnComp);
 	mWorld->AddComponent(tank, blockComp);
+	mWorld->AddComponent(tank, rollbackPosComp);
 }
 
 void EntitySpawnSystem::BulletSpawn(std::shared_ptr<ENTITY_SPAWN_ARGS::Bullet> args)

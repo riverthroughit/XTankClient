@@ -97,12 +97,12 @@ void PaintWidget::DrawEntityCollision(PRENDER_SHAPE::Type shape, Vec2f pos, QPai
 {
 
 	//圆半径
-	int blockR = logicToScreen(CUBE_SIDE_LENTH / 2);
-	int tankR = logicToScreen(TANK_RADIUS);
-	int bulletR = logicToScreen(BULLET_RADIUS);
+	const static int blockR = logicToScreen(BLOCK_RADIUS) + 0.5;
+	const static int tankR = logicToScreen(TANK_RADIUS);
+	const static int bulletR = logicToScreen(BULLET_RADIUS);
 
 	//四舍五入 不然可能抖动
-	int x = pos.x + 0.5, y = pos.y + 0.5;
+	int x = std::round(pos.x), y = std::round(pos.y);
 
 	switch (shape)
 	{

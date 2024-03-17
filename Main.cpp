@@ -9,20 +9,6 @@
 
 int main(int argc, char* argv[]) {
 
-    //QApplication a(argc, argv);
-
-    //ThreadManager::Instance().InvokeGameThread();
-
-    //PaintWidget paintWidget;
-    //paintWidget.SetWorld(ThreadManager::Instance().GetXTankWorld());
-    //paintWidget.show();
-
-    //int res = a.exec();
-
-    //ThreadManager::Instance().ShutDownGameThread();
-
-    //return res;
-
     ThreadManager::Instance().InvokeSocketThread();
 
     //·Ö±æÂÊËõ·Å
