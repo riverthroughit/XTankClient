@@ -8,7 +8,7 @@
 struct CommandComponent {
 	
 	//命令产生时的逻辑帧id
-	unsigned int frameId;
+	unsigned int frameId{};
 	//命令类型
 	BUTTON::Type cmd{ BUTTON::NONE };
 

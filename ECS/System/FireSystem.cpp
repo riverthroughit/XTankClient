@@ -13,7 +13,9 @@ void FireSystem::Tick(float dt)
 {
 	auto& entitySpawnComp = mWorld->GetSingletonComponent<EntitySpawnComponent>();
 	for (Entity entity : mEntities) {
+		
 		auto& cmdComp = mWorld->GetComponent<CommandComponent>(entity);
+		
 		if (cmdComp.cmd == BUTTON::FIRE) {
 
 			auto& playerComp = mWorld->GetComponent<PlayerComponent>(entity);

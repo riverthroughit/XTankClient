@@ -48,29 +48,40 @@ void SocketSystem::Init()
 void SocketSystem::Tick(float dt)
 {
 	auto& socketComp = mWorld->GetSingletonComponent<SocketComponent>();
-	socketComp.hasNewCmdMsg = false;
 	//收
-	MessageData msgData = ReceiveMsg();
+	
+	//接受当前已到达的所有命令
+	while (1) {
+		MessageData msgData = ReceiveMsg();
+		if (msgData.type == XTankMsg::NONE) {
+			break;
+		}
+		else if (msgData.type == XTankMsg::GAME_FORWARD_NTF) {
+			PlayersCommand cmd = GetCmdFromMsgData(msgData);
 
-	if (msgData.type == XTankMsg::GAME_FORWARD_NTF) {
-		UpdatePlayersCmd(msgData);
+			//防止收到重复命令 (追帧时)
+			assert(cmd.frameId >= socketComp.curServerFrameId);
+			socketComp.playersCmdsBuffer.push_back(cmd);
+
+		}
 	}
 
-	//发
-	SendLocalPlayerCmd();
-}
+	UpdateCurPlayersCmd();
 
-void SocketSystem::TickInChasing(float dt)
-{
-	MessageData msgData = ReceiveMsg();
-	if (msgData.type == XTankMsg::GAME_FORWARD_NTF) {
-		UpdatePlayersCmdInChasing(msgData);
+	//追帧时不发送本地玩家操作
+	if (IsChasingEnd()) {
+
+		//是否为中途加入开局追帧
+		if (!socketComp.isCutInChasing) {
+			SendLocalPlayerCmd();
+		}
+		else {
+			socketComp.isCutInChasing = false;
+			//通知服务器追帧完成
+			MsgSendQueue::Instance().SendPlayerChaseUpNtf();
+		}	
 	}
-
-	auto& socketComp = mWorld->GetSingletonComponent<SocketComponent>();
-	socketComp.hasNewCmdMsg = true;
-	socketComp.curPlayersCmd = socketComp.chasingCmds[socketComp.chasingFrameId];
-	++socketComp.chasingFrameId;
+	
 }
 
 void SocketSystem::WaitStart()
@@ -91,7 +102,7 @@ void SocketSystem::WaitStart()
 		else if (msgData.type == XTankMsg::PLAYER_CUT_IN_NTF) {
 			//该玩家为中途加入 获取其房间内id以及追帧信息
 
-			SetCutInData(msgData);
+			InitCutInData(msgData);
 
 			break;
 
@@ -103,14 +114,23 @@ bool SocketSystem::NeedChasing()
 {
 	auto& socketComp = mWorld->GetSingletonComponent<SocketComponent>();
 
-	return !socketComp.chasingCmds.empty();
+	return !socketComp.playersCmdsBuffer.empty();
 }
 
 bool SocketSystem::IsChasingEnd()
 {
 	auto& socketComp = mWorld->GetSingletonComponent<SocketComponent>();
 
-	return socketComp.chasingFrameId >= socketComp.chasingCmds.size();
+	return socketComp.playersCmdsBuffer.empty();
+}
+
+float SocketSystem::GetTickTimeBasedOnChasing()
+{
+	auto& socketComp = mWorld->GetSingletonComponent<SocketComponent>();
+
+	int bufferSize = socketComp.playersCmdsBuffer.size();
+	float tick = LOCKSTEP_TICK / (bufferSize + 1);
+	return MIN_CHASING_TICK > tick ? MIN_CHASING_TICK : tick;
 }
 
 MessageData SocketSystem::ReceiveMsg()
@@ -119,50 +139,54 @@ MessageData SocketSystem::ReceiveMsg()
 
 }
 
-
-void SocketSystem::UpdatePlayersCmd(const MessageData& msgData)
+PlayersCommand SocketSystem::GetCmdFromMsgData(const MessageData& msgData)
 {
 	auto msgPtr = std::static_pointer_cast<XTankMsg::GameForwardNtf>(msgData.msgPtr);
-	auto& socketComp = mWorld->GetSingletonComponent<SocketComponent>();
 
-	//更新socketComponent中的数据
-	socketComp.hasNewCmdMsg = true;
-	auto& curPlayersCmd = socketComp.curPlayersCmd;
-	curPlayersCmd.frameId = msgPtr->frameid();
-
+	PlayersCommand cmd;
+	cmd.frameId = msgPtr->frameid();
 	const auto& playersCmd = msgPtr->playercmds();
-
-	//更新用户操作指令
 	for (int i = 0; i < playersCmd.size(); ++i) {
 
-		curPlayersCmd.commandArray[i] = static_cast<BUTTON::Type>(playersCmd.Get(i));
+		cmd.commandArray[i] = static_cast<BUTTON::Type>(playersCmd.Get(i));
 	}
 
-	//判断是否有玩家加入指令 若有 则增加保存的玩家数量
-	for (auto cmdType: curPlayersCmd.commandArray) {
-
-		if (cmdType == BUTTON::CUT_IN) {
-			++socketComp.playerNum;
-		}
-	}
+	return cmd;
 }
 
-void SocketSystem::UpdatePlayersCmdInChasing(const MessageData& msgData)
+void SocketSystem::UpdateCurPlayersCmd()
 {
 	auto& socketComp = mWorld->GetSingletonComponent<SocketComponent>();
-	
-	auto msgPtr = std::static_pointer_cast<XTankMsg::GameForwardNtf>(msgData.msgPtr);
-	const auto& playersCmd = msgPtr->playercmds();
-	
-	PlayersCommand curCmd{};
-	curCmd.frameId = msgPtr->frameid();
-	//将新指令添加到追帧数组中
-	for (int i = 0; i < curCmd.commandArray.size(); ++i) {
 
-		curCmd.commandArray[i] = static_cast<BUTTON::Type>(playersCmd.Get(i));
+	if (socketComp.playersCmdsBuffer.empty()) {
+		//当前帧没有收到服务器转发指令
+		socketComp.hasNewCmdMsg = false;
+		socketComp.curPlayersCmd = {};
+		return;
 	}
 
-	socketComp.chasingCmds.push_back(curCmd);
+	socketComp.hasNewCmdMsg = true;
+	socketComp.curPlayersCmd = socketComp.playersCmdsBuffer.front();
+	socketComp.playersCmdsBuffer.pop_front();
+	++socketComp.curServerFrameId;
+
+	//判断是否有玩家加入指令 若有 则增加保存的玩家数量
+	for (auto cmdType : socketComp.curPlayersCmd.commandArray) {
+
+		switch (cmdType)
+		{
+		case BUTTON::CUT_IN:
+			++socketComp.playerNum;
+			break;
+
+		case BUTTON::EXIT:
+			--socketComp.playerNum;
+			break;
+
+		default:
+			break;
+		}
+	}
 }
 
 void SocketSystem::SendLocalPlayerCmd()
@@ -176,11 +200,13 @@ void SocketSystem::SendLocalPlayerCmd()
 
 }
 
-void SocketSystem::SetCutInData(const MessageData& msgData)
+void SocketSystem::InitCutInData(const MessageData& msgData)
 {
 
 	auto msgPtr = std::static_pointer_cast<XTankMsg::PlayerCutInNtf>(msgData.msgPtr);
 	auto& socketComp = mWorld->GetSingletonComponent<SocketComponent>();
+
+	socketComp.isCutInChasing = true;
 
 	//确定本地玩家在房间中的id
 	std::string localIP = SocketClient::Instance().GetLocalIP();
@@ -213,7 +239,7 @@ void SocketSystem::SetCutInData(const MessageData& msgData)
 
 		}
 
-		socketComp.chasingCmds.push_back(cmd);
+		socketComp.playersCmdsBuffer.push_back(cmd);
 
 	}
 }

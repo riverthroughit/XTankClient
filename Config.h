@@ -7,13 +7,13 @@ constexpr int RENDER_FPS{ 60 };
 //逻辑帧刷新率
 constexpr int LOCKSTEP_FPS{ 10 };
 //追帧时刷新率
-constexpr int CHASING_FPS{ LOCKSTEP_FPS * 2 };
+constexpr int MAX_CHASING_FPS{ LOCKSTEP_FPS * 2 };
 //逻辑帧周期
 constexpr float LOCKSTEP_TICK{ 1.0 / LOCKSTEP_FPS * 1000 };
 //渲染帧周期
 constexpr float RENDER_TICK{ 1.0 / RENDER_FPS * 1000 };
 //追帧周期
-constexpr float CHASING_TICK{ 1.0 / CHASING_FPS * 1000 };
+constexpr float MIN_CHASING_TICK{ 1.0 / MAX_CHASING_FPS * 1000 };
 
 //窗口设计宽
 constexpr int SCREEN_DESIGN_WIDTH{ 1280 };
@@ -54,6 +54,8 @@ constexpr float BULLET_ACCSPEED{ 100.f / LOCKSTEP_FPS };
 constexpr int PLAYER_HP = 3;
 //复活冷却时间
 constexpr int RESPAWN_TIME = LOCKSTEP_FPS;
+//玩家延迟销毁时间
+constexpr int PLAYER_DESTROY_LATENCY = 10 * LOCKSTEP_FPS;
 //玩家数量
 constexpr int PLAYER_NUM = 4;
 

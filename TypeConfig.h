@@ -30,7 +30,18 @@ namespace BUTTON {
 		FIRE,
 		IDLE,
 		CUT_IN,	//中途加入
+		EXIT,	//退出
 		MAX,
+	};
+}
+
+namespace PLAYER_STATUS {
+	enum Type {
+		LIVE,
+		DEAD,
+		HIT_OTHER,	//击中别人
+		BE_HIT,	//被击中
+		REVIVING,	//复活中
 	};
 }
 

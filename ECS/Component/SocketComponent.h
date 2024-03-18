@@ -3,6 +3,7 @@
 #include "TypeConfig.h"
 #include <array>
 #include <vector>
+#include <deque>
 
 struct SocketComponent{
 
@@ -20,9 +21,13 @@ struct SocketComponent{
 	//服务器发来的命令
 	PlayersCommand curPlayersCmd{};
 
-	//中途加入服务器下发的命令
-	std::vector<PlayersCommand> chasingCmds;
-	//当前追到的帧id
-	int chasingFrameId{};
+	//当前缓存的命令
+	std::deque<PlayersCommand> playersCmdsBuffer;
+
+	//当前收到的服务器帧id
+	int curServerFrameId{-1};
+
+	//本地玩家是否为 中途加入 且正在第一次追帧
+	bool isCutInChasing{};
 
 };

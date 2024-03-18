@@ -51,7 +51,6 @@ void FrameSystem::Reset()
 	frameComp.percent = 0;
 	frameComp.isNeedTick = false;
 	frameComp.isStart = false;
-	frameComp.preTime = frameComp.curTime = clock::now();
 }
 
 void FrameSystem::SetTickTime(float val)
@@ -59,7 +58,6 @@ void FrameSystem::SetTickTime(float val)
 	auto& frameComp = mWorld->GetSingletonComponent<FrameComponent>();
 
 	frameComp.tickTime = val;
-	Reset();
 }
 
 bool FrameSystem::IsNeedTick()

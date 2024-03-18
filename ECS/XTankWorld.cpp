@@ -158,6 +158,9 @@ void XTankWorld::Init()
 	SetSystemSignature<SpeedChangeSystem>(signature);
 
 	mPlayerSpawnSystem = RegisterSystem<PlayerSpawnSystem>();
+	signature.reset();
+	signature.set(playerCompType);
+	SetSystemSignature<PlayerSpawnSystem>(signature);
 
 	mEntitySpawnSystem = RegisterSystem<EntitySpawnSystem>();
 
@@ -263,7 +266,7 @@ void XTankWorld::SystemTickInDuplicate(float dt, const std::vector<PlayersComman
 void XTankWorld::SystemTickInChasing()
 {
 	//设置为追帧时的频率
-	mFrameSystem->SetTickTime(CHASING_TICK);
+	mFrameSystem->SetTickTime(MIN_CHASING_TICK);
 
 	auto& rollbackComp = GetSingletonComponent<RollbackComponent>();
 	auto& socketComp = GetSingletonComponent<SocketComponent>();
@@ -275,7 +278,7 @@ void XTankWorld::SystemTickInChasing()
 
 		if (mFrameSystem->IsNeedTick()) {
 			
-			mSocketSystem->TickInChasing(dt);
+			mSocketSystem->Tick(dt);
 			
 			rollbackComp.preciseCmd = socketComp.curPlayersCmd;
 
@@ -298,12 +301,11 @@ void XTankWorld::SystemTickInChasing()
 
 	//socketComp.chasingCmds.clear();
 
-	//通知服务器追帧完成
-	MsgSendQueue::Instance().SendPlayerChaseUpNtf();
+	
 
 	//重置更新频率并设置正确的帧id
 	mFrameSystem->SetTickTime(LOCKSTEP_TICK);
-	mFrameSystem->SetFrameId(socketComp.chasingFrameId - 1);
+	mFrameSystem->SetFrameId(socketComp.curServerFrameId);
 
 }
 
@@ -311,10 +313,6 @@ void XTankWorld::Start(const bool& isEnd)
 {
 
 	SystemInit();
-
-	if (mSocketSystem->NeedChasing()) {
-		SystemTickInChasing();
-	}
 
 	while (!isEnd) {
 
@@ -330,6 +328,10 @@ void XTankWorld::Start(const bool& isEnd)
 			//预测世界更新
 			mRollbackSystem->TickPredictWorld(dt);
 
+			//若收到不止一条来自服务器的指令 则根据数量更改tick速度 直至追上
+			float curTickTime = mSocketSystem->GetTickTimeBasedOnChasing();
+
+			mFrameSystem->SetTickTime(curTickTime);
 		}
 
 		//用预测的世界渲染

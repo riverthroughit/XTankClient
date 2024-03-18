@@ -10,6 +10,7 @@ public:
 
 private:
 
-	void CreatePlayerEntity(int id);
+	void CreatePlayerEntity(int localId);
 
+	void RemovePlayerEntity(int localId);
 };

@@ -59,22 +59,22 @@ void BulletHitSystem::HitBlock(Entity bulletId, Entity blockId)
 void BulletHitSystem::HitTank(Entity bulletId, Entity tankId)
 {
 
-	auto& attachComp = mWorld->GetComponent<AttachComponent>(bulletId);
-	auto& playerComp = mWorld->GetComponent<PlayerComponent>(attachComp.ownerId);
-	auto& speedComp = mWorld->GetComponent<SpeedComponent>(playerComp.charId);
+	auto& myAttachComp = mWorld->GetComponent<AttachComponent>(bulletId);
+	auto& myPlayerComp = mWorld->GetComponent<PlayerComponent>(myAttachComp.ownerId);
+
 	//若是自身的坦克则直接忽略
-	if (playerComp.charId == tankId) {
+	if (myPlayerComp.charId == tankId) {
 		return;
 	}
 
-	//增加自身玩家分数
-	++playerComp.score;
-	//减少对方玩家生命值
-	attachComp = mWorld->GetComponent<AttachComponent>(tankId);
-	playerComp = mWorld->GetComponent<PlayerComponent>(attachComp.ownerId);
-	--playerComp.hp;
-	//设置对方复活时间
-	playerComp.respawnTime = RESPAWN_TIME;
+	//设置自身玩家状态
+	myPlayerComp.status = PLAYER_STATUS::HIT_OTHER;
+
+
+	//设置对方状态
+	auto& hisAttachComp = mWorld->GetComponent<AttachComponent>(tankId);
+	auto& hisPlayerComp = mWorld->GetComponent<PlayerComponent>(hisAttachComp.ownerId);
+	hisPlayerComp.status = PLAYER_STATUS::BE_HIT;
 
 	HitBlock(bulletId, tankId);
 }
