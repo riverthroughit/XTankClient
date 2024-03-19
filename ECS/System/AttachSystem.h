@@ -2,11 +2,9 @@
 
 #include "ECS/System.h"
 
-class BulletHitSystem :public System<BulletHitSystem> {
+class AttachSystem :public System<AttachSystem> {
 
 public:
 	virtual void Tick(float dt) override;
-
-private:
 
 };

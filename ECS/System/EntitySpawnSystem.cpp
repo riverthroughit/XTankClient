@@ -10,9 +10,10 @@
 #include "ECS/Component/PRenderComponent.h"
 #include "ECS/Component/SpeedComponent.h"
 #include "ECS/Component/BulletSpawnComponent.h"
-#include "ECS/Component/BlockComponent.h"
 #include "ECS/Component/BulletComponent.h"
 #include "ECS/Component/RollbackPosComponent.h"
+#include "ECS/Component/SideComponent.h"
+#include "ECS/Component/HealthComponent.h"
 #include "Config.h"
 
 void EntitySpawnSystem::Tick(float dt)
@@ -60,13 +61,18 @@ void EntitySpawnSystem::BlockSpawn(std::shared_ptr<ENTITY_SPAWN_ARGS::Block> arg
 	CollisionComponent collComp{ LOGIC_SHAPE::CIRCLE,{BLOCK_RADIUS_FIXED}};
 	ObstacleComponent obsComp{ OBSTACLE::BLOCK };
 	PosComponent posComp{ args->pos , args->direc,args->pos , args->direc };
-	PRenderComponent pRenderComp{ PRENDER_SHAPE::BLOCK };
-	BlockComponent blockComp{ args->blockType,false };
+	PRenderComponent pRenderComp{ PRENDER_SHAPE::BLOCK };	
+	SideComponent sideComp;
+	HealthComponent healthComp;
+	healthComp.type = args->blockType == BLOCK::HARD ? HEALTH::SUPER : HEALTH::NORMAL;
+	healthComp.hp = BLOCK_HP;
+
 	mWorld->AddComponent(block, collComp);
 	mWorld->AddComponent(block, obsComp);
 	mWorld->AddComponent(block, posComp);
 	mWorld->AddComponent(block, pRenderComp);
-	mWorld->AddComponent(block, blockComp);
+	mWorld->AddComponent(block, sideComp);
+	mWorld->AddComponent(block, healthComp);
 }
 
 void EntitySpawnSystem::TankSpawn(std::shared_ptr<ENTITY_SPAWN_ARGS::Tank> args)
@@ -84,8 +90,10 @@ void EntitySpawnSystem::TankSpawn(std::shared_ptr<ENTITY_SPAWN_ARGS::Tank> args)
 	SpeedComponent speedComp{ Vec2Fixed(),TANK_SPEED_FIXED,Vec2Fixed(),TANK_ACCSPEED_FIXED };
 	PRenderComponent pRenderComp{ PRENDER_SHAPE::TANK };
 	BulletSpawnComponent bulletSpawnComp{ args->direc,true };
-	BlockComponent blockComp{ BLOCK::FRAGILE,false };
 	RollbackPosComponent rollbackPosComp{ Vec2Fixed() };
+	SideComponent sideComp{ args->ownerId };
+	HealthComponent healthComp{ HEALTH::NORMAL,TANK_HP };
+
 	mWorld->AddComponent(tank, attachComp);
 	mWorld->AddComponent(tank, collComp);
 	mWorld->AddComponent(tank, obsComp);
@@ -93,8 +101,9 @@ void EntitySpawnSystem::TankSpawn(std::shared_ptr<ENTITY_SPAWN_ARGS::Tank> args)
 	mWorld->AddComponent(tank, speedComp);
 	mWorld->AddComponent(tank, pRenderComp);
 	mWorld->AddComponent(tank, bulletSpawnComp);
-	mWorld->AddComponent(tank, blockComp);
 	mWorld->AddComponent(tank, rollbackPosComp);
+	mWorld->AddComponent(tank, sideComp);
+	mWorld->AddComponent(tank, healthComp);
 }
 
 void EntitySpawnSystem::BulletSpawn(std::shared_ptr<ENTITY_SPAWN_ARGS::Bullet> args)
@@ -106,10 +115,15 @@ void EntitySpawnSystem::BulletSpawn(std::shared_ptr<ENTITY_SPAWN_ARGS::Bullet> a
 	PosComponent posComp{ args->pos , args->speedDirec,args->pos , args->speedDirec };
 	SpeedComponent speedComp{ args->speedDirec,BULLET_SPEED_FIXED,args->speedDirec ,BULLET_ACCSPEED_FIXED };
 	PRenderComponent pRenderComp{ PRENDER_SHAPE::BULLET };
+	SideComponent sideComp{ args->ownerId };
+	HealthComponent healthComp{ HEALTH::NORMAL,BULLET_HP };
+
 	mWorld->AddComponent(bullet, attachComp);
 	mWorld->AddComponent(bullet, collComp);
 	mWorld->AddComponent(bullet, posComp);
 	mWorld->AddComponent(bullet, speedComp);
 	mWorld->AddComponent(bullet, pRenderComp);
 	mWorld->AddComponent(bullet, BulletComponent());
+	mWorld->AddComponent(bullet, sideComp);
+	mWorld->AddComponent(bullet, healthComp);
 }

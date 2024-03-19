@@ -3,6 +3,7 @@
 #include "Types.h"
 #include <set>
 #include <memory>
+#include <vector>
 
 class World;
 
@@ -23,6 +24,14 @@ public:
 
 	void SetWorld(World* world) { mWorld = world; };
 	World* GetWorld() { return mWorld; };
+
+	template<typename T>
+	void RemoveEntitiesComponent() {
+		std::vector<Entity> entities(mEntities.begin(), mEntities.end());
+		for (Entity entity : entities) {
+			mWorld->RemoveComponent<T>(entity);
+		}
+	}
 
 	virtual std::unique_ptr<SystemAbstract> GetACopy() const = 0;
 };

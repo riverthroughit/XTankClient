@@ -45,6 +45,7 @@ namespace PLAYER_STATUS {
 	};
 }
 
+
 //房间内所有玩家一帧的操作
 struct PlayersCommand {
 
@@ -89,6 +90,13 @@ namespace BLOCK {
 	enum Type {
 		HARD,
 		FRAGILE,
+	};
+}
+
+namespace HEALTH {
+	enum Type {
+		NORMAL,
+		SUPER,	//无敌
 	};
 }
 

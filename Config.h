@@ -52,6 +52,11 @@ constexpr float BULLET_ACCSPEED{ 100.f / LOCKSTEP_FPS };
 
 //玩家hp
 constexpr int PLAYER_HP = 3;
+constexpr int TANK_HP = 1;
+constexpr int BULLET_HP = 1;
+constexpr int BLOCK_HP = 1;
+constexpr int BULLET_DAMAGE = 1;
+
 //复活冷却时间
 constexpr int RESPAWN_TIME = LOCKSTEP_FPS;
 //玩家延迟销毁时间

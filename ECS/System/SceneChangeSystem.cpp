@@ -1,22 +1,11 @@
 #include "SceneChangeSystem.h"
 #include "ECS/World.h"
-#include "ECS/Component/BlockComponent.h"
 #include "ECS/Component/RandComponent.h"
 #include "ECS/Component/DestroyComponent.h"
 #include "ECS/Component/EntitySpawnComponent.h"
 #include "Config.h"
 #include "TypeConfig.h"
 #include <memory>
-
-void SceneChangeSystem::Tick(float dt)
-{
-	for (Entity entity : mEntities) {
-		auto& blockComp = mWorld->GetComponent<BlockComponent>(entity);
-		if (blockComp.blockType == BLOCK::FRAGILE && blockComp.isHit == true) {
-			mWorld->AddComponent(entity, DestroyComponent());
-		}
-	}
-}
 
 void SceneChangeSystem::Init()
 {

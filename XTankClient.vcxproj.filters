@@ -287,9 +287,6 @@
     <ClInclude Include="ECS\Component\BulletComponent.h">
       <Filter>Source Files\ECS\Component</Filter>
     </ClInclude>
-    <ClInclude Include="ECS\Component\BlockComponent.h">
-      <Filter>Source Files\ECS\Component</Filter>
-    </ClInclude>
     <ClInclude Include="ECS\System\SceneChangeSystem.h">
       <Filter>Source Files\ECS\System</Filter>
     </ClInclude>
@@ -337,6 +334,24 @@
     </ClInclude>
     <ClInclude Include="Protobuf\XTankMsg.pb.h">
       <Filter>Source Files\Protobuf</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Component\HitComponent.h">
+      <Filter>Source Files\ECS\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Component\BeHitComponent.h">
+      <Filter>Source Files\ECS\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\System\DamageSystem.h">
+      <Filter>Source Files\ECS\System</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\System\AttachSystem.h">
+      <Filter>Source Files\ECS\System</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Component\HealthComponent.h">
+      <Filter>Source Files\ECS\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Component\SideComponent.h">
+      <Filter>Source Files\ECS\Component</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -495,6 +510,12 @@
     </ClCompile>
     <ClCompile Include="Protobuf\XTankMsg.pb.cc">
       <Filter>Source Files\Protobuf</Filter>
+    </ClCompile>
+    <ClCompile Include="ECS\System\DamageSystem.cpp">
+      <Filter>Source Files\ECS\System</Filter>
+    </ClCompile>
+    <ClCompile Include="ECS\System\AttachSystem.cpp">
+      <Filter>Source Files\ECS\System</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

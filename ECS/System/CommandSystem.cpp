@@ -20,7 +20,7 @@ void CommandSystem::Tick(float dt)
 		cmdComp.frameId = frameComp.frameId;
 
 		//回滚组件中得到的命令
-		cmdComp.cmd = rollbackComp.preciseCmd.commandArray[playerComp.playerId];
+		cmdComp.cmd = rollbackComp.preciseCmd.commandArray[playerComp.localId];
 
 	}
 }

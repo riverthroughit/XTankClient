@@ -5,7 +5,7 @@
 
 struct PlayerComponent {
 	//玩家房间内id
-	unsigned int playerId{};
+	unsigned int localId{};
 	//操控的entity
 	Entity charId{};
 	//玩家状态

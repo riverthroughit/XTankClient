@@ -22,7 +22,8 @@ class BulletHitSystem;
 class PlayerStateSystem;
 class SceneChangeSystem;
 class RollbackSystem;
-
+class AttachSystem;
+class DamageSystem;
 
 class XTankWorld :public World {
 
@@ -44,6 +45,8 @@ private:
 	PlayerStateSystem* mPlayerStateSystem{};
 	SceneChangeSystem* mSceneChangeSystem{};
 	RollbackSystem* mRollbackSystem{};
+	AttachSystem* mAttachSystem{};
+	DamageSystem* mDamageSystem{};
 
 
 private:
@@ -86,9 +89,6 @@ public:
 
 	//预测世界中各个系统更新
 	void SystemTickInDuplicate(float dt,const std::vector<PlayersCommand>& playersCmds);
-
-	//中途加入 追帧
-	void SystemTickInChasing();
 
 	void Start(const bool& isEnd);
 

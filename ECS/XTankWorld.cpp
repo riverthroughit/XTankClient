@@ -17,6 +17,8 @@
 #include "ECS/System/PlayerStateSystem.h"
 #include "ECS/System/SceneChangeSystem.h"
 #include "ECS/System/RollbackSystem.h"
+#include "ECS/System/DamageSystem.h"
+#include "ECS/System/AttachSystem.h"
 
 
 #include "ECS/Component/AttachComponent.h"
@@ -34,11 +36,14 @@
 #include "ECS/Component/BulletSpawnComponent.h"
 #include "ECS/Component/DestroyComponent.h"
 #include "ECS/Component/BulletComponent.h"
-#include "ECS/Component/BlockComponent.h"
 #include "ECS/Component/RandComponent.h"
 #include "ECS/Component/EntitySpawnComponent.h"
 #include "ECS/Component/RollbackComponent.h"
 #include "ECS/Component/RollbackPosComponent.h"
+#include "ECS/Component/HitComponent.h"
+#include "ECS/Component/BeHitComponent.h"
+#include "ECS/Component/HealthComponent.h"
+#include "ECS/Component/SideComponent.h"
 #include "Config.h"
 #include <thread>
 #include "QtWidget/WidgetManager.h"
@@ -64,6 +69,8 @@ void XTankWorld::ResetSystemPtr()
 	mPlayerStateSystem = GetSystem<PlayerStateSystem>();
 	mSceneChangeSystem = GetSystem<SceneChangeSystem>();
 	mRollbackSystem = GetSystem<RollbackSystem>();
+	mDamageSystem = GetSystem<DamageSystem>();
+	mAttachSystem = GetSystem<AttachSystem>();
 }
 
 void XTankWorld::Init()
@@ -86,11 +93,14 @@ void XTankWorld::Init()
 	RegisterComponent<BulletSpawnComponent>();
 	RegisterComponent<DestroyComponent>();
 	RegisterComponent<BulletComponent>();
-	RegisterComponent<BlockComponent>();
 	RegisterSingletonComponent<RandComponent>();
 	RegisterSingletonComponent<EntitySpawnComponent>();
 	RegisterSingletonComponent<RollbackComponent>();
 	RegisterComponent<RollbackPosComponent>();
+	RegisterComponent<HitComponent>();
+	RegisterComponent<BeHitComponent>();
+	RegisterComponent<HealthComponent>();
+	RegisterComponent<SideComponent>();
 
 	ComponentType attachCompType = GetComponentType<AttachComponent>();
 	ComponentType collisionCompType = GetComponentType<CollisionComponent>();
@@ -103,8 +113,11 @@ void XTankWorld::Init()
 	ComponentType bulletSpawnCompType = GetComponentType<BulletSpawnComponent>();
 	ComponentType destroyCompType = GetComponentType<DestroyComponent>();
 	ComponentType bulletCompType = GetComponentType<BulletComponent>();
-	ComponentType blockCompType = GetComponentType<BlockComponent>();
 	ComponentType rollbackPosCompType = GetComponentType<RollbackPosComponent>();
+	ComponentType hitCompType = GetComponentType<HitComponent>();
+	ComponentType beHitCompType = GetComponentType<BeHitComponent>();
+	ComponentType healthCompType = GetComponentType<HealthComponent>();
+	ComponentType sideCompType = GetComponentType<SideComponent>();
 
 	Signature signature;
 
@@ -181,7 +194,6 @@ void XTankWorld::Init()
 
 	mSceneChangeSystem = RegisterSystem<SceneChangeSystem>();
 	signature.reset();
-	signature.set(blockCompType);
 	SetSystemSignature<SceneChangeSystem>(signature);
 
 	mRollbackSystem = RegisterSystem<RollbackSystem>();
@@ -189,6 +201,17 @@ void XTankWorld::Init()
 	signature.set(posCompType);
 	signature.set(rollbackPosCompType);
 	SetSystemSignature<RollbackSystem>(signature);
+
+	mAttachSystem = RegisterSystem<AttachSystem>();
+	signature.reset();
+	signature.set(attachCompType);
+	SetSystemSignature<AttachSystem>(signature);
+
+	mDamageSystem = RegisterSystem<DamageSystem>();
+	signature.reset();
+	signature.set(healthCompType);
+	signature.set(beHitCompType);
+	SetSystemSignature<DamageSystem>(signature);
 }
 
 void XTankWorld::SystemInit()
@@ -230,11 +253,11 @@ void XTankWorld::SystemTickInLogic(float dt)
 	mMoveSystem->Tick(dt);
 	mFireSystem->Tick(dt);
 	mBulletHitSystem->Tick(dt);
-	mSceneChangeSystem->Tick(dt);
+	mDamageSystem->Tick(dt);
 	mPlayerStateSystem->Tick(dt);
+	mAttachSystem->Tick(dt);
 	mEntityDestroySystem->Tick(dt);
 	mEntitySpawnSystem->Tick(dt);
-
 
 }
 
@@ -254,59 +277,14 @@ void XTankWorld::SystemTickInDuplicate(float dt, const std::vector<PlayersComman
 		mMoveSystem->Tick(dt);
 		mFireSystem->Tick(dt);
 		mBulletHitSystem->Tick(dt);
-		mSceneChangeSystem->Tick(dt);
+		mDamageSystem->Tick(dt);
 		mPlayerStateSystem->Tick(dt);
+		mAttachSystem->Tick(dt);
 		mEntityDestroySystem->Tick(dt);
 		mEntitySpawnSystem->Tick(dt);
 
 		mFrameSystem->AddFrameId();
 	}
-}
-
-void XTankWorld::SystemTickInChasing()
-{
-	//设置为追帧时的频率
-	mFrameSystem->SetTickTime(MIN_CHASING_TICK);
-
-	auto& rollbackComp = GetSingletonComponent<RollbackComponent>();
-	auto& socketComp = GetSingletonComponent<SocketComponent>();
-
-	while (!mSocketSystem->IsChasingEnd()) {
-
-		mFrameSystem->Tick();
-		float dt = mFrameSystem->GetDt();
-
-		if (mFrameSystem->IsNeedTick()) {
-			
-			mSocketSystem->Tick(dt);
-			
-			rollbackComp.preciseCmd = socketComp.curPlayersCmd;
-
-			mCommandSystem->Tick(dt);
-			mCollisionSystem->Tick(dt);
-			mSpeedChangeSystem->Tick(dt);
-			mObstacleSystem->Tick(dt);
-			mMoveSystem->Tick(dt);
-			mFireSystem->Tick(dt);
-			mBulletHitSystem->Tick(dt);
-			mSceneChangeSystem->Tick(dt);
-			mPlayerStateSystem->Tick(dt);
-			mEntityDestroySystem->Tick(dt);
-			mEntitySpawnSystem->Tick(dt);
-			mPRenderBufferSystem->Tick(dt);
-		}
-
-	}
-
-
-	//socketComp.chasingCmds.clear();
-
-	
-
-	//重置更新频率并设置正确的帧id
-	mFrameSystem->SetTickTime(LOCKSTEP_TICK);
-	mFrameSystem->SetFrameId(socketComp.curServerFrameId);
-
 }
 
 void XTankWorld::Start(const bool& isEnd)

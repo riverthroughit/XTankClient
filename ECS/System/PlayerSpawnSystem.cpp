@@ -44,7 +44,7 @@ void PlayerSpawnSystem::CreatePlayerEntity(int localId)
 
 	Entity localPlayer = mWorld->CreateEntity();
 	PlayerComponent playerComp;
-	playerComp.playerId = localId;
+	playerComp.localId = localId;
 	playerComp.status = PLAYER_STATUS::LIVE;
 	playerComp.hp = PLAYER_HP;
 	playerComp.score = 0;
@@ -72,15 +72,15 @@ void PlayerSpawnSystem::RemovePlayerEntity(int localId)
 		
 		auto& playerComp = mWorld->GetComponent<PlayerComponent>(playerEntity);
 		
-		if (playerComp.playerId == localId) {
+		if (playerComp.localId == localId) {
 			//玩家控制的实体可以直接销毁
-			if (playerComp.status == PLAYER_STATUS::LIVE) {
+			if (playerComp.charId != NULL_ENTITY) {
 
 				mWorld->AddComponent<DestroyComponent>(playerComp.charId, DestroyComponent());
 			}
 
 			//延迟销毁玩家本身
-			mWorld->AddComponent<DestroyComponent>(playerEntity, DestroyComponent{ PLAYER_DESTROY_LATENCY });
+			mWorld->AddComponent<DestroyComponent>(playerEntity, DestroyComponent{});
 
 			break;
 		}
