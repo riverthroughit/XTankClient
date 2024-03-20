@@ -35,6 +35,9 @@ private:
 	//判断预测是否成功 若不成功 则用当前权威命令重新预测至当前状态
 	void RollbackPredictCmd();
 
+	//预测下一帧指令
+	void PredictNextCmd();
+
 	//获取预测世界需执行的命令
 	std::vector<PlayersCommand> GetPredictCmds();
 };

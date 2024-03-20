@@ -1,30 +1,16 @@
 #pragma once
 
-#include <chrono>
 #include "Config.h"
+#include "Util/TickUtil.h"
 
 struct FrameComponent {
 
 	//单例组件
 
+	//用于管理客户端逻辑帧id
+	TickUtil clientTick{ LOCKSTEP_TICK };
 
-	using clock = std::chrono::high_resolution_clock;
-	using duration = std::chrono::duration<float, std::milli>;
-
-	//周期
-	float tickTime{ LOCKSTEP_TICK };
-	//当前帧id
-	int frameId{-1};
-	//当前帧内的时间
-	float dt{ LOCKSTEP_TICK };
-	//当前帧进度
-	float percent{};
-	//是否经过一个逻辑帧周期
-	bool isNeedTick{};
-
-	clock::time_point preTime{};
-	clock::time_point curTime{};
-
-	bool isStart{};
+	//服务器当前逻辑帧id
+	int serverFrameId{ -1 };
 
 };

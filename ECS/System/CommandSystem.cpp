@@ -17,7 +17,7 @@ void CommandSystem::Tick(float dt)
 		PlayerComponent& playerComp = mWorld->GetComponent<PlayerComponent>(entity);
 		CommandComponent& cmdComp = mWorld->GetComponent<CommandComponent>(entity);
 
-		cmdComp.frameId = frameComp.frameId;
+		cmdComp.frameId = frameComp.serverFrameId;
 
 		//回滚组件中得到的命令
 		cmdComp.cmd = rollbackComp.preciseCmd.commandArray[playerComp.localId];

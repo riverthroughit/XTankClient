@@ -6,7 +6,7 @@ class TickUtil {
 
 	using clock = std::chrono::high_resolution_clock;
 	using duration = std::chrono::duration<float, std::milli>;
-	
+
 	//周期
 	float tickTime{};
 	//当前帧id
@@ -17,6 +17,8 @@ class TickUtil {
 	float percent{};
 	//间隔时间
 	float dt{};
+	//是否经过一帧 需要更新
+	bool needTick{};
 
 	clock::time_point preTime{};
 	clock::time_point curTime{};
@@ -24,7 +26,8 @@ class TickUtil {
 	bool isStart{};
 
 public:
-	TickUtil() {
+	TickUtil(float tkTime) {
+		tickTime = tkTime;
 		Reset();
 	}
 
@@ -33,12 +36,13 @@ public:
 		frameId = -1;
 		percent = 0;
 		isStart = false;
-		preTime = curTime = clock::now();
+
 	}
 
 	void SetTickTime(float val) {
+
 		tickTime = val;
-		Reset();
+
 	}
 
 
@@ -49,19 +53,25 @@ public:
 			preTime = clock::now();
 		}
 
+		needTick = false;
 		curTime = clock::now();
 		duration dtn = std::chrono::duration_cast<duration>(curTime - preTime);
 		preTime = curTime;
-		dt = dtn.count();
-		frameTime += dt;
+		frameTime += dtn.count();
+		dt = frameTime;
 
 		if (frameTime > tickTime) {
+			needTick = true;
 			int dframe = frameTime / tickTime;
 			frameTime -= dframe * tickTime;
 			frameId += dframe;
 		}
 
 		percent = frameTime / tickTime;
+	}
+
+	bool NeedTick() {
+		return needTick;
 	}
 
 	//设置一次延迟

@@ -8,6 +8,8 @@
 #include "ECS/Component/InputComponent.h"
 #include "ECS/Component/FrameComponent.h"
 #include "ECS/Component/RandComponent.h"
+#include "ECS/Component/RollbackComponent.h"
+#include "ECS/ECSUtil.h"
 
 using google::protobuf::Message;
 
@@ -27,32 +29,28 @@ void SocketSystem::Init()
 	auto& randComp = mWorld->GetSingletonComponent<RandComponent>();
 	randComp.seed = msgPtr->randseed();
 
-	
 	const auto& playerIds = msgPtr->playerids();
 	socketComp.playerNum = playerIds.size();
 
-	std::string localIP = SocketClient::Instance().GetLocalIP();
-	unsigned long pid = GetCurrentProcessId();
-
-	//确定本地玩家在房间中的id
-	for (int i = 0; i < socketComp.playerNum; ++i) {
-		auto& playerId = playerIds.Get(i);
-		if (localIP == playerId.ip() && pid == playerId.pid()) {
-			socketComp.localPlayerId = i;
-			break;
-		}
-	}
+	SetLocalPlayerIdByMsg(playerIds);
 
 }
 
 void SocketSystem::Tick(float dt)
 {
+	ReceiveCmd();
+	SendCmd();
+
+}
+
+void SocketSystem::ReceiveCmd()
+{
 	auto& socketComp = mWorld->GetSingletonComponent<SocketComponent>();
-	//收
-	
+
 	//接受当前已到达的所有命令
+
 	while (1) {
-		MessageData msgData = ReceiveMsg();
+		MessageData msgData = MsgRecvQueue::Instance().GetAndPopTopMsg();
 		if (msgData.type == XTankMsg::NONE) {
 			break;
 		}
@@ -60,28 +58,46 @@ void SocketSystem::Tick(float dt)
 			PlayersCommand cmd = GetCmdFromMsgData(msgData);
 
 			//防止收到重复命令 (追帧时)
-			assert(cmd.frameId >= socketComp.curServerFrameId);
+			assert(cmd.frameId > socketComp.curServerFrameId);
 			socketComp.playersCmdsBuffer.push_back(cmd);
-
+			//break;
 		}
 	}
 
 	UpdateCurPlayersCmd();
 
-	//追帧时不发送本地玩家操作
+}
+
+void SocketSystem::SendCmd()
+{
+
+	auto& socketComp = mWorld->GetSingletonComponent<SocketComponent>();
+
+	//追帧时 不发送本地玩家操作     
 	if (IsChasingEnd()) {
 
 		//是否为中途加入开局追帧
 		if (!socketComp.isCutInChasing) {
-			SendLocalPlayerCmd();
+
+			//auto& rollbackComp = mWorld->GetSingletonComponent<RollbackComponent>();
+			////达到预测上限时不发送
+			//if (!IsReachPredictLimit(rollbackComp)) {
+
+				SendLocalPlayerCmd();
+			//}
 		}
 		else {
 			socketComp.isCutInChasing = false;
 			//通知服务器追帧完成
 			MsgSendQueue::Instance().SendPlayerChaseUpNtf();
-		}	
+		}
 	}
-	
+}
+
+bool SocketSystem::HasNewCmdMsg()
+{
+	auto& socketComp = mWorld->GetSingletonComponent<SocketComponent>();
+	return socketComp.hasNewCmdMsg;
 }
 
 void SocketSystem::WaitStart()
@@ -133,11 +149,6 @@ float SocketSystem::GetTickTimeBasedOnChasing()
 	return MIN_CHASING_TICK > tick ? MIN_CHASING_TICK : tick;
 }
 
-MessageData SocketSystem::ReceiveMsg()
-{
-	return MsgRecvQueue::Instance().GetAndPopTopMsg();
-
-}
 
 PlayersCommand SocketSystem::GetCmdFromMsgData(const MessageData& msgData)
 {
@@ -167,8 +178,8 @@ void SocketSystem::UpdateCurPlayersCmd()
 
 	socketComp.hasNewCmdMsg = true;
 	socketComp.curPlayersCmd = socketComp.playersCmdsBuffer.front();
+	socketComp.curServerFrameId = socketComp.curPlayersCmd.frameId;
 	socketComp.playersCmdsBuffer.pop_front();
-	++socketComp.curServerFrameId;
 
 	//判断是否有玩家加入指令 若有 则增加保存的玩家数量
 	for (auto cmdType : socketComp.curPlayersCmd.commandArray) {
@@ -192,11 +203,20 @@ void SocketSystem::UpdateCurPlayersCmd()
 void SocketSystem::SendLocalPlayerCmd()
 {
 
-	auto& inputComp = mWorld->GetSingletonComponent<InputComponent>();
 
 	auto& frameComp = mWorld->GetSingletonComponent<FrameComponent>();
+	int clientFrameId = frameComp.clientTick.GetFrameId();
 
-	MsgSendQueue::Instance().SendPlayerInputNtf(frameComp.frameId, inputComp.curBtn);
+	auto& socketComp = mWorld->GetSingletonComponent<SocketComponent>();
+
+	//限制每帧只能发送一次
+	if (socketComp.lastSendFrameId < clientFrameId) {
+		
+		socketComp.lastSendFrameId = clientFrameId;
+
+		auto& inputComp = mWorld->GetSingletonComponent<InputComponent>();
+		MsgSendQueue::Instance().SendPlayerInputNtf(clientFrameId, inputComp.curBtn);
+	}
 
 }
 
@@ -208,19 +228,9 @@ void SocketSystem::InitCutInData(const MessageData& msgData)
 
 	socketComp.isCutInChasing = true;
 
-	//确定本地玩家在房间中的id
-	std::string localIP = SocketClient::Instance().GetLocalIP();
-	unsigned long pid = GetCurrentProcessId();
-	auto& playerIds = msgPtr->playerids();
-	
-	for (int i = 0; i < playerIds.size(); ++i) {
-		auto& playerId = playerIds.Get(i);
-		if (localIP == playerId.ip() && pid == playerId.pid()) {
-			socketComp.localPlayerId = i;
-			break;
-		}
-	}
+	SetLocalPlayerIdByMsg(msgPtr->playerids());
 
+	socketComp.curServerFrameId = msgPtr->cmds().size() - 1;
 
 	//保存追帧信息
 	PlayersCommand cmd;
@@ -241,6 +251,24 @@ void SocketSystem::InitCutInData(const MessageData& msgData)
 
 		socketComp.playersCmdsBuffer.push_back(cmd);
 
+	}
+}
+
+void SocketSystem::SetLocalPlayerIdByMsg(const google::protobuf::RepeatedPtrField<XTankMsg::PlayerId>& playerIds)
+{
+
+	auto& socketComp = mWorld->GetSingletonComponent<SocketComponent>();
+
+	//确定本地玩家在房间中的id
+	std::string localIP = SocketClient::Instance().GetLocalIP();
+	unsigned long pid = GetCurrentProcessId();
+
+	for (int i = 0; i < playerIds.size(); ++i) {
+		auto& playerId = playerIds.Get(i);
+		if (localIP == playerId.ip() && pid == playerId.pid()) {
+			socketComp.localPlayerId = i;
+			break;
+		}
 	}
 }
 

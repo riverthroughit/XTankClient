@@ -14,6 +14,8 @@ constexpr float LOCKSTEP_TICK{ 1.0 / LOCKSTEP_FPS * 1000 };
 constexpr float RENDER_TICK{ 1.0 / RENDER_FPS * 1000 };
 //追帧周期
 constexpr float MIN_CHASING_TICK{ 1.0 / MAX_CHASING_FPS * 1000 };
+//最多预测帧数
+constexpr int MAX_PREDICT_FRAME{ 6 };
 
 //窗口设计宽
 constexpr int SCREEN_DESIGN_WIDTH{ 1280 };

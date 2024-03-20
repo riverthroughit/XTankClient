@@ -12,24 +12,10 @@
 void CollisionSystem::Tick(float dt)
 {
 
-	TickUtil tickUtil;
-	tickUtil.SetTickTime(1000);
-	float dts[3]{0};
-
-	tickUtil.Tick();
-	//UpdateGrids();
-	tickUtil.Tick();
-	dts[0] = tickUtil.GetDt();
 	
-	tickUtil.Tick();
 	ClearHitEntities();
-	tickUtil.Tick();
-	dts[1] = tickUtil.GetDt();
 
-	tickUtil.Tick();
 	UpdateCollision();
-	tickUtil.Tick();
-	dts[2] = tickUtil.GetDt();
 }
 
 void CollisionSystem::Init()

@@ -27,6 +27,9 @@ struct SocketComponent{
 	//当前收到的服务器帧id
 	int curServerFrameId{-1};
 
+	//上一次发送本地操作时的帧id
+	int lastSendFrameId{ -1 };
+
 	//本地玩家是否为 中途加入 且正在第一次追帧
 	bool isCutInChasing{};
 

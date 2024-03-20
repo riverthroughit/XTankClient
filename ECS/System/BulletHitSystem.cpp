@@ -35,7 +35,7 @@ void BulletHitSystem::Tick(float dt)
 
 		}
 
-		//若击中了物体 则为其owner添加hitComponent
+		//若击中了物体 则为自身owner添加hitComponent
 		if (!hitComp.beHitEntities.empty()) {
 
 			auto& attachComp = mWorld->GetComponent<AttachComponent>(bullet);

@@ -326,9 +326,6 @@
     <ClInclude Include="Input\KeyboardData.h">
       <Filter>Source Files\Input</Filter>
     </ClInclude>
-    <ClInclude Include="Util\TickUtil.h">
-      <Filter>Source Files\Util</Filter>
-    </ClInclude>
     <ClInclude Include="ECS\Component\RollbackPosComponent.h">
       <Filter>Source Files\ECS\Component</Filter>
     </ClInclude>
@@ -352,6 +349,9 @@
     </ClInclude>
     <ClInclude Include="ECS\Component\SideComponent.h">
       <Filter>Source Files\ECS\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\TickUtil.h">
+      <Filter>Source Files\Util</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

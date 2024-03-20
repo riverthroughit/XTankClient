@@ -3,6 +3,8 @@
 #include "ECS/Component/PosComponent.h"
 #include "ECS/Component/CollisionComponent.h"
 #include "ECS/Component/UniformGridComponent.h"
+#include "ECS/Component/SocketComponent.h"
+#include "ECS/Component/RollbackComponent.h"
 
 void UpdateGridOfEntity(Entity entity,const PosComponent& posComp, 
 	const CollisionComponent& collComp, UniformGridComponent& gridComp)
@@ -74,4 +76,14 @@ void RemoveEntityFromGrid(Entity entity, const PosComponent& posComp,
 			gridComp.mGrids[y][x].erase(entity);
 		}
 	}
+}
+
+bool HasNewCmdMsg(SocketComponent& socketComp)
+{
+	return socketComp.hasNewCmdMsg;
+}
+
+bool IsReachPredictLimit(RollbackComponent& rollbackComp)
+{
+	return rollbackComp.predCmdDeq.size() >= rollbackComp.maxPredictTimes;
 }

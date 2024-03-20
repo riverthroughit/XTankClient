@@ -218,10 +218,10 @@ void XTankWorld::SystemInit()
 {
 
 	mFrameSystem->Init();
-	//初始化场景
-	mSceneChangeSystem->Init();
 	//获取初始信息
 	mSocketSystem->Init();
+	//初始化场景
+	mSceneChangeSystem->Init();
 	//生成玩家
 	mPlayerSpawnSystem->Init();
 
@@ -241,34 +241,36 @@ void XTankWorld::SystemInit()
 void XTankWorld::SystemTickInLogic(float dt)
 {
 
+	static int a, b;
+	auto& inputComp = GetSingletonComponent<InputComponent>();
+	auto& frameComp = GetSingletonComponent<FrameComponent>();
+	auto& socketComp = GetSingletonComponent<SocketComponent>();
+	auto& rollbackComp = GetSingletonComponent<RollbackComponent>();
+
+
+	mFrameSystem->Tick(dt);
 	mInputSystem->Tick(dt);
 	mSocketSystem->Tick(dt);
+
+	if (inputComp.curBtn == BUTTON::RIGHT) {
+		a = frameComp.clientTick.GetFrameId();
+	}
+	if (socketComp.curPlayersCmd.commandArray[socketComp.localPlayerId] == BUTTON::RIGHT) {
+		b = frameComp.clientTick.GetFrameId();
+	}
+
 	mRollbackSystem->Tick(dt);
-	mPlayerSpawnSystem->Tick(dt);
 
-	mCommandSystem->Tick(dt);
-	mCollisionSystem->Tick(dt);
-	mSpeedChangeSystem->Tick(dt);
-	mObstacleSystem->Tick(dt);
-	mMoveSystem->Tick(dt);
-	mFireSystem->Tick(dt);
-	mBulletHitSystem->Tick(dt);
-	mDamageSystem->Tick(dt);
-	mPlayerStateSystem->Tick(dt);
-	mAttachSystem->Tick(dt);
-	mEntityDestroySystem->Tick(dt);
-	mEntitySpawnSystem->Tick(dt);
 
-}
 
-void XTankWorld::SystemTickInDuplicate(float dt, const std::vector<PlayersCommand>& playersCmds)
-{
 
-	//设置命令
-	auto& rollbackComp = GetSingletonComponent<RollbackComponent>();
-	for (const PlayersCommand& cmd : playersCmds) {
-		
-		rollbackComp.preciseCmd = cmd;
+
+
+
+	//有服务器下发命令时才更新主状态
+	if (mSocketSystem->HasNewCmdMsg()) {
+		mFrameSystem->AddServerFrameId();
+		mPlayerSpawnSystem->Tick(dt);
 
 		mCommandSystem->Tick(dt);
 		mCollisionSystem->Tick(dt);
@@ -282,8 +284,33 @@ void XTankWorld::SystemTickInDuplicate(float dt, const std::vector<PlayersComman
 		mAttachSystem->Tick(dt);
 		mEntityDestroySystem->Tick(dt);
 		mEntitySpawnSystem->Tick(dt);
+	}
 
-		mFrameSystem->AddFrameId();
+}
+
+void XTankWorld::SystemTickInDuplicate(float dt, const std::vector<PlayersCommand>& playersCmds)
+{
+
+	//设置命令
+	auto& rollbackComp = GetSingletonComponent<RollbackComponent>();
+	for (const PlayersCommand& cmd : playersCmds) {
+		
+		rollbackComp.preciseCmd = cmd;
+
+		mFrameSystem->AddServerFrameId();
+		mCommandSystem->Tick(dt);
+		mCollisionSystem->Tick(dt);
+		mSpeedChangeSystem->Tick(dt);
+		mObstacleSystem->Tick(dt);
+		mMoveSystem->Tick(dt);
+		mFireSystem->Tick(dt);
+		mBulletHitSystem->Tick(dt);
+		mDamageSystem->Tick(dt);
+		mPlayerStateSystem->Tick(dt);
+		mAttachSystem->Tick(dt);
+		mEntityDestroySystem->Tick(dt);
+		mEntitySpawnSystem->Tick(dt);
+
 	}
 }
 
@@ -292,13 +319,15 @@ void XTankWorld::Start(const bool& isEnd)
 
 	SystemInit();
 
+	TickUtil tickUtil(LOCKSTEP_TICK);
+
 	while (!isEnd) {
 
-		mFrameSystem->Tick();
-		float dt = mFrameSystem->GetDt();
+		tickUtil.Tick();
+		float dt = tickUtil.GetDt();
 
 		//逻辑
-		if (mFrameSystem->IsNeedTick()) {
+		if (tickUtil.NeedTick()) {
 			
 			//真实世界更新
 			SystemTickInLogic(dt);
@@ -309,7 +338,7 @@ void XTankWorld::Start(const bool& isEnd)
 			//若收到不止一条来自服务器的指令 则根据数量更改tick速度 直至追上
 			float curTickTime = mSocketSystem->GetTickTimeBasedOnChasing();
 
-			mFrameSystem->SetTickTime(curTickTime);
+			tickUtil.SetTickTime(curTickTime);
 		}
 
 		//用预测的世界渲染

@@ -13,6 +13,15 @@ public:
 	virtual void Init() override;
 	virtual void Tick(float dt)override;
 
+	//接收消息
+	void ReceiveCmd();
+
+	//发送消息
+	void SendCmd();
+
+	//有服务器下发的新的命令
+	bool HasNewCmdMsg();
+
 	//等待服务器下发开赛通知或追帧通知
 	void WaitStart();
 
@@ -26,8 +35,6 @@ public:
 	float GetTickTimeBasedOnChasing();
 
 private:
-	//获取服务器消息
-	MessageData ReceiveMsg();
 
 	//从MessageData中解析得到命令
 	PlayersCommand GetCmdFromMsgData(const MessageData& msgData);
@@ -40,4 +47,6 @@ private:
 
 	//将追帧信息等保存
 	void InitCutInData(const MessageData& msgData);
+
+	void SetLocalPlayerIdByMsg(const google::protobuf::RepeatedPtrField<XTankMsg::PlayerId>& playerIds);
 };
