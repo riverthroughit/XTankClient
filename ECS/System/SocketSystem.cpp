@@ -39,8 +39,7 @@ void SocketSystem::Init()
 void SocketSystem::Tick(float dt)
 {
 	ReceiveCmd();
-	SendCmd();
-
+	SendLocalPlayerCmd();
 }
 
 void SocketSystem::ReceiveCmd()
@@ -64,40 +63,12 @@ void SocketSystem::ReceiveCmd()
 		}
 	}
 
-	UpdateCurPlayersCmd();
-
 }
 
-void SocketSystem::SendCmd()
-{
-
-	auto& socketComp = mWorld->GetSingletonComponent<SocketComponent>();
-
-	//追帧时 不发送本地玩家操作     
-	if (IsChasingEnd()) {
-
-		//是否为中途加入开局追帧
-		if (!socketComp.isCutInChasing) {
-
-			//auto& rollbackComp = mWorld->GetSingletonComponent<RollbackComponent>();
-			////达到预测上限时不发送
-			//if (!IsReachPredictLimit(rollbackComp)) {
-
-				SendLocalPlayerCmd();
-			//}
-		}
-		else {
-			socketComp.isCutInChasing = false;
-			//通知服务器追帧完成
-			MsgSendQueue::Instance().SendPlayerChaseUpNtf();
-		}
-	}
-}
-
-bool SocketSystem::HasNewCmdMsg()
+bool SocketSystem::IsCmdBufferEmpty()
 {
 	auto& socketComp = mWorld->GetSingletonComponent<SocketComponent>();
-	return socketComp.hasNewCmdMsg;
+	return socketComp.playersCmdsBuffer.empty();
 }
 
 void SocketSystem::WaitStart()
@@ -126,19 +97,6 @@ void SocketSystem::WaitStart()
 	}
 }
 
-bool SocketSystem::NeedChasing()
-{
-	auto& socketComp = mWorld->GetSingletonComponent<SocketComponent>();
-
-	return !socketComp.playersCmdsBuffer.empty();
-}
-
-bool SocketSystem::IsChasingEnd()
-{
-	auto& socketComp = mWorld->GetSingletonComponent<SocketComponent>();
-
-	return socketComp.playersCmdsBuffer.empty();
-}
 
 float SocketSystem::GetTickTimeBasedOnChasing()
 {
@@ -171,12 +129,12 @@ void SocketSystem::UpdateCurPlayersCmd()
 
 	if (socketComp.playersCmdsBuffer.empty()) {
 		//当前帧没有收到服务器转发指令
-		socketComp.hasNewCmdMsg = false;
+		socketComp.hasCurCmd = false;
 		socketComp.curPlayersCmd = {};
 		return;
 	}
 
-	socketComp.hasNewCmdMsg = true;
+	socketComp.hasCurCmd = true;
 	socketComp.curPlayersCmd = socketComp.playersCmdsBuffer.front();
 	socketComp.curServerFrameId = socketComp.curPlayersCmd.frameId;
 	socketComp.playersCmdsBuffer.pop_front();
@@ -200,6 +158,13 @@ void SocketSystem::UpdateCurPlayersCmd()
 	}
 }
 
+bool SocketSystem::IsCutInChasing()
+{
+	auto& socketComp = mWorld->GetSingletonComponent<SocketComponent>();
+
+	return socketComp.isCutInChasing;
+}
+
 void SocketSystem::SendLocalPlayerCmd()
 {
 
@@ -209,8 +174,8 @@ void SocketSystem::SendLocalPlayerCmd()
 
 	auto& socketComp = mWorld->GetSingletonComponent<SocketComponent>();
 
-	//限制每帧只能发送一次
-	if (socketComp.lastSendFrameId < clientFrameId) {
+	//限制每帧只能发送一次 且中途加入时不可发送
+	if (socketComp.lastSendFrameId < clientFrameId && !socketComp.isCutInChasing) {
 		
 		socketComp.lastSendFrameId = clientFrameId;
 
@@ -218,6 +183,19 @@ void SocketSystem::SendLocalPlayerCmd()
 		MsgSendQueue::Instance().SendPlayerInputNtf(clientFrameId, inputComp.curBtn);
 	}
 
+}
+
+void SocketSystem::TrySendChaseUpNtf()
+{
+	auto& socketComp = mWorld->GetSingletonComponent<SocketComponent>();
+
+	//追帧完成 发送通知  
+	if (socketComp.isCutInChasing && IsCmdBufferEmpty()) {
+
+		socketComp.isCutInChasing = false;
+		//通知服务器追帧完成
+		MsgSendQueue::Instance().SendPlayerChaseUpNtf();
+	}
 }
 
 void SocketSystem::InitCutInData(const MessageData& msgData)

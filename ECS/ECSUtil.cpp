@@ -78,9 +78,14 @@ void RemoveEntityFromGrid(Entity entity, const PosComponent& posComp,
 	}
 }
 
-bool HasNewCmdMsg(SocketComponent& socketComp)
+bool IsCmdBufferEmpty(SocketComponent& socketComp)
 {
-	return socketComp.hasNewCmdMsg;
+	return socketComp.playersCmdsBuffer.empty();
+}
+
+bool HasCurCmd(SocketComponent& socketComp)
+{
+	return socketComp.hasCurCmd;
 }
 
 bool IsReachPredictLimit(RollbackComponent& rollbackComp)

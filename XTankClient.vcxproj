@@ -169,6 +169,7 @@
     <ClCompile Include="Socket\MessageQueue.cpp" />
     <ClCompile Include="Socket\SocketClient.cpp" />
     <ClCompile Include="Thread\ThreadManager.cpp" />
+    <ClCompile Include="Util\TickUtil.cpp" />
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="QtWidget\LobbyWidget.ui" />

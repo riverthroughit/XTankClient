@@ -517,6 +517,9 @@
     <ClCompile Include="ECS\System\AttachSystem.cpp">
       <Filter>Source Files\ECS\System</Filter>
     </ClCompile>
+    <ClCompile Include="Util\TickUtil.cpp">
+      <Filter>Source Files\Util</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="QtWidget\PaintWidget.h">

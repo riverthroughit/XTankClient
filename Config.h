@@ -5,7 +5,7 @@
 //渲染刷新率
 constexpr int RENDER_FPS{ 60 };
 //逻辑帧刷新率
-constexpr int LOCKSTEP_FPS{ 10 };
+constexpr int LOCKSTEP_FPS{ 20 };
 //追帧时刷新率
 constexpr int MAX_CHASING_FPS{ LOCKSTEP_FPS * 2 };
 //逻辑帧周期
@@ -15,7 +15,7 @@ constexpr float RENDER_TICK{ 1.0 / RENDER_FPS * 1000 };
 //追帧周期
 constexpr float MIN_CHASING_TICK{ 1.0 / MAX_CHASING_FPS * 1000 };
 //最多预测帧数
-constexpr int MAX_PREDICT_FRAME{ 6 };
+constexpr int MAX_PREDICT_FRAME{ 20 };
 
 //窗口设计宽
 constexpr int SCREEN_DESIGN_WIDTH{ 1280 };

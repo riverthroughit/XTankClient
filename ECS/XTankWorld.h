@@ -90,6 +90,15 @@ public:
 	//预测世界中各个系统更新
 	void SystemTickInDuplicate(float dt,const std::vector<PlayersCommand>& playersCmds);
 
+	//用预测世界更新渲染系统
+	void DuplicateRenderTick(float dt);
+
+	//游戏循环
+	void GameTick();
+
+	//玩家中途加入 追帧
+	void ChaseUpToServer();
+
 	void Start(const bool& isEnd);
 
 };

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <chrono>
+#include <cassert>
 
 class TickUtil {
 
@@ -26,69 +27,28 @@ class TickUtil {
 	bool isStart{};
 
 public:
-	TickUtil(float tkTime) {
-		tickTime = tkTime;
-		Reset();
-	}
+	TickUtil(float tkTime);
 
-	void Reset() {
-		frameTime = tickTime;
-		frameId = -1;
-		percent = 0;
-		isStart = false;
+	void Reset();
 
-	}
-
-	void SetTickTime(float val) {
-
-		tickTime = val;
-
-	}
+	void SetTickTime(float val);
 
 
-	void Tick() {
+	void Tick();
 
-		if (!isStart) {
-			isStart = true;
-			preTime = clock::now();
-		}
+	bool NeedTick();
 
-		needTick = false;
-		curTime = clock::now();
-		duration dtn = std::chrono::duration_cast<duration>(curTime - preTime);
-		preTime = curTime;
-		frameTime += dtn.count();
-		dt = frameTime;
-
-		if (frameTime > tickTime) {
-			needTick = true;
-			int dframe = frameTime / tickTime;
-			frameTime -= dframe * tickTime;
-			frameId += dframe;
-		}
-
-		percent = frameTime / tickTime;
-	}
-
-	bool NeedTick() {
-		return needTick;
-	}
+	float TimeToNextFrame();
 
 	//…Ë÷√“ª¥Œ—”≥Ÿ
-	void SetDelay(float val) {
-		frameTime -= val;
-	}
+	void SetDelay(float val);
 
-	int GetFrameId() {
-		return frameId;
-	}
+	int GetFrameId();
 
-	float GetPercent() {
-		return percent;
-	}
+	float GetPercent();
 
-	float GetDt() {
-		return dt;
-	}
+	float GetDt();
+
+	float GetTickTime();
 
 };

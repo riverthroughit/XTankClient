@@ -17,8 +17,11 @@ void UpdateGridOfEntity(Entity entity,const PosComponent& posComp,
 void RemoveEntityFromGrid(Entity entity, const PosComponent& posComp,
 	const CollisionComponent& collComp, UniformGridComponent& gridComp);
 
-//当前帧是否有服务器下发操作
-bool HasNewCmdMsg(SocketComponent& socketComp);
+//指令缓冲是否为空
+bool IsCmdBufferEmpty(SocketComponent& socketComp);
+
+//当前是否有需要执行的操作
+bool HasCurCmd(SocketComponent& socketComp);
 
 //是否达到预测上限
 bool IsReachPredictLimit(RollbackComponent& rollbackComp);

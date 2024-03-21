@@ -13,8 +13,8 @@
 void RollbackSystem::Tick(float dt)
 {
 
-	UpdatePreciseCmd();
-	UpdatePredictCmd();
+	//UpdatePreciseCmd();
+	//UpdatePredictCmd();
 }
 
 void RollbackSystem::Init()
@@ -37,23 +37,14 @@ void RollbackSystem::UpdatePreciseCmd()
 	auto& socketComp = mWorld->GetSingletonComponent<SocketComponent>();
 	auto& rollbackComp = mWorld->GetSingletonComponent<RollbackComponent>();
 
-	if (HasNewCmdMsg(socketComp)) {
+	if (HasCurCmd(socketComp)) {
 
 		rollbackComp.preciseCmd = socketComp.curPlayersCmd;
+
+		RollbackPredictCmd();
 	}
 }
 
-void RollbackSystem::UpdatePredictCmd()
-{
-
-
-	//判断之前的命令是否预测成功
-	RollbackPredictCmd();
-
-	PredictNextCmd();
-
-
-}
 
 std::array<BUTTON::Type, PLAYER_NUM> RollbackSystem::GetPredictCmdFrom(const std::array<BUTTON::Type, PLAYER_NUM>& preCmd)
 {
@@ -72,35 +63,33 @@ std::array<BUTTON::Type, PLAYER_NUM> RollbackSystem::GetPredictCmdFrom(const std
 void RollbackSystem::RollbackPredictCmd()
 {
 	auto& rollbackComp = mWorld->GetSingletonComponent<RollbackComponent>();
-	rollbackComp.NeedResetDlctWorld = false;
+	auto& socketComp = mWorld->GetSingletonComponent<SocketComponent>();
+	
+	rollbackComp.NeedRollback = false;
 
-	if (rollbackComp.predCmdDeq.empty()) {
+	////当前有服务器命令 且有预测命令
+	//assert(HasCurCmd(socketComp) && !rollbackComp.predCmdDeq.empty());
+	if (!HasCurCmd(socketComp) || rollbackComp.predCmdDeq.empty()) {
 		return;
 	}
 
-	auto& socketComp = mWorld->GetSingletonComponent<SocketComponent>();
+	PlayersCommand predictCmd = rollbackComp.predCmdDeq.front();
 
-	//若当前有服务器命令 需判断预测是否正确
-	if (HasNewCmdMsg(socketComp)) {
-		assert(!rollbackComp.predCmdDeq.empty());
+	//权威帧已到 该预测帧可以出队
+	rollbackComp.predCmdDeq.pop_front();
 
-		PlayersCommand predictCmd = rollbackComp.predCmdDeq.front();
-		//权威帧已到 该预测帧可以出队
-		rollbackComp.predCmdDeq.pop_front();
+	//若不准确 则重新预测往后的所有命令
+	if (predictCmd != rollbackComp.preciseCmd) {
 
-		//若不准确 则重新预测往后的所有命令
-		if (predictCmd != rollbackComp.preciseCmd) {
-			
-			rollbackComp.NeedResetDlctWorld = true;
-			PlayersCommand preCmd = rollbackComp.preciseCmd;
-			
-			for (PlayersCommand& cmd : rollbackComp.predCmdDeq) {
-				
-				BUTTON::Type localBtn = cmd.commandArray[socketComp.localPlayerId];
-				cmd.commandArray = GetPredictCmdFrom(preCmd.commandArray);
-				cmd.commandArray[socketComp.localPlayerId] = localBtn;
-				preCmd = cmd;
-			}
+		rollbackComp.NeedRollback = true;
+		PlayersCommand preCmd = rollbackComp.preciseCmd;
+
+		for (PlayersCommand& cmd : rollbackComp.predCmdDeq) {
+
+			BUTTON::Type localBtn = cmd.commandArray[socketComp.localPlayerId];
+			cmd.commandArray = GetPredictCmdFrom(preCmd.commandArray);
+			cmd.commandArray[socketComp.localPlayerId] = localBtn;
+			preCmd = cmd;
 		}
 	}
 }
@@ -110,8 +99,8 @@ void RollbackSystem::PredictNextCmd()
 
 	auto& rollbackComp = mWorld->GetSingletonComponent<RollbackComponent>();
 
-	//到达最大预测上限 则不预测
-	if (!IsReachPredictLimit(rollbackComp)) {
+	//到达最大预测上限 则不预测 当前帧已经预测过 也不再重复预测
+	if (!IsReachPredictLimit(rollbackComp) && !HasPredictCurFrame()) {
 
 		//注意 用副本世界的frame组件
 		//auto& frameComp = rollbackComp.duplicateWorld->GetSingletonComponent<FrameComponent>();
@@ -121,6 +110,8 @@ void RollbackSystem::PredictNextCmd()
 		PlayersCommand predCmd{};
 		//predCmd.frameId = frameComp.serverFrameId + 1;
 		predCmd.frameId = frameComp.clientTick.GetFrameId();
+		rollbackComp.curPredictFrameId = predCmd.frameId;
+
 		predCmd.commandArray = GetPredictCmdFrom(rollbackComp.preciseCmd.commandArray);
 		auto& inputComp = mWorld->GetSingletonComponent<InputComponent>();
 		//当前本地玩家的命令
@@ -131,25 +122,47 @@ void RollbackSystem::PredictNextCmd()
 	}
 }
 
+bool RollbackSystem::HasPredictCurFrame()
+{
+	auto& rollbackComp = mWorld->GetSingletonComponent<RollbackComponent>();
+	auto& frameComp = mWorld->GetSingletonComponent<FrameComponent>();
+
+	return rollbackComp.curPredictFrameId == frameComp.clientTick.GetFrameId();
+}
+
 void RollbackSystem::TickPredictWorld(float dt)
 {
 	auto& rollbackComp = mWorld->GetSingletonComponent<RollbackComponent>();
 	
-	//达到上限 直接返回
-	if (IsReachPredictLimit(rollbackComp)) {
-		return;
-	}
-
-	std::vector<PlayersCommand> cmds = GetPredictCmds();
-	
-	if (!rollbackComp.NeedResetDlctWorld) {
+	if (!rollbackComp.NeedRollback) {
 		//不用回滚的情况
-		rollbackComp.duplicateWorld->SystemTickInDuplicate(dt, cmds);
+		RunAheadPredictWorld(dt);
 	}
 	else {
 		//需要回滚
-		//位置组件需特殊处理 以便插值平滑
+		RollbackPredictWorld(dt);
+	}
+}
+
+void RollbackSystem::RunAheadPredictWorld(float dt)
+{
+	auto& rollbackComp = mWorld->GetSingletonComponent<RollbackComponent>();
+
+	if (!IsReachPredictLimit(rollbackComp)) {
 		
+		std::vector<PlayersCommand> cmds = GetPredictCmdsByNeedRollback(false);
+		rollbackComp.duplicateWorld->SystemTickInDuplicate(dt, cmds);
+	}
+}
+
+void RollbackSystem::RollbackPredictWorld(float dt)
+{
+	//需要回滚
+	//位置组件需特殊处理 以便插值平滑
+
+	auto& rollbackComp = mWorld->GetSingletonComponent<RollbackComponent>();
+
+	if (!IsReachPredictLimit(rollbackComp)) {
 		auto dupRollSystem = rollbackComp.duplicateWorld->GetSystem<RollbackSystem>();
 
 		std::unordered_map<Entity, Vec2Fixed> prePoses;
@@ -158,11 +171,14 @@ void RollbackSystem::TickPredictWorld(float dt)
 			const auto& posComp = rollbackComp.duplicateWorld->GetComponent<PosComponent>(entity);
 			prePoses[entity] = posComp.pos;
 		}
-		
+
 		//用权威状态覆盖
 		*rollbackComp.duplicateWorld = XTankWorld(static_cast<XTankWorld&>(*mWorld));
+
+		std::vector<PlayersCommand> cmds = GetPredictCmdsByNeedRollback(true);
+
 		rollbackComp.duplicateWorld->SystemTickInDuplicate(dt, cmds);
-		
+
 		dupRollSystem = rollbackComp.duplicateWorld->GetSystem<RollbackSystem>();
 
 		//修改预测世界的位置组件的上一帧位置
@@ -173,12 +189,21 @@ void RollbackSystem::TickPredictWorld(float dt)
 	}
 }
 
-std::vector<PlayersCommand> RollbackSystem::GetPredictCmds()
+void RollbackSystem::TryRollbackPredictWorld(float dt)
+{
+	auto& rollbackComp = mWorld->GetSingletonComponent<RollbackComponent>();
+
+	if (rollbackComp.NeedRollback) {
+		RollbackPredictWorld(dt);
+	}
+}
+
+std::vector<PlayersCommand> RollbackSystem::GetPredictCmdsByNeedRollback(bool needRollBack)
 {
 	auto& rollbackComp = mWorld->GetSingletonComponent<RollbackComponent>();
 
 	//若预测失败 则需重新执行所有命令
-	if (rollbackComp.NeedResetDlctWorld) {
+	if (needRollBack) {
 		return std::vector<PlayersCommand>(rollbackComp.predCmdDeq.begin(), rollbackComp.predCmdDeq.end());
 	}
 

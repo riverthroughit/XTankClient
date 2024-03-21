@@ -15,8 +15,8 @@ struct SocketComponent{
 	//玩家数量
 	int playerNum{};
 
-	//是否有新来的命令
-	bool hasNewCmdMsg{};
+	//是否有当前需要执行的命令
+	bool hasCurCmd{};
 
 	//服务器发来的命令
 	PlayersCommand curPlayersCmd{};

@@ -241,50 +241,21 @@ void XTankWorld::SystemInit()
 void XTankWorld::SystemTickInLogic(float dt)
 {
 
-	static int a, b;
-	auto& inputComp = GetSingletonComponent<InputComponent>();
-	auto& frameComp = GetSingletonComponent<FrameComponent>();
-	auto& socketComp = GetSingletonComponent<SocketComponent>();
-	auto& rollbackComp = GetSingletonComponent<RollbackComponent>();
+	mFrameSystem->AddServerFrameId();
+	mPlayerSpawnSystem->Tick(dt);
 
-
-	mFrameSystem->Tick(dt);
-	mInputSystem->Tick(dt);
-	mSocketSystem->Tick(dt);
-
-	if (inputComp.curBtn == BUTTON::RIGHT) {
-		a = frameComp.clientTick.GetFrameId();
-	}
-	if (socketComp.curPlayersCmd.commandArray[socketComp.localPlayerId] == BUTTON::RIGHT) {
-		b = frameComp.clientTick.GetFrameId();
-	}
-
-	mRollbackSystem->Tick(dt);
-
-
-
-
-
-
-
-	//有服务器下发命令时才更新主状态
-	if (mSocketSystem->HasNewCmdMsg()) {
-		mFrameSystem->AddServerFrameId();
-		mPlayerSpawnSystem->Tick(dt);
-
-		mCommandSystem->Tick(dt);
-		mCollisionSystem->Tick(dt);
-		mSpeedChangeSystem->Tick(dt);
-		mObstacleSystem->Tick(dt);
-		mMoveSystem->Tick(dt);
-		mFireSystem->Tick(dt);
-		mBulletHitSystem->Tick(dt);
-		mDamageSystem->Tick(dt);
-		mPlayerStateSystem->Tick(dt);
-		mAttachSystem->Tick(dt);
-		mEntityDestroySystem->Tick(dt);
-		mEntitySpawnSystem->Tick(dt);
-	}
+	mCommandSystem->Tick(dt);
+	mCollisionSystem->Tick(dt);
+	mSpeedChangeSystem->Tick(dt);
+	mObstacleSystem->Tick(dt);
+	mMoveSystem->Tick(dt);
+	mFireSystem->Tick(dt);
+	mBulletHitSystem->Tick(dt);
+	mDamageSystem->Tick(dt);
+	mPlayerStateSystem->Tick(dt);
+	mAttachSystem->Tick(dt);
+	mEntityDestroySystem->Tick(dt);
+	mEntitySpawnSystem->Tick(dt);
 
 }
 
@@ -314,36 +285,124 @@ void XTankWorld::SystemTickInDuplicate(float dt, const std::vector<PlayersComman
 	}
 }
 
+void XTankWorld::DuplicateRenderTick(float dt)
+{
+	//用预测的世界渲染
+	XTankWorld* dupWorld = mRollbackSystem->GetDuplicateWorld();
+	dupWorld->mPRenderBufferSystem->Tick(dt);
+}
+
+void XTankWorld::GameTick()
+{
+
+	auto& clientTick = GetSingletonComponent<FrameComponent>().clientTick;
+
+	clientTick.Tick();
+	float dt = clientTick.GetDt();
+
+	//逻辑
+	if (clientTick.NeedTick()) {
+
+		mInputSystem->Tick(dt);
+		mSocketSystem->Tick(dt);
+
+		float tickTime = mSocketSystem->GetTickTimeBasedOnChasing();
+		TickUtil serverTick(tickTime);
+
+		float remainTime = clientTick.TimeToNextFrame();
+
+		//有服务器新命令且没超过tick时间
+		while (!mSocketSystem->IsCmdBufferEmpty() && (remainTime > (clientTick.GetTickTime() / 2))) {
+
+			serverTick.Tick();
+			dt += serverTick.GetDt();
+
+			if (serverTick.NeedTick()) {
+
+				mSocketSystem->UpdateCurPlayersCmd();
+				//更新权威操作
+				mRollbackSystem->UpdatePreciseCmd();
+
+				SystemTickInLogic(dt);
+
+				//尝试回滚
+				mRollbackSystem->TryRollbackPredictWorld(dt);
+			}
+
+			DuplicateRenderTick(dt);
+
+		}
+
+		//预测命令
+		mRollbackSystem->PredictNextCmd();
+		//预测世界
+		mRollbackSystem->RunAheadPredictWorld(dt);
+
+	}
+
+	DuplicateRenderTick(dt);
+}
+
+void XTankWorld::ChaseUpToServer()
+{
+	if (mSocketSystem->IsCutInChasing()) {
+		
+		auto& clientTick = GetSingletonComponent<FrameComponent>().clientTick;
+		
+		clientTick.SetTickTime(MIN_CHASING_TICK);
+		clientTick.Reset();
+
+		//延迟一会儿
+		int latencyTimes = 2;
+
+		while (mSocketSystem->IsCutInChasing()) {
+
+			clientTick.Tick();
+			float dt = clientTick.GetDt();
+
+			//逻辑
+			if (clientTick.NeedTick()) {
+
+				mSocketSystem->ReceiveCmd();
+
+				if (--latencyTimes < 0) {
+
+					mSocketSystem->UpdateCurPlayersCmd();
+					//更新权威操作
+					mRollbackSystem->UpdatePreciseCmd();
+
+					SystemTickInLogic(dt);
+
+					//尝试回滚
+					mRollbackSystem->TryRollbackPredictWorld(dt);
+
+				}
+
+				//预测命令
+				mRollbackSystem->PredictNextCmd();
+				//预测世界
+				mRollbackSystem->RunAheadPredictWorld(dt);
+
+				mSocketSystem->TrySendChaseUpNtf();
+			}
+
+			DuplicateRenderTick(dt);
+			
+		}
+
+		clientTick.SetTickTime(LOCKSTEP_TICK);
+	}
+}
+
 void XTankWorld::Start(const bool& isEnd)
 {
 
 	SystemInit();
 
-	TickUtil tickUtil(LOCKSTEP_TICK);
+	ChaseUpToServer();
 
 	while (!isEnd) {
 
-		tickUtil.Tick();
-		float dt = tickUtil.GetDt();
-
-		//逻辑
-		if (tickUtil.NeedTick()) {
-			
-			//真实世界更新
-			SystemTickInLogic(dt);
-
-			//预测世界更新
-			mRollbackSystem->TickPredictWorld(dt);
-
-			//若收到不止一条来自服务器的指令 则根据数量更改tick速度 直至追上
-			float curTickTime = mSocketSystem->GetTickTimeBasedOnChasing();
-
-			tickUtil.SetTickTime(curTickTime);
-		}
-
-		//用预测的世界渲染
-		XTankWorld* dupWorld = mRollbackSystem->GetDuplicateWorld();
-		dupWorld->mPRenderBufferSystem->Tick(dt);
-
+		GameTick();
 	}
 }

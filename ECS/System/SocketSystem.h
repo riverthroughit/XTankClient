@@ -16,31 +16,28 @@ public:
 	//接收消息
 	void ReceiveCmd();
 
-	//发送消息
-	void SendCmd();
-
-	//有服务器下发的新的命令
-	bool HasNewCmdMsg();
+	//命令缓冲是否为空
+	bool IsCmdBufferEmpty();
 
 	//等待服务器下发开赛通知或追帧通知
 	void WaitStart();
 
-	//是否中途加入
-	bool NeedChasing();
-
-	//是否追帧结束
-	bool IsChasingEnd();
-
 	//获取建议的游戏更新帧率（追帧时会更快）
 	float GetTickTimeBasedOnChasing();
+
+	//更新当前需要执行的服务器命令
+	void UpdateCurPlayersCmd();
+
+	//是否为中途加入并且正在追帧
+	bool IsCutInChasing();
+
+	//发送追帧完成通知
+	void TrySendChaseUpNtf();
 
 private:
 
 	//从MessageData中解析得到命令
 	PlayersCommand GetCmdFromMsgData(const MessageData& msgData);
-
-	//更新用户命令
-	void UpdateCurPlayersCmd();
 
 	//发送本地玩家命令
 	void SendLocalPlayerCmd();

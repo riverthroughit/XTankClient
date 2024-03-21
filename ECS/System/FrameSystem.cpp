@@ -8,14 +8,14 @@
 
 void FrameSystem::Tick(float)
 {
-	auto& frameComp = mWorld->GetSingletonComponent<FrameComponent>();
-	frameComp.clientTick.Tick();
+	
 }
 
 void FrameSystem::Init()
 {
 	auto& frameComp = mWorld->GetSingletonComponent<FrameComponent>();
-	frameComp.serverFrameId = -1;
+	frameComp.clientTick.SetTickTime(LOCKSTEP_TICK);
+
 }
 
 
@@ -25,5 +25,33 @@ void FrameSystem::AddServerFrameId()
 	
 	++frameComp.serverFrameId;
 
+}
+
+void FrameSystem::TickClientFrame()
+{
+	auto& frameComp = mWorld->GetSingletonComponent<FrameComponent>();
+
+	frameComp.clientTick.Tick();
+}
+
+bool FrameSystem::NeedClientTick()
+{
+	auto& frameComp = mWorld->GetSingletonComponent<FrameComponent>();
+
+	return frameComp.clientTick.NeedTick();
+}
+
+float FrameSystem::GetClientTickDt()
+{
+	auto& frameComp = mWorld->GetSingletonComponent<FrameComponent>();
+
+	return frameComp.clientTick.GetDt();
+}
+
+float FrameSystem::GetTimeToNextClientFrame()
+{
+	auto& frameComp = mWorld->GetSingletonComponent<FrameComponent>();
+
+	return frameComp.clientTick.TimeToNextFrame();
 }
 
