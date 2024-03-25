@@ -20,8 +20,8 @@
     <ClInclude Include="Config.h" />
     <ClInclude Include="ECS\ComponentArray.h" />
     <ClInclude Include="ECS\ComponentManager.h" />
-    <ClInclude Include="ECS\Component\AttachComponent.h" />
-    <ClInclude Include="ECS\Component\BeHitComponent.h" />
+    <ClInclude Include="ECS\Component\EventComponent.h" />
+    <ClInclude Include="ECS\Component\ObservedComponent.h" />
     <ClInclude Include="ECS\Component\BulletComponent.h" />
     <ClInclude Include="ECS\Component\BulletSpawnComponent.h" />
     <ClInclude Include="ECS\Component\CollisionComponent.h" />
@@ -29,9 +29,9 @@
     <ClInclude Include="ECS\Component\DestroyComponent.h" />
     <ClInclude Include="ECS\Component\EntitySpawnComponent.h" />
     <ClInclude Include="ECS\Component\HealthComponent.h" />
-    <ClInclude Include="ECS\Component\HitComponent.h" />
     <ClInclude Include="ECS\Component\InputComponent.h" />
     <ClInclude Include="ECS\Component\ObstacleComponent.h" />
+    <ClInclude Include="ECS\Component\PawnComponent.h" />
     <ClInclude Include="ECS\Component\PlayerComponent.h" />
     <ClInclude Include="ECS\Component\PosComponent.h" />
     <ClInclude Include="ECS\Component\PRenderComponent.h" />
@@ -43,7 +43,7 @@
     <ClInclude Include="ECS\Component\SpeedComponent.h" />
     <ClInclude Include="ECS\Component\UniformGridComponent.h" />
     <ClInclude Include="ECS\ECSUtil.h" />
-    <ClInclude Include="ECS\System\AttachSystem.h" />
+    <ClInclude Include="ECS\System\ObservedSystem.h" />
     <ClInclude Include="ECS\System\BulletHitSystem.h" />
     <ClInclude Include="ECS\System\CommandSystem.h" />
     <ClInclude Include="ECS\System\DamageSystem.h" />
@@ -119,7 +119,7 @@
     <ClCompile Include="ECS\Component\FrameComponent.h" />
     <ClCompile Include="ECS\ECSUtil.cpp" />
     <ClCompile Include="ECS\System.cpp" />
-    <ClCompile Include="ECS\System\AttachSystem.cpp" />
+    <ClCompile Include="ECS\System\ObservedSystem.cpp" />
     <ClCompile Include="ECS\System\BulletHitSystem.cpp" />
     <ClCompile Include="ECS\System\CollisionSystem.cpp" />
     <ClCompile Include="ECS\System\CommandSystem.cpp" />

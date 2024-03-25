@@ -38,23 +38,30 @@ void ObstacleSystem::BlockTypeSpeedTick(Entity entity)
 			//如果两物体距离在变远 则可以分开
 			//否则继续碰撞 将速度置0
 
-			CollisionComponent& collisionComp1 = mWorld->GetComponent<CollisionComponent>(hitEntity);
-			PosComponent& posComp1 = mWorld->GetComponent<PosComponent>(hitEntity);
+			//没有障碍组件或组件类型为OVERLAP则不参与阻挡
+			if (!mWorld->HasComponent<ObstacleComponent>(hitEntity)) {
+				continue;
+			}
+			auto& hitObstacleComp = mWorld->GetComponent<ObstacleComponent>(hitEntity);
+			if (hitObstacleComp.obstacleType == OBSTACLE::OVERLAP) {
+				continue;
+			}
+
+			PosComponent& hitPosComp = mWorld->GetComponent<PosComponent>(hitEntity);
 			
-			FixedPoint preDist = (posComp.pos - posComp1.pos).squareLenth();
-			
-			PosComponent newPosComp1;
+			PosComponent hitNewPosComp;
 
 			if (mWorld->HasComponent<SpeedComponent>(hitEntity)) {
 				SpeedComponent& speedComp1 = mWorld->GetComponent<SpeedComponent>(hitEntity);
-				newPosComp1.pos = posComp1.pos + speedComp1.direc * speedComp1.speed;
+				hitNewPosComp.pos = hitPosComp.pos + speedComp1.direc * speedComp1.speed;
 			}
 			else {
-				newPosComp1 = posComp1;
+				hitNewPosComp = hitPosComp;
 			}
 
-			FixedPoint curDist = (newPosComp.pos - newPosComp1.pos).squareLenth();
-			
+			FixedPoint curDist = (newPosComp.pos - hitNewPosComp.pos).squareLenth();	
+			FixedPoint preDist = (posComp.pos - hitPosComp.pos).squareLenth();
+			//距离变近 则需要设置速度为0
 			if (curDist < preDist) {
 				isEnd = false;
 				break;

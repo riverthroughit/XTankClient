@@ -7,7 +7,7 @@ struct PlayerComponent {
 	//玩家房间内id
 	unsigned int localId{};
 	//操控的entity
-	Entity charId{};
+	Entity pawnId{};
 	//玩家状态
 	PLAYER_STATUS::Type status{};
 	//生命值

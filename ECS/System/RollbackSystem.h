@@ -18,9 +18,6 @@ public:
 	//获取复制的世界
 	XTankWorld* GetDuplicateWorld();
 
-	//更新预测世界
-	void TickPredictWorld(float dt);
-
 	//没有预测失败 继续更新预测世界
 	void RunAheadPredictWorld(float dt);
 

@@ -88,6 +88,16 @@ bool HasCurCmd(SocketComponent& socketComp)
 	return socketComp.hasCurCmd;
 }
 
+PlayersCommand GetSocketCurCmd(SocketComponent& socketComp)
+{
+	if (socketComp.hasCurCmd) {
+		socketComp.hasCurCmd = false;
+		return socketComp.curPlayersCmd;
+	}
+	
+	return PlayersCommand{};
+}
+
 bool IsReachPredictLimit(RollbackComponent& rollbackComp)
 {
 	return rollbackComp.predCmdDeq.size() >= rollbackComp.maxPredictTimes;

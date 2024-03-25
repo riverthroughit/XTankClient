@@ -3,7 +3,7 @@
 #include "ECS/Component/CommandComponent.h"
 #include "ECS/World.h"
 #include "ECS/Component/EntitySpawnComponent.h"
-#include "ECS/Component/AttachComponent.h"
+#include "ECS/Component/ObservedComponent.h"
 #include "ECS/Component/CollisionComponent.h"
 #include "ECS/Component/ObstacleComponent.h"
 #include "ECS/Component/PosComponent.h"
@@ -14,7 +14,10 @@
 #include "ECS/Component/RollbackPosComponent.h"
 #include "ECS/Component/SideComponent.h"
 #include "ECS/Component/HealthComponent.h"
+#include "ECS/Component/PawnComponent.h"
+#include "ECS/Component/EventComponent.h"
 #include "Config.h"
+#include "ECS/ECSUtil.h"
 
 void EntitySpawnSystem::Tick(float dt)
 {
@@ -66,6 +69,7 @@ void EntitySpawnSystem::BlockSpawn(std::shared_ptr<ENTITY_SPAWN_ARGS::Block> arg
 	HealthComponent healthComp;
 	healthComp.type = args->blockType == BLOCK::HARD ? HEALTH::SUPER : HEALTH::NORMAL;
 	healthComp.hp = BLOCK_HP;
+	EventComponent eventComp;
 
 	mWorld->AddComponent(block, collComp);
 	mWorld->AddComponent(block, obsComp);
@@ -73,6 +77,7 @@ void EntitySpawnSystem::BlockSpawn(std::shared_ptr<ENTITY_SPAWN_ARGS::Block> arg
 	mWorld->AddComponent(block, pRenderComp);
 	mWorld->AddComponent(block, sideComp);
 	mWorld->AddComponent(block, healthComp);
+	mWorld->AddComponent(block, eventComp);
 }
 
 void EntitySpawnSystem::TankSpawn(std::shared_ptr<ENTITY_SPAWN_ARGS::Tank> args)
@@ -81,20 +86,20 @@ void EntitySpawnSystem::TankSpawn(std::shared_ptr<ENTITY_SPAWN_ARGS::Tank> args)
 
 	//设置玩家组件中的坦克id
 	PlayerComponent& playerComp = mWorld->GetComponent<PlayerComponent>(args->ownerId);
-	playerComp.charId = tank;
+	playerComp.pawnId = tank;
 
-	AttachComponent attachComp{ args->ownerId };
+	PawnComponent pawnComp{ args->ownerId };
 	CollisionComponent collComp{ LOGIC_SHAPE::CIRCLE,{TANK_RADIUS_FIXED} };
 	ObstacleComponent obsComp{ OBSTACLE::BLOCK };
 	PosComponent posComp{ args->pos , args->direc,args->pos , args->direc };
 	SpeedComponent speedComp{ Vec2Fixed(),TANK_SPEED_FIXED,Vec2Fixed(),TANK_ACCSPEED_FIXED };
 	PRenderComponent pRenderComp{ PRENDER_SHAPE::TANK };
-	BulletSpawnComponent bulletSpawnComp{ args->direc,true };
+	BulletSpawnComponent bulletSpawnComp{ args->direc,true ,BULLET_CD };
 	RollbackPosComponent rollbackPosComp{ Vec2Fixed() };
 	SideComponent sideComp{ args->ownerId };
 	HealthComponent healthComp{ HEALTH::NORMAL,TANK_HP };
+	EventComponent eventComp;
 
-	mWorld->AddComponent(tank, attachComp);
 	mWorld->AddComponent(tank, collComp);
 	mWorld->AddComponent(tank, obsComp);
 	mWorld->AddComponent(tank, posComp);
@@ -104,26 +109,32 @@ void EntitySpawnSystem::TankSpawn(std::shared_ptr<ENTITY_SPAWN_ARGS::Tank> args)
 	mWorld->AddComponent(tank, rollbackPosComp);
 	mWorld->AddComponent(tank, sideComp);
 	mWorld->AddComponent(tank, healthComp);
+	mWorld->AddComponent(tank, pawnComp);
+	mWorld->AddComponent(tank, eventComp);
 }
 
 void EntitySpawnSystem::BulletSpawn(std::shared_ptr<ENTITY_SPAWN_ARGS::Bullet> args)
 {
 	Entity bullet = mWorld->CreateEntity();
 
-	AttachComponent attachComp{ args->ownerId };
+	ObservedComponent observedComp;
+	AddObserver<EVENT::Hit>(observedComp, args->ownerId);
 	CollisionComponent collComp{ LOGIC_SHAPE::CIRCLE,{BULLET_RADIUS_FIXED} };
 	PosComponent posComp{ args->pos , args->speedDirec,args->pos , args->speedDirec };
 	SpeedComponent speedComp{ args->speedDirec,BULLET_SPEED_FIXED,args->speedDirec ,BULLET_ACCSPEED_FIXED };
 	PRenderComponent pRenderComp{ PRENDER_SHAPE::BULLET };
 	SideComponent sideComp{ args->ownerId };
 	HealthComponent healthComp{ HEALTH::NORMAL,BULLET_HP };
+	EventComponent eventComp;
+	BulletComponent bulletComp;
 
-	mWorld->AddComponent(bullet, attachComp);
 	mWorld->AddComponent(bullet, collComp);
 	mWorld->AddComponent(bullet, posComp);
 	mWorld->AddComponent(bullet, speedComp);
 	mWorld->AddComponent(bullet, pRenderComp);
-	mWorld->AddComponent(bullet, BulletComponent());
 	mWorld->AddComponent(bullet, sideComp);
 	mWorld->AddComponent(bullet, healthComp);
+	mWorld->AddComponent(bullet, observedComp);
+	mWorld->AddComponent(bullet, eventComp);
+	mWorld->AddComponent(bullet, bulletComp);
 }

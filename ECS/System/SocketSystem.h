@@ -45,5 +45,9 @@ private:
 	//将追帧信息等保存
 	void InitCutInData(const MessageData& msgData);
 
-	void SetLocalPlayerIdByMsg(const google::protobuf::RepeatedPtrField<XTankMsg::PlayerId>& playerIds);
+	//设置玩家信息
+	void SetExistPlayersByMsg(const google::protobuf::RepeatedPtrField<XTankMsg::PlayerId>& playerIds);
+
+	//根据玩家加入或退出命令更改玩家数组
+	void UpdateExistPlayersByCmd(const PlayersCommand& cmd);
 };

@@ -26,4 +26,7 @@ struct RollbackComponent {
 	//当前到来的服务器命令
 	PlayersCommand preciseCmd{};
 
+	//当前是否有服务器命令
+	bool hasPreciseCmd{};
+
 };

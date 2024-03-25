@@ -27,5 +27,5 @@ private:
 	void InitQPaint(QPainter& painter);
 
 	//»æÖÆÅö×²Ä£ÐÍ
-	void DrawEntityCollision(PRENDER_SHAPE::Type shape, Vec2f pos, QPainter& painter);
+	void DrawEntityCollision(PRENDER_SHAPE::Type shape, Vec2f pos, Vec2f direc, QPainter& painter);
 };

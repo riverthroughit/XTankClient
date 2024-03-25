@@ -3,6 +3,7 @@
 #include "ECS/Component/SpeedComponent.h"
 #include "ECS/Component/PlayerComponent.h"
 #include "ECS/Component/BulletSpawnComponent.h"
+#include "ECS/Component/PosComponent.h"
 #include "ECS/World.h"
 
 void SpeedChangeSystem::Tick(float dt)
@@ -21,35 +22,44 @@ void SpeedChangeSystem::Tick(float dt)
 		PlayerComponent& playerComp = mWorld->GetComponent<PlayerComponent>(entity);
 
 		//先判断该玩家的character是否有速度组件
-		if (!mWorld->HasComponent<SpeedComponent>(playerComp.charId)) {
+		if (!mWorld->HasComponent<SpeedComponent>(playerComp.pawnId)) {
 			continue;
 		}
-		SpeedComponent& speedComp = mWorld->GetComponent<SpeedComponent>(playerComp.charId);
+		SpeedComponent& speedComp = mWorld->GetComponent<SpeedComponent>(playerComp.pawnId);
 		//炮台组件的方向也应该修改
-		auto& bulletSpawnComp = mWorld->GetComponent<BulletSpawnComponent>(playerComp.charId);
+		auto& bulletSpawnComp = mWorld->GetComponent<BulletSpawnComponent>(playerComp.pawnId);
+		auto& posComp = mWorld->GetComponent<PosComponent>(playerComp.pawnId);
 
 		switch (cmdComp.cmd)
 		{
 		case BUTTON::UP:
 			speedComp.accDirec = Vec2Fixed(FixedPoint(0), FixedPoint(-1));
+			posComp.preDirec = posComp.direc;
+			posComp.direc = speedComp.accDirec;
 			bulletSpawnComp.spawnDirec = speedComp.accDirec;
 			speedComp.direc.y = std::max(FixedPoint(-1), speedComp.direc.y - speedComp.accSpeed);
 			break;
 
 		case BUTTON::DOWN:
 			speedComp.accDirec = Vec2Fixed(FixedPoint(0), FixedPoint(1));
+			posComp.preDirec = posComp.direc;
+			posComp.direc = speedComp.accDirec;
 			bulletSpawnComp.spawnDirec = speedComp.accDirec;
 			speedComp.direc.y = std::min(FixedPoint(1), speedComp.direc.y + speedComp.accSpeed);
 			break;
 
 		case BUTTON::LEFT:
 			speedComp.accDirec = Vec2Fixed(FixedPoint(-1), FixedPoint(0));
+			posComp.preDirec = posComp.direc;
+			posComp.direc = speedComp.accDirec;
 			bulletSpawnComp.spawnDirec = speedComp.accDirec;
 			speedComp.direc.x = std::max(FixedPoint(-1), speedComp.direc.x - speedComp.accSpeed);
 			break;
 
 		case BUTTON::RIGHT:
 			speedComp.accDirec = Vec2Fixed(FixedPoint(1), FixedPoint(0));
+			posComp.preDirec = posComp.direc;
+			posComp.direc = speedComp.accDirec;
 			bulletSpawnComp.spawnDirec = speedComp.accDirec;
 			speedComp.direc.x = std::min(FixedPoint(1), speedComp.direc.x + speedComp.accSpeed);
 			break;

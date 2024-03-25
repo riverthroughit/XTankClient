@@ -37,10 +37,7 @@ void PaintWidget::paintEvent(QPaintEvent* event)
 
 	for (auto& [shape, pos,direc] : buffer) {
 
-		//变换坐标
-		pos = logicToScreen(pos);
-
-		DrawEntityCollision(shape, pos, painter);
+		DrawEntityCollision(shape, pos, direc, painter);
 	}
 
 
@@ -93,7 +90,7 @@ void PaintWidget::InitQPaint(QPainter& painter)
 	painter.setBrush(brush);
 }
 
-void PaintWidget::DrawEntityCollision(PRENDER_SHAPE::Type shape, Vec2f pos, QPainter& painter)
+void PaintWidget::DrawEntityCollision(PRENDER_SHAPE::Type shape, Vec2f pos, Vec2f direc, QPainter& painter)
 {
 
 	//圆半径
@@ -101,7 +98,13 @@ void PaintWidget::DrawEntityCollision(PRENDER_SHAPE::Type shape, Vec2f pos, QPai
 	const static int tankR = logicToScreen(TANK_RADIUS);
 	const static int bulletR = logicToScreen(BULLET_RADIUS);
 
-	//四舍五入 不然可能抖动
+	//坦克炮台半径
+	const static int tankBatteryR = logicToScreen(1);
+
+	//变换坐标
+	pos = logicToScreen(pos);
+
+	//四舍五入
 	int x = std::round(pos.x), y = std::round(pos.y);
 
 	switch (shape)
@@ -112,6 +115,12 @@ void PaintWidget::DrawEntityCollision(PRENDER_SHAPE::Type shape, Vec2f pos, QPai
 
 	case PRENDER_SHAPE::TANK:
 		painter.drawArc(x - tankR, y - tankR, tankR * 2, tankR * 2, 0, 16 * 360);
+
+		//炮台
+		x = pos.x + direc.x * tankR;
+		y = pos.y + direc.y * tankR;
+		painter.drawArc(x - tankBatteryR, y - tankBatteryR, tankBatteryR * 2, tankBatteryR * 2, 0, 16 * 360);
+
 		break;
 
 	case PRENDER_SHAPE::BULLET:

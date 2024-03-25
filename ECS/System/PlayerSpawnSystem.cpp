@@ -7,12 +7,15 @@
 #include "ECS/Component/SocketComponent.h"
 #include "ECS/Component/RollbackComponent.h"
 #include "ECS/Component/DestroyComponent.h"
+#include "ECS/Component/EventComponent.h"
 
 void PlayerSpawnSystem::Init()
 {
 	auto& socketComp = mWorld->GetSingletonComponent<SocketComponent>();
-	for (int id = 0; id < socketComp.playerNum; ++id) {
-		CreatePlayerEntity(id);
+	for (int id = 0; id < socketComp.existPlayers.size(); ++id) {
+		if (socketComp.existPlayers[id]) {
+			CreatePlayerEntity(id);
+		}
 	}
 }
 
@@ -51,8 +54,10 @@ void PlayerSpawnSystem::CreatePlayerEntity(int localId)
 	playerComp.respawnTime = 0;
 
 	CommandComponent commandComp;
+	EventComponent eventComp;
 	mWorld->AddComponent(localPlayer, playerComp);
 	mWorld->AddComponent(localPlayer, commandComp);
+	mWorld->AddComponent(localPlayer, eventComp);
 
 	//tank
 	auto tankArgs = std::make_shared<ENTITY_SPAWN_ARGS::Tank>();
@@ -74,9 +79,9 @@ void PlayerSpawnSystem::RemovePlayerEntity(int localId)
 		
 		if (playerComp.localId == localId) {
 			//玩家控制的实体可以直接销毁
-			if (playerComp.charId != NULL_ENTITY) {
+			if (playerComp.pawnId != NULL_ENTITY) {
 
-				mWorld->AddComponent<DestroyComponent>(playerComp.charId, DestroyComponent());
+				mWorld->AddComponent<DestroyComponent>(playerComp.pawnId, DestroyComponent());
 			}
 
 			//延迟销毁玩家本身

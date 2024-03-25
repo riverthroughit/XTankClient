@@ -1,7 +1,7 @@
 #pragma once
 
 //服务器ip和端口
-const char* const SERVER_IP = "127.0.0.1";
+const char* const SERVER_IP = "127.0.0.1";//"101.201.109.25"
 constexpr unsigned int SOCKET_PORT = 6666;
 
 //包头大小（存储消息体的大小(不含消息体类型id)）

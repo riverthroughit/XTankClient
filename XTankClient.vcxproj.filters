@@ -245,7 +245,7 @@
     <ClInclude Include="ECS\Component\PlayerComponent.h">
       <Filter>Source Files\ECS\Component</Filter>
     </ClInclude>
-    <ClInclude Include="ECS\Component\AttachComponent.h">
+    <ClInclude Include="ECS\Component\ObservedComponent.h">
       <Filter>Source Files\ECS\Component</Filter>
     </ClInclude>
     <ClInclude Include="ECS\System\SocketSystem.h">
@@ -332,16 +332,10 @@
     <ClInclude Include="Protobuf\XTankMsg.pb.h">
       <Filter>Source Files\Protobuf</Filter>
     </ClInclude>
-    <ClInclude Include="ECS\Component\HitComponent.h">
-      <Filter>Source Files\ECS\Component</Filter>
-    </ClInclude>
-    <ClInclude Include="ECS\Component\BeHitComponent.h">
-      <Filter>Source Files\ECS\Component</Filter>
-    </ClInclude>
     <ClInclude Include="ECS\System\DamageSystem.h">
       <Filter>Source Files\ECS\System</Filter>
     </ClInclude>
-    <ClInclude Include="ECS\System\AttachSystem.h">
+    <ClInclude Include="ECS\System\ObservedSystem.h">
       <Filter>Source Files\ECS\System</Filter>
     </ClInclude>
     <ClInclude Include="ECS\Component\HealthComponent.h">
@@ -352,6 +346,12 @@
     </ClInclude>
     <ClInclude Include="Util\TickUtil.h">
       <Filter>Source Files\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Component\EventComponent.h">
+      <Filter>Source Files\ECS\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Component\PawnComponent.h">
+      <Filter>Source Files\ECS\Component</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -514,7 +514,7 @@
     <ClCompile Include="ECS\System\DamageSystem.cpp">
       <Filter>Source Files\ECS\System</Filter>
     </ClCompile>
-    <ClCompile Include="ECS\System\AttachSystem.cpp">
+    <ClCompile Include="ECS\System\ObservedSystem.cpp">
       <Filter>Source Files\ECS\System</Filter>
     </ClCompile>
     <ClCompile Include="Util\TickUtil.cpp">

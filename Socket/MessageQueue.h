@@ -32,6 +32,7 @@ public:
 	void PushMsg(const MessageData& msgData){
 		std::unique_lock<std::shared_mutex> lock(dequeMutex);
 		msgDeque.push_back(msgData);
+
 	}
 
 	void PopMsg() {

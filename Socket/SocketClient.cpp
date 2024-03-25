@@ -13,8 +13,7 @@ std::pair<XTankMsg::MSG, int> SocketClient::ReceiveFromServer()
 
 	int len = 0;
 	while (len != MSG_TOTAL_HEAD_SIZE) {
-		int curLen = 0;
-		curLen = recv(csocket, msgRcvData + len, MSG_TOTAL_HEAD_SIZE - len, 0);
+		int curLen = recv(csocket, msgRcvData + len, MSG_TOTAL_HEAD_SIZE - len, 0);
 		if (curLen == 0 || curLen == -1) {
 			return {XTankMsg::NONE,XTankMsg::NONE };
 		}
@@ -25,11 +24,9 @@ std::pair<XTankMsg::MSG, int> SocketClient::ReceiveFromServer()
 	XTankMsg::MSG msgId = *reinterpret_cast<XTankMsg::MSG*>(msgRcvData + MSG_HEAD_SIZE);
 
 	//读取消息内容
-
 	len = 0;
 	while (len != dataSize) {
-		int curLen = 0;
-		curLen = recv(csocket, msgRcvData + MSG_TOTAL_HEAD_SIZE + len, dataSize - len, 0);
+		int curLen = recv(csocket, msgRcvData + MSG_TOTAL_HEAD_SIZE + len, dataSize - len, 0);
 		if (curLen == 0 || curLen == -1) {
 			return { XTankMsg::NONE,XTankMsg::NONE };
 		}

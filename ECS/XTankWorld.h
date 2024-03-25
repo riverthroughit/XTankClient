@@ -22,7 +22,7 @@ class BulletHitSystem;
 class PlayerStateSystem;
 class SceneChangeSystem;
 class RollbackSystem;
-class AttachSystem;
+class ObservedSystem;
 class DamageSystem;
 
 class XTankWorld :public World {
@@ -45,7 +45,7 @@ private:
 	PlayerStateSystem* mPlayerStateSystem{};
 	SceneChangeSystem* mSceneChangeSystem{};
 	RollbackSystem* mRollbackSystem{};
-	AttachSystem* mAttachSystem{};
+	ObservedSystem* mObservedSystem{};
 	DamageSystem* mDamageSystem{};
 
 

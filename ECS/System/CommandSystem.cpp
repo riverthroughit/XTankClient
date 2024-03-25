@@ -8,8 +8,6 @@
 
 void CommandSystem::Tick(float dt)
 {
-
-	auto& frameComp = mWorld->GetSingletonComponent<FrameComponent>();
 	auto& rollbackComp = mWorld->GetSingletonComponent<RollbackComponent>();
 
 	for (const Entity& entity : mEntities) {
@@ -17,7 +15,7 @@ void CommandSystem::Tick(float dt)
 		PlayerComponent& playerComp = mWorld->GetComponent<PlayerComponent>(entity);
 		CommandComponent& cmdComp = mWorld->GetComponent<CommandComponent>(entity);
 
-		cmdComp.frameId = frameComp.serverFrameId;
+		cmdComp.frameId = rollbackComp.preciseCmd.frameId;
 
 		//回滚组件中得到的命令
 		cmdComp.cmd = rollbackComp.preciseCmd.commandArray[playerComp.localId];

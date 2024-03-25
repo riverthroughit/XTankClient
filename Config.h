@@ -5,7 +5,7 @@
 //渲染刷新率
 constexpr int RENDER_FPS{ 60 };
 //逻辑帧刷新率
-constexpr int LOCKSTEP_FPS{ 20 };
+constexpr int LOCKSTEP_FPS{ 10 };
 //追帧时刷新率
 constexpr int MAX_CHASING_FPS{ LOCKSTEP_FPS * 2 };
 //逻辑帧周期
@@ -14,6 +14,9 @@ constexpr float LOCKSTEP_TICK{ 1.0 / LOCKSTEP_FPS * 1000 };
 constexpr float RENDER_TICK{ 1.0 / RENDER_FPS * 1000 };
 //追帧周期
 constexpr float MIN_CHASING_TICK{ 1.0 / MAX_CHASING_FPS * 1000 };
+//中途加入追帧周期
+constexpr float CUT_IN_CHASING_TICK{ LOCKSTEP_TICK };
+
 //最多预测帧数
 constexpr int MAX_PREDICT_FRAME{ 20 };
 
@@ -35,6 +38,8 @@ constexpr float BLOCK_RADIUS{ 2.5 };
 constexpr int TANK_RADIUS{ 3 };
 //炮弹半径
 constexpr int BULLET_RADIUS{ 1 };
+//炮弹CD
+constexpr int BULLET_CD{ LOCKSTEP_FPS / 5 };
 //场景边上方格数量(包括最边缘障碍物)
 constexpr int SCENE_SIDE_NUM{ 14 };
 //场景边长

@@ -2,7 +2,7 @@
 
 #include "ECS/System.h"
 
-class AttachSystem :public System<AttachSystem> {
+class ObservedSystem :public System<ObservedSystem> {
 
 public:
 	virtual void Tick(float dt) override;

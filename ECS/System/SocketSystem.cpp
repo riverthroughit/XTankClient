@@ -10,6 +10,7 @@
 #include "ECS/Component/RandComponent.h"
 #include "ECS/Component/RollbackComponent.h"
 #include "ECS/ECSUtil.h"
+#include <algorithm>
 
 using google::protobuf::Message;
 
@@ -30,9 +31,8 @@ void SocketSystem::Init()
 	randComp.seed = msgPtr->randseed();
 
 	const auto& playerIds = msgPtr->playerids();
-	socketComp.playerNum = playerIds.size();
 
-	SetLocalPlayerIdByMsg(playerIds);
+	SetExistPlayersByMsg(playerIds);
 
 }
 
@@ -127,6 +127,11 @@ void SocketSystem::UpdateCurPlayersCmd()
 {
 	auto& socketComp = mWorld->GetSingletonComponent<SocketComponent>();
 
+	if (socketComp.hasCurCmd == true) {
+		//之前的命令还未被执行 不更新
+		return;
+	}
+
 	if (socketComp.playersCmdsBuffer.empty()) {
 		//当前帧没有收到服务器转发指令
 		socketComp.hasCurCmd = false;
@@ -139,23 +144,7 @@ void SocketSystem::UpdateCurPlayersCmd()
 	socketComp.curServerFrameId = socketComp.curPlayersCmd.frameId;
 	socketComp.playersCmdsBuffer.pop_front();
 
-	//判断是否有玩家加入指令 若有 则增加保存的玩家数量
-	for (auto cmdType : socketComp.curPlayersCmd.commandArray) {
 
-		switch (cmdType)
-		{
-		case BUTTON::CUT_IN:
-			++socketComp.playerNum;
-			break;
-
-		case BUTTON::EXIT:
-			--socketComp.playerNum;
-			break;
-
-		default:
-			break;
-		}
-	}
 }
 
 bool SocketSystem::IsCutInChasing()
@@ -206,7 +195,7 @@ void SocketSystem::InitCutInData(const MessageData& msgData)
 
 	socketComp.isCutInChasing = true;
 
-	SetLocalPlayerIdByMsg(msgPtr->playerids());
+	SetExistPlayersByMsg(msgPtr->playerids());
 
 	socketComp.curServerFrameId = msgPtr->cmds().size() - 1;
 
@@ -232,7 +221,7 @@ void SocketSystem::InitCutInData(const MessageData& msgData)
 	}
 }
 
-void SocketSystem::SetLocalPlayerIdByMsg(const google::protobuf::RepeatedPtrField<XTankMsg::PlayerId>& playerIds)
+void SocketSystem::SetExistPlayersByMsg(const google::protobuf::RepeatedPtrField<XTankMsg::PlayerId>& playerIds)
 {
 
 	auto& socketComp = mWorld->GetSingletonComponent<SocketComponent>();
@@ -242,11 +231,48 @@ void SocketSystem::SetLocalPlayerIdByMsg(const google::protobuf::RepeatedPtrFiel
 	unsigned long pid = GetCurrentProcessId();
 
 	for (int i = 0; i < playerIds.size(); ++i) {
+
 		auto& playerId = playerIds.Get(i);
+		socketComp.existPlayers[i] = !playerId.ip().empty();
+
 		if (localIP == playerId.ip() && pid == playerId.pid()) {
 			socketComp.localPlayerId = i;
+		}
+	}
+}
+
+void SocketSystem::UpdateExistPlayersByCmd(const PlayersCommand& cmd)
+{
+
+	auto& socketComp = mWorld->GetSingletonComponent<SocketComponent>();
+
+	//根据玩家加入或退出修改玩家数组
+	for (int i = 0; i < cmd.commandArray.size(); ++i) {
+
+		BUTTON::Type cmdType = cmd.commandArray[i];
+
+		switch (cmdType)
+		{
+		case BUTTON::CUT_IN:
+			
+			for (int i = 0; i < socketComp.existPlayers.size(); ++i) {
+				if (!socketComp.existPlayers[i]) {
+					socketComp.existPlayers[i] = true;
+				}
+			}
+
+			break;
+
+		case BUTTON::EXIT:
+			
+			socketComp.existPlayers[i] = false;
+
+			break;
+
+		default:
 			break;
 		}
 	}
+
 }
 

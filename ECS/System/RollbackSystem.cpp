@@ -37,9 +37,12 @@ void RollbackSystem::UpdatePreciseCmd()
 	auto& socketComp = mWorld->GetSingletonComponent<SocketComponent>();
 	auto& rollbackComp = mWorld->GetSingletonComponent<RollbackComponent>();
 
+	rollbackComp.hasPreciseCmd = false;
+
 	if (HasCurCmd(socketComp)) {
 
-		rollbackComp.preciseCmd = socketComp.curPlayersCmd;
+		rollbackComp.preciseCmd = GetSocketCurCmd(socketComp);
+		rollbackComp.hasPreciseCmd = true;
 
 		RollbackPredictCmd();
 	}
@@ -69,7 +72,7 @@ void RollbackSystem::RollbackPredictCmd()
 
 	////当前有服务器命令 且有预测命令
 	//assert(HasCurCmd(socketComp) && !rollbackComp.predCmdDeq.empty());
-	if (!HasCurCmd(socketComp) || rollbackComp.predCmdDeq.empty()) {
+	if (!rollbackComp.hasPreciseCmd || rollbackComp.predCmdDeq.empty()) {
 		return;
 	}
 
@@ -128,20 +131,6 @@ bool RollbackSystem::HasPredictCurFrame()
 	auto& frameComp = mWorld->GetSingletonComponent<FrameComponent>();
 
 	return rollbackComp.curPredictFrameId == frameComp.clientTick.GetFrameId();
-}
-
-void RollbackSystem::TickPredictWorld(float dt)
-{
-	auto& rollbackComp = mWorld->GetSingletonComponent<RollbackComponent>();
-	
-	if (!rollbackComp.NeedRollback) {
-		//不用回滚的情况
-		RunAheadPredictWorld(dt);
-	}
-	else {
-		//需要回滚
-		RollbackPredictWorld(dt);
-	}
 }
 
 void RollbackSystem::RunAheadPredictWorld(float dt)

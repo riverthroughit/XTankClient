@@ -2,6 +2,7 @@
 #include "Math/Vec2.h"
 #include "ECS/Types.h"
 #include "Config.h"
+#include <vector>
 #include <array>
 
 namespace ENTITY {
@@ -121,6 +122,21 @@ namespace ENTITY_SPAWN_ARGS {
 	struct Block {
 		Vec2Fixed pos{};
 		Vec2Fixed direc{};
-		BLOCK::Type blockType;
+		BLOCK::Type blockType{};
 	};
+}
+
+namespace EVENT {
+	
+	struct Hit {
+		//被击中的实体的id
+		std::vector<Entity> beHitEntities;
+	};
+
+	struct BeHit {
+		//造成的伤害
+		std::vector<int> damages;
+
+	};
+
 }

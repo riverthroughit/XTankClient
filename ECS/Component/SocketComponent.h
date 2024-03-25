@@ -12,8 +12,8 @@ struct SocketComponent{
 	//本地用户的房间内id
 	int localPlayerId{-1};
 
-	//玩家数量
-	int playerNum{};
+	//下标对应玩家是否存在
+	std::array<bool, 4> existPlayers{};
 
 	//是否有当前需要执行的命令
 	bool hasCurCmd{};
