@@ -27,7 +27,4 @@ private:
 	void UpdateCollisionInGrid(const std::vector<Entity>& entities);
 	//void UpdateCollisionInGrid2(const std::set<Entity>& entities);
 
-	//Á½¸öentityÊÇ·ñÅö×²
-	bool isCollision(PosComponent& p1, CollisionComponent& c1, PosComponent& p2, CollisionComponent& c2);
-
 };

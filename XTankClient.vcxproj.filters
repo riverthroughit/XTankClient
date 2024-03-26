@@ -78,6 +78,9 @@
     <Filter Include="Source Files\Input">
       <UniqueIdentifier>{11700ff1-7875-4047-8d13-5832fa56e656}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\ECS\Util">
+      <UniqueIdentifier>{be90e8e3-dcf4-434b-b018-fc6325b8fa73}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="renderer\input\Face.h">
@@ -236,9 +239,6 @@
     <ClInclude Include="Math\Vec2.h">
       <Filter>Source Files\Math</Filter>
     </ClInclude>
-    <ClInclude Include="ECS\ECSUtil.h">
-      <Filter>Source Files\ECS</Filter>
-    </ClInclude>
     <ClInclude Include="ECS\Component\CommandComponent.h">
       <Filter>Source Files\ECS\Component</Filter>
     </ClInclude>
@@ -353,6 +353,18 @@
     <ClInclude Include="ECS\Component\PawnComponent.h">
       <Filter>Source Files\ECS\Component</Filter>
     </ClInclude>
+    <ClInclude Include="ECS\System\AttachSystem.h">
+      <Filter>Source Files\ECS\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\GeometricUtil.h">
+      <Filter>Source Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Util\ECSSceneUtil.h">
+      <Filter>Source Files\ECS\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Util\ECSUtil.h">
+      <Filter>Source Files\ECS\Util</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="renderer\input\Face.cpp">
@@ -432,9 +444,6 @@
     </ClCompile>
     <ClCompile Include="Config.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ECS\ECSUtil.cpp">
-      <Filter>Source Files\ECS</Filter>
     </ClCompile>
     <ClCompile Include="ECS\Component\FrameComponent.h">
       <Filter>Source Files\ECS\Component</Filter>
@@ -519,6 +528,18 @@
     </ClCompile>
     <ClCompile Include="Util\TickUtil.cpp">
       <Filter>Source Files\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="ECS\System\AttachSystem.cpp">
+      <Filter>Source Files\ECS\System</Filter>
+    </ClCompile>
+    <ClCompile Include="Math\GeometricUtil.cpp">
+      <Filter>Source Files\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="ECS\Util\ECSSceneUtil.cpp">
+      <Filter>Source Files\ECS\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="ECS\Util\ECSUtil.cpp">
+      <Filter>Source Files\ECS\Util</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

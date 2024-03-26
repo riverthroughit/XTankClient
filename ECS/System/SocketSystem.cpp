@@ -9,7 +9,7 @@
 #include "ECS/Component/FrameComponent.h"
 #include "ECS/Component/RandComponent.h"
 #include "ECS/Component/RollbackComponent.h"
-#include "ECS/ECSUtil.h"
+#include "ECS/Util/ECSUtil.h"
 #include <algorithm>
 
 using google::protobuf::Message;

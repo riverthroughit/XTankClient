@@ -23,8 +23,8 @@ void FireSystem::Tick(float dt)
 			continue;
 		}
 
-		auto& cmdComp = mWorld->GetComponent<CommandComponent>(entity);
-		
+		//¿ª»ð
+		auto& cmdComp = mWorld->GetComponent<CommandComponent>(entity);	
 		if (cmdComp.cmd == BUTTON::FIRE) {
 
 			bulletSpawnComp.reFireTime = BULLET_CD;

@@ -6,7 +6,8 @@
 #include "Event/EventDefine.h"
 #include "Util/TickUtil.h"
 #include <set>
-#include <ECS/ECSUtil.h>
+#include "ECS/Util/ECSUtil.h"
+#include "ECS/Util/ECSSceneUtil.h"
 
 
 void CollisionSystem::Tick(float dt)
@@ -51,7 +52,6 @@ void CollisionSystem::UpdateCollision()
 		for (int col = 0; col < SCENE_SIDE_NUM; ++col) {
 			std::set<Entity>& curGrid = gridComp.mGrids[row][col];
 			UpdateCollisionInGrid(std::vector<Entity>(curGrid.begin(), curGrid.end()));
-			//UpdateCollisionInGrid2(curGrid);
 		}
 	}
 }
@@ -68,7 +68,7 @@ void CollisionSystem::UpdateCollisionInGrid(const std::vector<Entity>& entities)
 			PosComponent& p2 = mWorld->GetComponent<PosComponent>(entities[t]);
 			CollisionComponent& c2 = mWorld->GetComponent<CollisionComponent>(entities[t]);
 
-			if (isCollision(p1, c1, p2, c2)) {
+			if (IsCollision(p1, c1, p2, c2)) {
 
 				c1.hitEntities.push_back(entities[t]);
 				c2.hitEntities.push_back(entities[i]);
@@ -77,52 +77,5 @@ void CollisionSystem::UpdateCollisionInGrid(const std::vector<Entity>& entities)
 	}
 }
 
-//void CollisionSystem::UpdateCollisionInGrid2(const std::set<Entity>& entities)
-//{
-//
-//	auto endIte = entities.empty() ? entities.end() : --entities.end();
-//
-//	for (auto ite = entities.begin(); ite != endIte && ite != entities.end();++ite) {
-//
-//		PosComponent& p1 = mWorld->GetComponent<PosComponent>(*ite);
-//		CollisionComponent& c1 = mWorld->GetComponent<CollisionComponent>(*ite);
-//
-//		for (auto ite2 = ite; ite2 != entities.end(); ++ite2) {
-//			
-//			if (ite2 == ite) {
-//				++ite2;
-//			}
-//			
-//			PosComponent& p2 = mWorld->GetComponent<PosComponent>(*ite2);
-//			CollisionComponent& c2 = mWorld->GetComponent<CollisionComponent>(*ite2);
-//
-//			if (isCollision(p1, c1, p2, c2)) {
-//
-//				c1.hitEntities.push_back(*ite2);
-//				c2.hitEntities.push_back(*ite);
-//			}
-//		}
-//	}
-//}
-
-
-
-bool CollisionSystem::isCollision(PosComponent& p1, CollisionComponent& c1, PosComponent& p2, CollisionComponent& c2)
-{
-	bool res = false;
-
-	if (c1.shape == LOGIC_SHAPE::CIRCLE && c2.shape == LOGIC_SHAPE::CIRCLE) {
-		//¡Ω‘≤œ‡Ωª
-		Vec2Fixed pp = p1.pos - p2.pos;
-
-		FixedPoint rr = c1.shapeData.r + c2.shapeData.r;
-
-		if (pp * pp < rr * rr) {
-			res = true;
-		}
-	}
-
-	return res;
-}
 
 

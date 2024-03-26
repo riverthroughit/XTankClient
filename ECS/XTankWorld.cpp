@@ -312,7 +312,7 @@ void XTankWorld::GameTick()
 		float remainTime = clientTick.TimeToNextFrame();
 
 		//有服务器新命令且没超过tick时间
-		while (!mSocketSystem->IsCmdBufferEmpty() && (remainTime > (clientTick.GetTickTime() / 2))) {
+		while (!mSocketSystem->IsCmdBufferEmpty() && (remainTime > (LOCKSTEP_TICK / 2))) {
 
 			serverTick.Tick();
 			dt += serverTick.GetDt();

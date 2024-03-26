@@ -3,7 +3,7 @@
 #include "ECS/Component/HealthComponent.h"
 #include "ECS/Component/EventComponent.h"
 #include "ECS/Component/DestroyComponent.h"
-#include "ECS/ECSUtil.h"
+#include "ECS/Util/ECSUtil.h"
 
 void DamageSystem::Tick(float dt)
 {

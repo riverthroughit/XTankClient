@@ -6,7 +6,7 @@
 #include "ECS/Component/PosComponent.h"
 #include "ECS/Component/FrameComponent.h"
 #include "ECS/Component/RollbackPosComponent.h"
-#include "ECS/ECSUtil.h"
+#include "ECS/Util/ECSUtil.h"
 #include <memory>
 
 

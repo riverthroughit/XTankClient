@@ -17,7 +17,7 @@
 #include "ECS/Component/PawnComponent.h"
 #include "ECS/Component/EventComponent.h"
 #include "Config.h"
-#include "ECS/ECSUtil.h"
+#include "ECS/Util/ECSUtil.h"
 
 void EntitySpawnSystem::Tick(float dt)
 {

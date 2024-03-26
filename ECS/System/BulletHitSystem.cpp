@@ -10,7 +10,7 @@
 #include "ECS/Component/EventComponent.h"
 #include "Config.h"
 #include "ECS/Component/SpeedComponent.h"
-#include "ECS/ECSUtil.h"
+#include "ECS/Util/ECSUtil.h"
 
 void BulletHitSystem::Tick(float dt)
 {

@@ -101,6 +101,15 @@ namespace HEALTH {
 	};
 }
 
+namespace DIREC {
+	enum Type {
+		UP,
+		DOWN,
+		LEFT,
+		RIGHT,
+	};
+}
+
 namespace ENTITY_SPAWN_ARGS {
 
 	struct Player {

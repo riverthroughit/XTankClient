@@ -75,6 +75,13 @@ public:
          return fixedPoint;
      }
 
+     FixedPoint abs() const {
+     
+         FixedPoint ans;
+         ans.val = std::abs(val);
+         return ans;
+     }
+
      friend FixedPoint operator + (const FixedPoint& a, const FixedPoint& b);
      friend FixedPoint operator - (const FixedPoint& a, const FixedPoint& b);
      friend FixedPoint operator * (const FixedPoint& a, const FixedPoint& b);
@@ -83,7 +90,7 @@ public:
      friend bool operator != (const FixedPoint& a, const FixedPoint& b);
      friend bool operator <(const FixedPoint& a, const FixedPoint& b);
      friend bool operator >(const FixedPoint& a, const FixedPoint& b);
-     friend FixedPoint sqrt(const FixedPoint& fixedPoint);
+
 };
 
 inline FixedPoint operator + (const FixedPoint& a, const FixedPoint& b) {
@@ -133,5 +140,11 @@ inline bool operator>(const FixedPoint& a, const FixedPoint& b)
 inline FixedPoint sqrt(const FixedPoint& fixedPoint)
 {
     return fixedPoint.sqrt();
+}
+
+inline FixedPoint abs(const FixedPoint& fixedPoint) 
+{
+
+    return fixedPoint.abs();
 }
 

@@ -8,7 +8,7 @@
 #include "ECS/Component/PawnComponent.h"
 #include "ECS/Component/HealthComponent.h"
 #include "ECS/Component/EventComponent.h"
-#include "ECS/ECSUtil.h"
+#include "ECS/Util/ECSUtil.h"
 
 void PlayerStateSystem::Tick(float dt)
 {

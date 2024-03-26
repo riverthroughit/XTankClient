@@ -42,7 +42,7 @@
     <ClInclude Include="ECS\Component\SocketComponent.h" />
     <ClInclude Include="ECS\Component\SpeedComponent.h" />
     <ClInclude Include="ECS\Component\UniformGridComponent.h" />
-    <ClInclude Include="ECS\ECSUtil.h" />
+    <ClInclude Include="ECS\System\AttachSystem.h" />
     <ClInclude Include="ECS\System\ObservedSystem.h" />
     <ClInclude Include="ECS\System\BulletHitSystem.h" />
     <ClInclude Include="ECS\System\CommandSystem.h" />
@@ -61,6 +61,8 @@
     <ClInclude Include="ECS\System\SceneChangeSystem.h" />
     <ClInclude Include="ECS\System\SocketSystem.h" />
     <ClInclude Include="ECS\System\SpeedChangeSystem.h" />
+    <ClInclude Include="ECS\Util\ECSSceneUtil.h" />
+    <ClInclude Include="ECS\Util\ECSUtil.h" />
     <ClInclude Include="ECS\World.h" />
     <ClInclude Include="ECS\EntityManager.h" />
     <ClInclude Include="ECS\System.h" />
@@ -73,6 +75,7 @@
     <ClInclude Include="Factory\Factory.h" />
     <ClInclude Include="Input\KeyboardData.h" />
     <ClInclude Include="Math\FixedPoint.h" />
+    <ClInclude Include="Math\GeometricUtil.h" />
     <ClInclude Include="Math\Vec2.h" />
     <ClInclude Include="ObjectPool\ObjectPool.h" />
     <QtMoc Include="QtWidget\PaintWidget.h" />
@@ -117,8 +120,8 @@
   <ItemGroup>
     <ClCompile Include="Config.cpp" />
     <ClCompile Include="ECS\Component\FrameComponent.h" />
-    <ClCompile Include="ECS\ECSUtil.cpp" />
     <ClCompile Include="ECS\System.cpp" />
+    <ClCompile Include="ECS\System\AttachSystem.cpp" />
     <ClCompile Include="ECS\System\ObservedSystem.cpp" />
     <ClCompile Include="ECS\System\BulletHitSystem.cpp" />
     <ClCompile Include="ECS\System\CollisionSystem.cpp" />
@@ -138,8 +141,11 @@
     <ClCompile Include="ECS\System\SceneChangeSystem.cpp" />
     <ClCompile Include="ECS\System\SocketSystem.cpp" />
     <ClCompile Include="ECS\System\SpeedChangeSystem.cpp" />
+    <ClCompile Include="ECS\Util\ECSSceneUtil.cpp" />
+    <ClCompile Include="ECS\Util\ECSUtil.cpp" />
     <ClCompile Include="ECS\XTankWorld.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Math\GeometricUtil.cpp" />
     <ClCompile Include="Protobuf\XTankMsg.pb.cc" />
     <ClCompile Include="QtWidget\LobbyWidget.cpp" />
     <ClCompile Include="QtWidget\MainMenuWidget.cpp" />

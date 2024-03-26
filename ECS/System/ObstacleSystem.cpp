@@ -4,7 +4,7 @@
 #include "ECS/Component/PosComponent.h"
 #include "ECS/Component/SpeedComponent.h"
 #include "ECS/World.h"
-#include "ECS/ECSUtil.h"
+#include "ECS/Util/ECSUtil.h"
 #include "TypeConfig.h"
 
 void ObstacleSystem::Tick(float dt)

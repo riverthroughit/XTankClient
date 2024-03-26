@@ -15,7 +15,7 @@ constexpr float RENDER_TICK{ 1.0 / RENDER_FPS * 1000 };
 //追帧周期
 constexpr float MIN_CHASING_TICK{ 1.0 / MAX_CHASING_FPS * 1000 };
 //中途加入追帧周期
-constexpr float CUT_IN_CHASING_TICK{ LOCKSTEP_TICK };
+constexpr float CUT_IN_CHASING_TICK{ LOCKSTEP_TICK / 2};
 
 //最多预测帧数
 constexpr int MAX_PREDICT_FRAME{ 20 };

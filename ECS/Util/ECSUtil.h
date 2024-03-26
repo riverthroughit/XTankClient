@@ -4,22 +4,13 @@
 #include "TypeConfig.h"
 #include "ECS/Component/EventComponent.h"
 #include "ECS/Component/ObservedComponent.h"
+#include <vector>
+#include <utility>
 
-struct PosComponent;
-struct CollisionComponent;
-struct UniformGridComponent;
+
 struct SocketComponent;
 struct RollbackComponent;
 
-
-
-//更新对应entity所处的grid
-void UpdateGridOfEntity(Entity entity,const PosComponent& posComp, 
-	const CollisionComponent& collComp,UniformGridComponent& gridComp);
-
-//将entity从对应grid中删除
-void RemoveEntityFromGrid(Entity entity, const PosComponent& posComp,
-	const CollisionComponent& collComp, UniformGridComponent& gridComp);
 
 //指令缓冲是否为空
 bool IsCmdBufferEmpty(SocketComponent& socketComp);

@@ -3,7 +3,7 @@
 #include "ECS/World.h"
 #include "ECS/Component/ObservedComponent.h"
 #include "ECS/Component/DestroyComponent.h"
-#include "ECS/ECSUtil.h"
+#include "ECS/Util/ECSUtil.h"
 
 void ObservedSystem::Tick(float dt)
 {

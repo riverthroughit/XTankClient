@@ -5,7 +5,8 @@
 #include "ECS/Component/PosComponent.h"
 #include "ECS/Component/UniformGridComponent.h"
 #include "ECS/Component/DestroyComponent.h"
-#include "ECS/ECSUtil.h"
+#include "ECS/Util/ECSUtil.h"
+#include "ECS/Util/ECSSceneUtil.h"
 
 void EntityDestroySystem::Tick(float dt)
 {

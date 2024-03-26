@@ -4,7 +4,9 @@
 #include "ECS/Component/SpeedComponent.h"
 #include "ECS/Component/UniformGridComponent.h"
 #include "ECS/Component/CollisionComponent.h"
-#include "ECS/ECSUtil.h"
+#include "ECS/Util/ECSUtil.h"
+#include "ECS/Util/ECSSceneUtil.h"
+
 
 void MoveSystem::Tick(float dt)
 {
